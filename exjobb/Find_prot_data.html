@@ -11771,9 +11771,18 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Importing the pdb structure</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">Bio</span>
@@ -11786,24 +11795,93 @@ div#notebook {
  
          
 <span class="k">def</span> <span class="nf">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
-     
-    <span class="n">model</span> <span class="o">=</span> <span class="n">structure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">chain</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span> 
-    <span class="n">input_</span><span class="o">=</span><span class="p">[]</span>
-    <span class="n">count</span><span class="o">=</span><span class="mi">0</span>
-    <span class="c1">#for atom in structure.get_atoms():  If I want all atoms in a structure, depends if I want the residue</span>
-    <span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">residue</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39; &#39;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">residue</span><span class="p">:</span>
-                <span class="k">print</span> <span class="n">atom</span><span class="o">.</span><span class="n">get_id</span><span class="p">()</span>
-                <span class="n">count</span><span class="o">=</span><span class="n">count</span> <span class="o">+</span><span class="mi">1</span>
-            <span class="c1">#print residue.get_full_id()</span>
-    <span class="k">print</span> <span class="n">count</span>
-            
-           <span class="c1">#rr_all_distance.append([residue1, residue2, distance])</span>
-        <span class="c1">#   structure_params.append([index1, index2, distance]) #tabort residue1 o reside2</span>
- 
-    <span class="k">return</span>
+    
+    <span class="c1">#structure_data.append([Chain_id,Seg_id, residue_name, atom_name, atom_coord_vector])</span>
+    <span class="n">structure_data</span><span class="o">=</span><span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="c1">#for atom in structure.get_atoms():  If I want all atoms in a structure, depends if I want the residue</span>
+            <span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
+              <span class="c1">#  if residue.get_full_id()[3][0]==&#39; &#39;:  #If I want to remove HOH etc (hetero-atoms) use this!</span>
+                    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">residue</span><span class="p">:</span>
+                        <span class="n">structure_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">chain</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span><span class="n">residue</span><span class="o">.</span><span class="n">get_id</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="n">residue</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">atom</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span><span class="n">atom</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()])</span>
+
+   <span class="c1"># for i in structure_data:</span>
+       <span class="c1"># if i[0]==&#39;L&#39;:</span>
+     <span class="c1">#       print i</span>
+
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>How to find different atoms for the 11 layers</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
+    
+    <span class="n">layer1_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CYS:SG&#39;</span><span class="p">,</span><span class="s1">&#39;MET:SD&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:SE&#39;</span><span class="p">]</span>
+    <span class="n">layer2_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ASN:ND2&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:NE2&#39;</span><span class="p">]</span> <span class="c1">#Backbone N</span>
+    <span class="n">layer3_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HIS:ND1&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:NE1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:NE1&#39;</span><span class="p">]</span>
+    <span class="n">layer4_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ARG:NE&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:NH1&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:NH2&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:NH3&#39;</span><span class="p">]</span>
+    <span class="n">layer5_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LYS:NZ&#39;</span><span class="p">]</span>
+    <span class="n">layer6_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ASN:OD1&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:OE1&#39;</span><span class="p">]</span> <span class="c1">#Backbone O?</span>
+    <span class="n">layer7_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SER:OG&#39;</span><span class="p">,</span><span class="s1">&#39;THR:OG1&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:OH&#39;</span><span class="p">]</span>
+    <span class="n">layer8_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ASP:OD1&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:OD2&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:OD3&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:OE1&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:OE2&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:OE3&#39;</span><span class="p">]</span>
+    <span class="n">layer9_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ARG:CZ&#39;</span><span class="p">,</span><span class="s1">&#39;ASN:CG&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:CG&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:CD&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:CD&#39;</span><span class="p">]</span> <span class="c1">#Backbone C?</span>
+    <span class="n">layer10_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HIS:CG&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CG&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CE2&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CE3&#39;&#39;PHE:CZ&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CG&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CE2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CE3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CZ1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CZ2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CZ3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CH2&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CG&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CE2&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CE3&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CZ&#39;</span><span class="p">]</span>
+    <span class="n">layer11_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ALA:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:CG&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:CD&#39;</span><span class="p">,</span><span class="s1">&#39;ASN:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:CB&#39;</span><span class="p">,</span><span class="s1">&#39;CYS:CB&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:CB&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:CG&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:CB&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:CG&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CG1&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CG2&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CG3&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CB&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CG&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CB&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CG&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CD&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CE&#39;</span><span class="p">,</span><span class="s1">&#39;MET:CB&#39;</span><span class="p">,</span><span class="s1">&#39;MET:CG&#39;</span><span class="p">,</span><span class="s1">&#39;MET:CE&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:CB&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:CG&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:CE&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CB&#39;</span><span class="p">,</span><span class="s1">&#39;PRO:CB&#39;</span><span class="p">,</span><span class="s1">&#39;PRO:CG&#39;</span><span class="p">,</span><span class="s1">&#39;PRO:CD&#39;</span><span class="p">,</span><span class="s1">&#39;SER:CB&#39;</span><span class="p">,</span><span class="s1">&#39;THR:CB&#39;</span><span class="p">,</span><span class="s1">&#39;THR:CG2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CB&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CB&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CB&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CG1&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CG2&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CG3&#39;</span><span class="p">]</span> <span class="c1">#Backbone CA?</span>
+    <span class="n">layers</span><span class="o">=</span><span class="p">[[],[],[],[],[],[],[],[],[],[],[]]</span>
+    
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">structure_data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span>
+            <span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;O&#39;</span><span class="p">:</span>
+            <span class="n">layers</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+            <span class="n">layers</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">atom_type</span> <span class="o">=</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="n">atom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer1_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer2_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer3_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer4_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer5_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer6_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer7_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer8_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer9_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer10_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer11_check</span><span class="p">:</span>
+                <span class="n">layers</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11813,18 +11891,20 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">filename_pdb</span> <span class="o">=</span> <span class="s1">&#39;/home/joakim/Downloads/2HIY_A.pdb&#39;</span>
+    <span class="n">filename_pdb</span> <span class="o">=</span> <span class="s1">&#39;/home/joakim/Downloads/5bk1.pdb&#39;</span>
     
     <span class="n">PDBobj</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">()</span>
     <span class="n">structure</span> <span class="o">=</span> <span class="n">PDBobj</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>
-    <span class="n">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
     
+    <span class="n">structure_data</span> <span class="o">=</span> <span class="n">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+    <span class="n">layers</span> <span class="o">=</span> <span class="n">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
     
-    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">print</span> <span class="n">i</span>
     
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
   <span class="n">main</span><span class="p">()</span>
@@ -11844,1466 +11924,1737 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-NE2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-NE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-ND1
-CD2
-CE1
-NE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-CG
-CD
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-NE2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-NE1
-CE2
-CE3
-CZ2
-CZ3
-CH2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-NE1
-CE2
-CE3
-CZ2
-CZ3
-CH2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-NE2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-NE1
-CE2
-CE3
-CZ2
-CZ3
-CH2
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-OE2
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-OG
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-CG
-ND1
-CD2
-CE1
-NE2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-OH
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-CB
-CG
-ND1
-CD2
-CE1
-NE2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-CB
-CG
-CD
-NE
-CZ
-NH1
-NH2
-N
-CA
-C
-O
-CB
-CG
-OD1
-ND2
-N
-CA
-C
-O
-CB
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-OG1
-CG2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-CE1
-CE2
-CZ
-N
-CA
-C
-O
-CB
-CG
-OD1
-OD2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG1
-CG2
-CD1
-N
-CA
-C
-O
-N
-CA
-C
-O
-CB
-CG
-CD
-OE1
-NE2
-N
-CA
-C
-O
-CB
-CG
-CD1
-CD2
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-N
-CA
-C
-O
-CB
-CG
-CD
-CE
-NZ
-1459
+<pre>[&#39;H&#39;, 5, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 41.37, 11.31, -76.15&gt;]
+[&#39;H&#39;, 6, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 42.10, 12.43, -72.99&gt;]
+[&#39;H&#39;, 6, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 39.32, 8.70, -69.03&gt;]
+[&#39;H&#39;, 7, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 41.95, 13.34, -69.51&gt;]
+[&#39;H&#39;, 8, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 43.05, 12.26, -66.54&gt;]
+[&#39;H&#39;, 9, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 42.58, 12.20, -63.13&gt;]
+[&#39;H&#39;, 10, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 44.07, 11.90, -59.86&gt;]
+[&#39;H&#39;, 11, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 44.90, 11.23, -56.40&gt;]
+[&#39;H&#39;, 12, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 43.61, 12.73, -54.47&gt;]
+[&#39;H&#39;, 13, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 41.75, 13.26, -51.38&gt;]
+[&#39;H&#39;, 14, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 41.48, 12.90, -47.83&gt;]
+[&#39;H&#39;, 15, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 42.90, 15.16, -45.44&gt;]
+[&#39;H&#39;, 16, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 44.79, 16.91, -42.96&gt;]
+[&#39;H&#39;, 16, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 45.60, 14.24, -38.84&gt;]
+[&#39;H&#39;, 17, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 44.73, 20.25, -41.51&gt;]
+[&#39;H&#39;, 18, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 47.62, 22.20, -42.22&gt;]
+[&#39;H&#39;, 19, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 48.88, 20.00, -43.32&gt;]
+[&#39;H&#39;, 20, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 49.99, 17.97, -46.15&gt;]
+[&#39;H&#39;, 21, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 49.34, 17.27, -49.61&gt;]
+[&#39;H&#39;, 22, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 49.38, 15.56, -52.71&gt;]
+[&#39;H&#39;, 23, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 48.41, 15.98, -55.93&gt;]
+[&#39;H&#39;, 24, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 47.63, 14.41, -59.07&gt;]
+[&#39;H&#39;, 25, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 47.61, 14.58, -62.63&gt;]
+[&#39;H&#39;, 26, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 47.12, 12.84, -65.23&gt;]
+[&#39;H&#39;, 27, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 47.61, 12.73, -68.65&gt;]
+[&#39;H&#39;, 28, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 46.41, 11.90, -71.94&gt;]
+[&#39;H&#39;, 29, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 46.44, 11.46, -75.50&gt;]
+[&#39;H&#39;, 30, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 47.41, 13.93, -76.25&gt;]
+[&#39;H&#39;, 31, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 50.31, 16.05, -75.97&gt;]
+[&#39;H&#39;, 31, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 55.09, 15.77, -76.07&gt;]
+[&#39;H&#39;, 32, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 51.35, 17.26, -72.97&gt;]
+[&#39;H&#39;, 33, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 53.45, 18.99, -72.70&gt;]
+[&#39;H&#39;, 34, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 53.40, 20.98, -74.67&gt;]
+[&#39;H&#39;, 35, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 51.22, 22.52, -73.99&gt;]
+[&#39;H&#39;, 36, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 49.22, 24.56, -71.75&gt;]
+[&#39;H&#39;, 37, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 48.67, 23.43, -68.57&gt;]
+[&#39;H&#39;, 38, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 46.13, 23.57, -66.32&gt;]
+[&#39;H&#39;, 39, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 45.08, 23.94, -62.91&gt;]
+[&#39;H&#39;, 40, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 41.98, 23.96, -61.42&gt;]
+[&#39;H&#39;, 41, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 39.74, 24.67, -58.88&gt;]
+[&#39;H&#39;, 42, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 36.76, 23.95, -56.95&gt;]
+[&#39;H&#39;, 42, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 31.34, 24.94, -59.42&gt;]
+[&#39;H&#39;, 43, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 34.79, 24.86, -54.44&gt;]
+[&#39;H&#39;, 44, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 32.33, 23.37, -52.22&gt;]
+[&#39;H&#39;, 45, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 29.11, 23.95, -53.46&gt;]
+[&#39;H&#39;, 46, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 29.94, 26.40, -54.54&gt;]
+[&#39;H&#39;, 47, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 31.61, 28.69, -56.85&gt;]
+[&#39;H&#39;, 48, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 33.95, 28.33, -59.65&gt;]
+[&#39;H&#39;, 49, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 37.48, 28.43, -59.07&gt;]
+[&#39;H&#39;, 50, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 40.56, 29.52, -60.05&gt;]
+[&#39;H&#39;, 51, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 43.78, 28.01, -59.70&gt;]
+[&#39;H&#39;, 52, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 46.52, 27.22, -60.32&gt;]
+[&#39;H&#39;, 53, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 48.97, 27.09, -63.00&gt;]
+[&#39;H&#39;, 54, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 50.89, 25.49, -65.60&gt;]
+[&#39;H&#39;, 55, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 53.21, 25.71, -68.21&gt;]
+[&#39;H&#39;, 56, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 55.16, 24.11, -69.95&gt;]
+[&#39;H&#39;, 57, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 56.69, 24.13, -72.33&gt;]
+[&#39;H&#39;, 58, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 57.08, 26.87, -72.74&gt;]
+[&#39;H&#39;, 59, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 58.40, 27.45, -70.44&gt;]
+[&#39;H&#39;, 60, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 57.09, 28.38, -68.03&gt;]
+[&#39;H&#39;, 61, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 55.33, 28.96, -64.99&gt;]
+[&#39;H&#39;, 62, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 52.44, 29.55, -63.00&gt;]
+[&#39;H&#39;, 63, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 50.56, 31.05, -60.31&gt;]
+[&#39;H&#39;, 64, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 47.67, 31.42, -58.28&gt;]
+[&#39;H&#39;, 65, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 46.97, 34.12, -56.00&gt;]
+[&#39;H&#39;, 66, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 45.94, 33.29, -53.55&gt;]
+[&#39;H&#39;, 67, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 47.13, 30.85, -53.03&gt;]
+[&#39;H&#39;, 68, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 49.81, 31.08, -53.51&gt;]
+[&#39;H&#39;, 69, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 53.18, 30.37, -52.81&gt;]
+[&#39;H&#39;, 70, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 52.49, 28.26, -51.08&gt;]
+[&#39;H&#39;, 71, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 51.49, 26.12, -52.67&gt;]
+[&#39;H&#39;, 72, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 52.87, 24.03, -55.23&gt;]
+[&#39;H&#39;, 73, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 53.27, 23.59, -58.60&gt;]
+[&#39;H&#39;, 74, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 54.04, 21.20, -61.10&gt;]
+[&#39;H&#39;, 75, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 55.49, 19.16, -63.73&gt;]
+[&#39;H&#39;, 76, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 55.86, 16.02, -65.42&gt;]
+[&#39;H&#39;, 77, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 57.37, 15.20, -68.16&gt;]
+[&#39;H&#39;, 78, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 58.07, 12.83, -69.50&gt;]
+[&#39;H&#39;, 79, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 56.23, 11.06, -68.47&gt;]
+[&#39;H&#39;, 80, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 53.91, 12.24, -69.24&gt;]
+[&#39;H&#39;, 80, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 50.25, 12.78, -72.42&gt;]
+[&#39;H&#39;, 81, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 52.35, 13.76, -67.46&gt;]
+[&#39;H&#39;, 82, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 51.01, 16.00, -65.08&gt;]
+[&#39;H&#39;, 83, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 51.46, 17.69, -61.91&gt;]
+[&#39;H&#39;, 84, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 50.21, 18.79, -58.73&gt;]
+[&#39;H&#39;, 85, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 51.51, 20.01, -55.94&gt;]
+[&#39;H&#39;, 85, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 53.47, 18.05, -51.28&gt;]
+[&#39;H&#39;, 86, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 50.44, 20.37, -52.81&gt;]
+[&#39;H&#39;, 87, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 50.94, 22.22, -49.99&gt;]
+[&#39;H&#39;, 87, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 54.78, 22.11, -50.16&gt;]
+[&#39;H&#39;, 88, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 50.87, 23.20, -46.50&gt;]
+[&#39;H&#39;, 89, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 48.07, 23.22, -45.98&gt;]
+[&#39;H&#39;, 90, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 44.72, 24.48, -45.58&gt;]
+[&#39;H&#39;, 91, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 41.45, 24.77, -44.05&gt;]
+[&#39;H&#39;, 92, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 39.85, 26.23, -45.82&gt;]
+[&#39;H&#39;, 93, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 40.84, 25.40, -48.26&gt;]
+[&#39;H&#39;, 94, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 39.39, 23.21, -48.99&gt;]
+[&#39;H&#39;, 95, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 37.75, 21.52, -51.51&gt;]
+[&#39;H&#39;, 96, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 36.46, 20.41, -54.71&gt;]
+[&#39;H&#39;, 97, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 38.90, 19.45, -56.94&gt;]
+[&#39;H&#39;, 98, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 39.92, 20.20, -60.17&gt;]
+[&#39;H&#39;, 99, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 41.78, 19.36, -63.14&gt;]
+[&#39;H&#39;, 100, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 42.86, 20.93, -66.16&gt;]
+[&#39;H&#39;, 101, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 43.22, 21.61, -69.66&gt;]
+[&#39;H&#39;, 102, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 44.73, 24.17, -71.47&gt;]
+[&#39;H&#39;, 103, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 44.87, 25.33, -74.70&gt;]
+[&#39;H&#39;, 104, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 47.47, 26.21, -77.05&gt;]
+[&#39;H&#39;, 105, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 48.73, 27.92, -79.89&gt;]
+[&#39;H&#39;, 106, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 50.96, 29.45, -81.07&gt;]
+[&#39;H&#39;, 107, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 54.19, 30.76, -80.01&gt;]
+[&#39;H&#39;, 108, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 54.20, 33.46, -79.50&gt;]
+[&#39;H&#39;, 109, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 51.63, 34.15, -78.78&gt;]
+[&#39;H&#39;, 110, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 49.06, 35.65, -76.74&gt;]
+[&#39;H&#39;, 111, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 46.98, 34.45, -73.96&gt;]
+[&#39;H&#39;, 112, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 44.23, 32.72, -75.36&gt;]
+[&#39;H&#39;, 113, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 42.48, 30.60, -76.19&gt;]
+[&#39;H&#39;, 114, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 41.08, 29.34, -74.16&gt;]
+[&#39;H&#39;, 115, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 39.89, 26.69, -71.94&gt;]
+[&#39;H&#39;, 116, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 39.72, 23.57, -73.07&gt;]
+[&#39;H&#39;, 117, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 39.63, 20.81, -72.49&gt;]
+[&#39;H&#39;, 118, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 38.83, 18.84, -69.66&gt;]
+[&#39;H&#39;, 119, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 39.52, 17.30, -66.54&gt;]
+[&#39;H&#39;, 120, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 38.01, 14.69, -64.48&gt;]
+[&#39;H&#39;, 120, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 39.55, 11.63, -61.69&gt;]
+[&#39;H&#39;, 121, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 37.72, 15.54, -61.89&gt;]
+[&#39;H&#39;, 122, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 38.57, 15.63, -58.38&gt;]
+[&#39;H&#39;, 123, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 37.97, 15.09, -54.93&gt;]
+[&#39;H&#39;, 124, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 39.07, 17.08, -52.28&gt;]
+[&#39;H&#39;, 125, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 39.42, 17.24, -48.91&gt;]
+[&#39;H&#39;, 126, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 40.03, 19.23, -46.21&gt;]
+[&#39;H&#39;, 127, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 40.57, 19.02, -42.91&gt;]
+[&#39;H&#39;, 128, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 40.44, 18.80, -39.33&gt;]
+[&#39;H&#39;, 129, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 38.96, 16.75, -38.33&gt;]
+[&#39;H&#39;, 130, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 38.35, 13.28, -37.62&gt;]
+[&#39;H&#39;, 131, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 37.67, 10.33, -39.58&gt;]
+[&#39;H&#39;, 132, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 34.35, 9.29, -39.43&gt;]
+[&#39;H&#39;, 133, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 31.35, 7.52, -38.93&gt;]
+[&#39;H&#39;, 134, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 27.81, 8.14, -39.49&gt;]
+[&#39;H&#39;, 135, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 25.14, 9.03, -37.16&gt;]
+[&#39;H&#39;, 136, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 21.77, 8.03, -37.30&gt;]
+[&#39;H&#39;, 137, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 18.65, 9.38, -37.18&gt;]
+[&#39;H&#39;, 138, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 15.11, 9.18, -36.76&gt;]
+[&#39;H&#39;, 139, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 12.76, 11.04, -38.68&gt;]
+[&#39;H&#39;, 140, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 9.71, 11.51, -37.91&gt;]
+[&#39;H&#39;, 141, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 6.46, 10.84, -39.23&gt;]
+[&#39;H&#39;, 142, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 3.65, 13.08, -38.93&gt;]
+[&#39;H&#39;, 143, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 1.10, 12.44, -36.58&gt;]
+[&#39;H&#39;, 144, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector -1.24, 13.81, -36.81&gt;]
+[&#39;H&#39;, 145, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -1.74, 13.84, -39.61&gt;]
+[&#39;H&#39;, 146, &#39;THR&#39;, &#39;N&#39;, &lt;Vector -2.83, 14.80, -42.93&gt;]
+[&#39;H&#39;, 147, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -6.05, 13.83, -43.35&gt;]
+[&#39;H&#39;, 148, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector -6.75, 11.37, -45.52&gt;]
+[&#39;H&#39;, 149, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector -4.84, 12.41, -47.29&gt;]
+[&#39;H&#39;, 150, &#39;THR&#39;, &#39;N&#39;, &lt;Vector -1.58, 13.81, -47.86&gt;]
+[&#39;H&#39;, 151, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 1.38, 12.74, -46.28&gt;]
+[&#39;H&#39;, 152, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 4.50, 13.47, -44.66&gt;]
+[&#39;H&#39;, 153, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 7.75, 12.15, -44.10&gt;]
+[&#39;H&#39;, 154, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 10.98, 11.18, -42.81&gt;]
+[&#39;H&#39;, 155, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 14.60, 10.90, -42.51&gt;]
+[&#39;H&#39;, 156, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 17.10, 11.91, -40.29&gt;]
+[&#39;H&#39;, 157, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 20.42, 12.50, -40.78&gt;]
+[&#39;H&#39;, 158, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 23.16, 12.61, -39.03&gt;]
+[&#39;H&#39;, 159, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 26.24, 14.09, -37.94&gt;]
+[&#39;H&#39;, 160, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 28.67, 13.07, -39.26&gt;]
+[&#39;H&#39;, 161, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 31.76, 12.25, -40.98&gt;]
+[&#39;H&#39;, 162, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 34.04, 11.83, -43.67&gt;]
+[&#39;H&#39;, 163, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 32.26, 13.72, -46.29&gt;]
+[&#39;H&#39;, 164, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 30.98, 11.68, -49.01&gt;]
+[&#39;H&#39;, 165, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 27.52, 10.78, -48.11&gt;]
+[&#39;H&#39;, 166, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 25.12, 8.31, -49.01&gt;]
+[&#39;H&#39;, 167, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 21.63, 8.02, -49.45&gt;]
+[&#39;H&#39;, 168, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 18.92, 5.88, -49.56&gt;]
+[&#39;H&#39;, 169, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 15.55, 4.61, -49.99&gt;]
+[&#39;H&#39;, 170, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 13.63, 2.02, -48.74&gt;]
+[&#39;H&#39;, 170, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 9.58, 1.48, -48.73&gt;]
+[&#39;H&#39;, 171, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 15.40, 0.20, -49.94&gt;]
+[&#39;H&#39;, 172, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 15.81, 1.22, -52.54&gt;]
+[&#39;H&#39;, 173, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 13.32, 0.78, -53.70&gt;]
+[&#39;H&#39;, 174, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 11.39, 2.71, -53.19&gt;]
+[&#39;H&#39;, 175, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 11.12, 5.74, -54.64&gt;]
+[&#39;H&#39;, 176, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 9.77, 7.90, -55.71&gt;]
+[&#39;H&#39;, 177, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 8.87, 11.21, -54.90&gt;]
+[&#39;H&#39;, 178, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 10.96, 11.61, -53.13&gt;]
+[&#39;H&#39;, 179, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 13.28, 13.58, -51.38&gt;]
+[&#39;H&#39;, 180, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 16.54, 14.42, -50.88&gt;]
+[&#39;H&#39;, 181, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 18.57, 16.34, -49.00&gt;]
+[&#39;H&#39;, 182, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 21.27, 18.70, -49.54&gt;]
+[&#39;H&#39;, 183, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 24.33, 18.25, -47.74&gt;]
+[&#39;H&#39;, 184, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 25.27, 20.01, -44.74&gt;]
+[&#39;H&#39;, 185, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 28.01, 21.72, -43.34&gt;]
+[&#39;H&#39;, 186, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 28.59, 21.51, -40.07&gt;]
+[&#39;H&#39;, 186, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 26.81, 18.25, -37.59&gt;]
+[&#39;H&#39;, 187, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 29.37, 23.53, -37.14&gt;]
+[&#39;H&#39;, 188, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 30.89, 21.98, -35.47&gt;]
+[&#39;H&#39;, 189, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 32.60, 20.60, -37.12&gt;]
+[&#39;H&#39;, 190, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 31.68, 18.27, -38.26&gt;]
+[&#39;H&#39;, 191, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 29.48, 16.72, -40.65&gt;]
+[&#39;H&#39;, 192, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 26.00, 17.09, -41.58&gt;]
+[&#39;H&#39;, 193, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 22.73, 16.10, -42.67&gt;]
+[&#39;H&#39;, 194, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 19.40, 15.74, -44.04&gt;]
+[&#39;H&#39;, 195, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 16.92, 13.44, -45.26&gt;]
+[&#39;H&#39;, 196, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 13.94, 13.31, -46.94&gt;]
+[&#39;H&#39;, 197, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 10.60, 12.15, -47.64&gt;]
+[&#39;H&#39;, 198, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 7.41, 12.18, -49.20&gt;]
+[&#39;H&#39;, 199, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 4.25, 10.66, -48.68&gt;]
+[&#39;H&#39;, 200, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 1.10, 8.94, -49.23&gt;]
+[&#39;H&#39;, 201, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -1.37, 9.47, -46.69&gt;]
+[&#39;H&#39;, 202, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -2.86, 7.31, -45.77&gt;]
+[&#39;H&#39;, 203, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -1.25, 5.10, -46.01&gt;]
+[&#39;H&#39;, 204, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 0.48, 5.02, -43.88&gt;]
+[&#39;H&#39;, 205, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 0.30, 3.28, -41.67&gt;]
+[&#39;H&#39;, 206, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 0.48, 0.73, -42.72&gt;]
+[&#39;H&#39;, 207, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 2.29, 0.22, -45.03&gt;]
+[&#39;H&#39;, 207, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 4.55, -0.63, -49.25&gt;]
+[&#39;H&#39;, 208, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 5.80, -0.22, -44.87&gt;]
+[&#39;H&#39;, 209, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 8.48, 1.94, -44.08&gt;]
+[&#39;H&#39;, 210, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 11.76, 2.40, -44.54&gt;]
+[&#39;H&#39;, 211, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 14.86, 3.93, -44.23&gt;]
+[&#39;H&#39;, 212, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 17.87, 3.80, -45.98&gt;]
+[&#39;H&#39;, 212, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 17.51, 0.49, -46.40&gt;]
+[&#39;H&#39;, 213, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 20.93, 4.41, -45.10&gt;]
+[&#39;H&#39;, 214, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 24.09, 4.99, -46.21&gt;]
+[&#39;H&#39;, 214, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 27.57, 3.32, -48.67&gt;]
+[&#39;H&#39;, 215, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 27.50, 5.16, -45.65&gt;]
+[&#39;H&#39;, 216, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 30.25, 5.15, -47.15&gt;]
+[&#39;H&#39;, 217, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 33.06, 5.96, -46.69&gt;]
+[&#39;H&#39;, 218, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 33.53, 5.36, -43.94&gt;]
+[&#39;H&#39;, 219, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 32.87, 2.71, -43.83&gt;]
+[&#39;H&#39;, 219, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 33.46, -2.12, -43.48&gt;]
+[&#39;H&#39;, 220, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 30.22, 2.14, -43.04&gt;]
+[&#39;H&#39;, 221, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 26.85, 1.28, -42.74&gt;]
+[&#39;H&#39;, 222, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 23.58, 1.99, -42.23&gt;]
+[&#39;H&#39;, 223, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 20.35, 0.97, -41.54&gt;]
+[&#39;H&#39;, 224, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 17.41, 2.36, -40.94&gt;]
+[&#39;H&#39;, 225, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 14.34, 2.15, -39.49&gt;]
+[&#39;H&#39;, 226, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 11.41, 4.02, -40.00&gt;]
+[&#39;H&#39;, 227, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 8.75, 5.14, -38.31&gt;]
+[&#39;H&#39;, 228, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 5.49, 6.15, -37.15&gt;]
+[&#39;H&#39;, 229, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 4.62, 8.23, -34.21&gt;]
+[&#39;H&#39;, 230, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 4.86, 7.46, -30.63&gt;]
+[&#39;H&#39;, 231, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 2.58, 7.45, -29.09&gt;]
+[&#39;L&#39;, 7, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 32.48, 31.93, -54.71&gt;]
+[&#39;L&#39;, 7, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 29.69, 37.38, -54.47&gt;]
+[&#39;L&#39;, 8, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 28.92, 32.13, -54.11&gt;]
+[&#39;L&#39;, 9, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 26.65, 31.23, -56.71&gt;]
+[&#39;L&#39;, 10, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 24.91, 33.44, -58.95&gt;]
+[&#39;L&#39;, 11, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 21.39, 33.76, -59.78&gt;]
+[&#39;L&#39;, 12, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 18.98, 33.06, -62.32&gt;]
+[&#39;L&#39;, 13, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 15.88, 33.07, -63.77&gt;]
+[&#39;L&#39;, 14, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 14.06, 31.43, -66.28&gt;]
+[&#39;L&#39;, 15, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 12.24, 30.48, -69.28&gt;]
+[&#39;L&#39;, 16, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 11.74, 27.70, -71.55&gt;]
+[&#39;L&#39;, 17, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 12.64, 28.44, -74.84&gt;]
+[&#39;L&#39;, 18, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 13.05, 31.15, -74.36&gt;]
+[&#39;L&#39;, 19, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 15.11, 34.08, -74.81&gt;]
+[&#39;L&#39;, 20, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 18.34, 34.62, -73.58&gt;]
+[&#39;L&#39;, 21, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 20.77, 36.64, -72.07&gt;]
+[&#39;L&#39;, 22, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 23.91, 36.86, -70.78&gt;]
+[&#39;L&#39;, 23, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 26.07, 38.84, -68.90&gt;]
+[&#39;L&#39;, 24, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 29.51, 39.23, -68.44&gt;]
+[&#39;L&#39;, 25, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 30.94, 39.71, -65.33&gt;]
+[&#39;L&#39;, 26, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 33.44, 39.61, -64.04&gt;]
+[&#39;L&#39;, 27, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 35.10, 40.33, -66.12&gt;]
+[&#39;L&#39;, 28, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 35.35, 43.05, -66.37&gt;]
+[&#39;L&#39;, 28, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 31.40, 44.84, -67.36&gt;]
+[&#39;L&#39;, 29, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 37.77, 43.88, -65.45&gt;]
+[&#39;L&#39;, 30, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 40.10, 43.91, -67.32&gt;]
+[&#39;L&#39;, 31, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 40.83, 44.11, -70.89&gt;]
+[&#39;L&#39;, 32, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.23, 41.65, -72.11&gt;]
+[&#39;L&#39;, 33, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 41.09, 38.33, -73.68&gt;]
+[&#39;L&#39;, 34, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 38.03, 36.47, -73.50&gt;]
+[&#39;L&#39;, 35, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 36.46, 33.64, -72.15&gt;]
+[&#39;L&#39;, 36, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 33.74, 31.32, -72.10&gt;]
+[&#39;L&#39;, 37, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 31.86, 29.04, -70.10&gt;]
+[&#39;L&#39;, 38, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 29.92, 26.08, -69.47&gt;]
+[&#39;L&#39;, 38, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 24.69, 24.37, -71.32&gt;]
+[&#39;L&#39;, 39, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 28.37, 24.40, -66.83&gt;]
+[&#39;L&#39;, 39, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 31.53, 22.12, -62.08&gt;]
+[&#39;L&#39;, 40, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 27.01, 21.55, -65.36&gt;]
+[&#39;L&#39;, 41, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 25.32, 19.96, -62.57&gt;]
+[&#39;L&#39;, 42, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 27.52, 17.99, -60.65&gt;]
+[&#39;L&#39;, 43, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 29.37, 17.42, -62.65&gt;]
+[&#39;L&#39;, 44, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 32.22, 18.12, -64.76&gt;]
+[&#39;L&#39;, 45, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 33.01, 21.44, -65.96&gt;]
+[&#39;L&#39;, 46, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 32.22, 22.66, -69.31&gt;]
+[&#39;L&#39;, 47, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 33.64, 23.87, -72.31&gt;]
+[&#39;L&#39;, 48, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 32.34, 26.62, -74.03&gt;]
+[&#39;L&#39;, 49, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 32.66, 29.03, -75.58&gt;]
+[&#39;L&#39;, 50, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 35.40, 30.90, -76.83&gt;]
+[&#39;L&#39;, 51, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 37.91, 33.49, -76.92&gt;]
+[&#39;L&#39;, 52, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 36.12, 35.67, -76.77&gt;]
+[&#39;L&#39;, 53, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.11, 35.56, -78.85&gt;]
+[&#39;L&#39;, 54, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.37, 33.31, -80.50&gt;]
+[&#39;L&#39;, 55, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 32.99, 30.32, -81.42&gt;]
+[&#39;L&#39;, 56, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 33.16, 27.27, -79.76&gt;]
+[&#39;L&#39;, 57, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.23, 24.10, -81.04&gt;]
+[&#39;L&#39;, 58, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 31.62, 22.00, -81.91&gt;]
+[&#39;L&#39;, 59, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 29.66, 23.07, -80.26&gt;]
+[&#39;L&#39;, 60, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 26.26, 24.04, -79.97&gt;]
+[&#39;L&#39;, 61, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 24.73, 26.33, -82.32&gt;]
+[&#39;L&#39;, 62, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 23.06, 28.22, -81.25&gt;]
+[&#39;L&#39;, 63, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 24.26, 29.34, -79.07&gt;]
+[&#39;L&#39;, 64, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 26.11, 32.26, -78.54&gt;]
+[&#39;L&#39;, 65, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 28.73, 34.68, -78.41&gt;]
+[&#39;L&#39;, 66, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 29.80, 37.98, -77.57&gt;]
+[&#39;L&#39;, 67, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 31.51, 41.14, -77.87&gt;]
+[&#39;L&#39;, 68, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 31.49, 44.45, -76.81&gt;]
+[&#39;L&#39;, 69, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 33.18, 47.05, -76.56&gt;]
+[&#39;L&#39;, 70, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 34.42, 47.32, -73.32&gt;]
+[&#39;L&#39;, 71, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 32.73, 45.36, -72.43&gt;]
+[&#39;L&#39;, 72, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 31.65, 42.06, -72.20&gt;]
+[&#39;L&#39;, 73, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 29.53, 39.56, -73.37&gt;]
+[&#39;L&#39;, 74, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 27.37, 36.68, -73.16&gt;]
+[&#39;L&#39;, 75, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 25.08, 34.97, -75.13&gt;]
+[&#39;L&#39;, 76, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 22.14, 33.08, -75.32&gt;]
+[&#39;L&#39;, 77, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 20.18, 32.16, -77.86&gt;]
+[&#39;L&#39;, 78, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 17.66, 30.95, -78.02&gt;]
+[&#39;L&#39;, 79, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 16.33, 29.28, -75.47&gt;]
+[&#39;L&#39;, 80, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 16.93, 25.91, -74.71&gt;]
+[&#39;L&#39;, 80, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 15.66, 25.45, -78.44&gt;]
+[&#39;L&#39;, 81, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 15.75, 22.79, -73.25&gt;]
+[&#39;L&#39;, 82, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 18.01, 21.33, -72.27&gt;]
+[&#39;L&#39;, 83, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 19.76, 23.34, -71.65&gt;]
+[&#39;L&#39;, 84, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 19.53, 24.55, -69.18&gt;]
+[&#39;L&#39;, 85, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 21.49, 25.26, -66.59&gt;]
+[&#39;L&#39;, 86, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 24.62, 26.08, -64.96&gt;]
+[&#39;L&#39;, 87, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 26.58, 28.93, -65.73&gt;]
+[&#39;L&#39;, 88, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 29.79, 30.19, -66.47&gt;]
+[&#39;L&#39;, 89, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 32.11, 32.86, -66.90&gt;]
+[&#39;L&#39;, 90, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 35.47, 33.41, -68.06&gt;]
+[&#39;L&#39;, 90, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 40.93, 31.48, -69.02&gt;]
+[&#39;L&#39;, 91, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 38.49, 35.12, -67.64&gt;]
+[&#39;L&#39;, 91, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 38.99, 40.86, -69.44&gt;]
+[&#39;L&#39;, 92, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.75, 36.55, -68.41&gt;]
+[&#39;L&#39;, 93, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 43.62, 38.39, -66.68&gt;]
+[&#39;L&#39;, 94, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 46.37, 39.46, -66.44&gt;]
+[&#39;L&#39;, 94, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 47.94, 43.08, -65.82&gt;]
+[&#39;L&#39;, 95, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 47.68, 37.89, -68.29&gt;]
+[&#39;L&#39;, 96, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 49.23, 35.75, -67.23&gt;]
+[&#39;L&#39;, 97, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 47.82, 35.31, -64.92&gt;]
+[&#39;L&#39;, 98, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 44.63, 33.97, -64.01&gt;]
+[&#39;L&#39;, 99, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 41.17, 34.32, -63.81&gt;]
+[&#39;L&#39;, 100, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 37.93, 33.38, -62.79&gt;]
+[&#39;L&#39;, 101, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 34.59, 34.35, -63.30&gt;]
+[&#39;L&#39;, 102, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 31.73, 35.10, -61.17&gt;]
+[&#39;L&#39;, 102, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 26.95, 35.48, -57.24&gt;]
+[&#39;L&#39;, 103, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 29.28, 32.54, -60.87&gt;]
+[&#39;L&#39;, 104, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 26.44, 32.05, -63.03&gt;]
+[&#39;L&#39;, 105, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 23.38, 30.77, -62.71&gt;]
+[&#39;L&#39;, 106, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 21.03, 29.31, -64.71&gt;]
+[&#39;L&#39;, 107, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 17.70, 28.80, -64.34&gt;]
+[&#39;L&#39;, 108, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 14.59, 26.92, -64.29&gt;]
+[&#39;L&#39;, 109, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 11.57, 28.34, -65.19&gt;]
+[&#39;L&#39;, 110, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 8.36, 28.35, -63.65&gt;]
+[&#39;L&#39;, 111, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 4.90, 27.97, -62.59&gt;]
+[&#39;L&#39;, 112, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 3.75, 29.70, -59.65&gt;]
+[&#39;L&#39;, 113, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 4.06, 27.95, -56.66&gt;]
+[&#39;L&#39;, 114, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 2.83, 27.18, -53.57&gt;]
+[&#39;L&#39;, 115, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 4.51, 26.24, -50.54&gt;]
+[&#39;L&#39;, 116, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 4.05, 23.13, -48.78&gt;]
+[&#39;L&#39;, 117, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 4.09, 22.68, -45.37&gt;]
+[&#39;L&#39;, 118, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 5.92, 21.08, -42.79&gt;]
+[&#39;L&#39;, 119, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 6.63, 20.03, -39.48&gt;]
+[&#39;L&#39;, 120, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 9.05, 18.55, -37.40&gt;]
+[&#39;L&#39;, 121, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 9.59, 16.98, -34.37&gt;]
+[&#39;L&#39;, 122, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 12.48, 16.42, -32.22&gt;]
+[&#39;L&#39;, 123, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 13.98, 13.15, -32.14&gt;]
+[&#39;L&#39;, 124, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 13.55, 10.47, -29.73&gt;]
+[&#39;L&#39;, 125, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 15.84, 8.93, -29.40&gt;]
+[&#39;L&#39;, 126, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 17.94, 10.64, -30.24&gt;]
+[&#39;L&#39;, 126, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 20.02, 15.77, -32.96&gt;]
+[&#39;L&#39;, 127, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 17.69, 12.69, -28.33&gt;]
+[&#39;L&#39;, 128, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 18.49, 11.36, -26.00&gt;]
+[&#39;L&#39;, 129, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 21.20, 11.27, -26.43&gt;]
+[&#39;L&#39;, 130, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 22.05, 13.80, -25.87&gt;]
+[&#39;L&#39;, 131, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 21.53, 16.04, -27.46&gt;]
+[&#39;L&#39;, 132, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 19.27, 18.10, -29.36&gt;]
+[&#39;L&#39;, 133, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 17.63, 18.25, -32.35&gt;]
+[&#39;L&#39;, 134, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 15.48, 20.09, -34.30&gt;]
+[&#39;L&#39;, 135, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 13.31, 19.98, -37.01&gt;]
+[&#39;L&#39;, 136, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 12.10, 21.78, -39.74&gt;]
+[&#39;L&#39;, 137, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 10.19, 21.45, -42.56&gt;]
+[&#39;L&#39;, 138, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 9.88, 22.54, -45.85&gt;]
+[&#39;L&#39;, 139, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 8.11, 21.85, -48.57&gt;]
+[&#39;L&#39;, 139, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 6.98, 17.48, -50.31&gt;]
+[&#39;L&#39;, 140, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 8.22, 21.20, -52.02&gt;]
+[&#39;L&#39;, 140, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 6.54, 17.88, -54.06&gt;]
+[&#39;L&#39;, 141, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 7.88, 23.79, -53.53&gt;]
+[&#39;L&#39;, 142, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 7.68, 26.98, -55.29&gt;]
+[&#39;L&#39;, 143, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 8.53, 30.29, -56.25&gt;]
+[&#39;L&#39;, 144, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 12.09, 29.91, -55.33&gt;]
+[&#39;L&#39;, 145, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 12.58, 31.65, -53.22&gt;]
+[&#39;L&#39;, 146, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 11.98, 32.14, -49.84&gt;]
+[&#39;L&#39;, 147, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 11.02, 32.60, -46.43&gt;]
+[&#39;L&#39;, 148, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 11.88, 31.54, -43.23&gt;]
+[&#39;L&#39;, 149, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 10.89, 31.51, -39.92&gt;]
+[&#39;L&#39;, 149, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 12.38, 34.16, -35.88&gt;]
+[&#39;L&#39;, 150, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 11.77, 30.91, -36.68&gt;]
+[&#39;L&#39;, 151, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 10.12, 30.18, -33.63&gt;]
+[&#39;L&#39;, 152, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 10.15, 29.97, -30.17&gt;]
+[&#39;L&#39;, 153, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 8.42, 29.21, -27.48&gt;]
+[&#39;L&#39;, 154, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 7.14, 31.56, -28.18&gt;]
+[&#39;L&#39;, 154, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 3.30, 33.12, -28.22&gt;]
+[&#39;L&#39;, 155, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 9.28, 33.28, -28.41&gt;]
+[&#39;L&#39;, 156, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 11.35, 34.97, -30.58&gt;]
+[&#39;L&#39;, 157, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 13.71, 33.49, -32.70&gt;]
+[&#39;L&#39;, 157, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 13.95, 31.45, -29.42&gt;]
+[&#39;L&#39;, 158, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 17.18, 33.43, -33.74&gt;]
+[&#39;L&#39;, 159, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 20.06, 32.61, -35.46&gt;]
+[&#39;L&#39;, 160, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 20.57, 30.03, -34.52&gt;]
+[&#39;L&#39;, 160, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 18.19, 29.00, -31.28&gt;]
+[&#39;L&#39;, 161, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 19.87, 28.03, -36.27&gt;]
+[&#39;L&#39;, 162, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 20.12, 26.21, -39.35&gt;]
+[&#39;L&#39;, 162, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 25.39, 25.29, -40.06&gt;]
+[&#39;L&#39;, 163, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 19.73, 26.12, -42.90&gt;]
+[&#39;L&#39;, 164, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 18.94, 24.12, -45.80&gt;]
+[&#39;L&#39;, 165, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 18.72, 23.67, -49.28&gt;]
+[&#39;L&#39;, 166, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 17.25, 21.92, -51.98&gt;]
+[&#39;L&#39;, 167, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 18.10, 21.11, -55.43&gt;]
+[&#39;L&#39;, 168, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 16.23, 22.15, -58.38&gt;]
+[&#39;L&#39;, 168, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 12.93, 25.50, -61.40&gt;]
+[&#39;L&#39;, 169, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 13.44, 20.10, -58.80&gt;]
+[&#39;L&#39;, 170, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 13.42, 17.27, -60.94&gt;]
+[&#39;L&#39;, 171, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 11.04, 16.61, -62.18&gt;]
+[&#39;L&#39;, 172, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 8.71, 18.34, -61.48&gt;]
+[&#39;L&#39;, 173, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 9.88, 20.82, -61.21&gt;]
+[&#39;L&#39;, 174, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 10.12, 22.21, -58.81&gt;]
+[&#39;L&#39;, 175, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 11.27, 23.43, -55.58&gt;]
+[&#39;L&#39;, 176, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 12.65, 22.16, -52.49&gt;]
+[&#39;L&#39;, 177, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 13.09, 22.69, -49.00&gt;]
+[&#39;L&#39;, 178, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 14.91, 22.43, -46.03&gt;]
+[&#39;L&#39;, 179, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 14.85, 23.42, -42.65&gt;]
+[&#39;L&#39;, 180, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 16.75, 23.46, -39.88&gt;]
+[&#39;L&#39;, 181, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 16.71, 23.52, -36.50&gt;]
+[&#39;L&#39;, 182, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 18.90, 23.60, -33.85&gt;]
+[&#39;L&#39;, 183, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 19.44, 22.51, -30.59&gt;]
+[&#39;L&#39;, 184, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 20.70, 22.08, -27.24&gt;]
+[&#39;L&#39;, 185, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 19.94, 19.21, -25.17&gt;]
+[&#39;L&#39;, 186, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 19.17, 19.97, -22.58&gt;]
+[&#39;L&#39;, 187, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 18.44, 22.69, -22.87&gt;]
+[&#39;L&#39;, 188, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 16.38, 22.36, -24.75&gt;]
+[&#39;L&#39;, 189, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 14.44, 21.00, -23.24&gt;]
+[&#39;L&#39;, 190, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 13.60, 22.98, -21.52&gt;]
+[&#39;L&#39;, 191, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 11.61, 24.50, -22.64&gt;]
+[&#39;L&#39;, 192, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 8.33, 24.72, -24.17&gt;]
+[&#39;L&#39;, 193, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 6.50, 25.21, -26.46&gt;]
+[&#39;L&#39;, 194, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 7.14, 24.88, -29.85&gt;]
+[&#39;L&#39;, 195, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 7.70, 26.34, -32.92&gt;]
+[&#39;L&#39;, 196, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 7.72, 26.96, -36.42&gt;]
+[&#39;L&#39;, 197, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 7.48, 29.58, -38.71&gt;]
+[&#39;L&#39;, 198, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 6.34, 30.22, -41.87&gt;]
+[&#39;L&#39;, 199, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 6.93, 32.17, -44.67&gt;]
+[&#39;L&#39;, 200, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 5.99, 32.95, -47.92&gt;]
+[&#39;L&#39;, 201, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 5.74, 33.50, -51.48&gt;]
+[&#39;L&#39;, 201, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 4.24, 37.48, -55.04&gt;]
+[&#39;L&#39;, 202, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 3.52, 32.25, -52.65&gt;]
+[&#39;L&#39;, 203, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 1.79, 32.01, -50.48&gt;]
+[&#39;L&#39;, 204, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -0.92, 33.54, -49.06&gt;]
+[&#39;L&#39;, 205, &#39;SER&#39;, &#39;N&#39;, &lt;Vector -0.95, 34.51, -46.49&gt;]
+[&#39;L&#39;, 206, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 1.31, 34.15, -43.71&gt;]
+[&#39;L&#39;, 207, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 2.29, 30.77, -42.87&gt;]
+[&#39;L&#39;, 208, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 2.15, 28.65, -40.09&gt;]
+[&#39;L&#39;, 209, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 3.58, 25.94, -38.43&gt;]
+[&#39;L&#39;, 210, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 3.47, 23.92, -35.58&gt;]
+[&#39;L&#39;, 211, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 4.40, 22.33, -32.47&gt;]
+[&#39;L&#39;, 212, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 3.89, 21.00, -29.15&gt;]
+[&#39;L&#39;, 212, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 0.76, 22.10, -27.24&gt;]
+[&#39;L&#39;, 213, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 6.26, 20.40, -26.67&gt;]
+[&#39;L&#39;, 214, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 6.71, 17.12, -25.66&gt;]
+[&#39;L&#39;, 215, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 4.10, 16.22, -25.77&gt;]
+[&#39;L&#39;, 216, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 1.38, 14.52, -27.45&gt;]
+[&#39;C&#39;, 5, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 40.39, -1.21, -78.05&gt;]
+[&#39;C&#39;, 6, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 39.10, -1.92, -74.95&gt;]
+[&#39;C&#39;, 6, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 42.15, 0.91, -71.21&gt;]
+[&#39;C&#39;, 7, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 38.58, -2.41, -71.43&gt;]
+[&#39;C&#39;, 8, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 36.90, -1.15, -68.81&gt;]
+[&#39;C&#39;, 9, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 36.68, -0.96, -65.40&gt;]
+[&#39;C&#39;, 10, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.57, -0.58, -62.51&gt;]
+[&#39;C&#39;, 11, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 33.02, 0.21, -59.34&gt;]
+[&#39;C&#39;, 12, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 33.89, -1.13, -57.05&gt;]
+[&#39;C&#39;, 13, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 34.95, -1.30, -53.56&gt;]
+[&#39;C&#39;, 14, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 34.45, -0.62, -50.07&gt;]
+[&#39;C&#39;, 15, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 32.57, -2.75, -47.90&gt;]
+[&#39;C&#39;, 16, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 30.24, -4.41, -45.77&gt;]
+[&#39;C&#39;, 16, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 28.41, -1.58, -42.14&gt;]
+[&#39;C&#39;, 17, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 30.03, -7.66, -44.17&gt;]
+[&#39;C&#39;, 18, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 27.47, -9.78, -45.47&gt;]
+[&#39;C&#39;, 19, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 26.40, -7.69, -46.91&gt;]
+[&#39;C&#39;, 20, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 25.84, -5.93, -50.06&gt;]
+[&#39;C&#39;, 21, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 27.16, -5.46, -53.37&gt;]
+[&#39;C&#39;, 22, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 27.78, -3.99, -56.55&gt;]
+[&#39;C&#39;, 23, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 29.52, -4.57, -59.41&gt;]
+[&#39;C&#39;, 24, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 30.94, -3.13, -62.36&gt;]
+[&#39;C&#39;, 25, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 31.76, -3.49, -65.82&gt;]
+[&#39;C&#39;, 26, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 32.72, -1.85, -68.33&gt;]
+[&#39;C&#39;, 27, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 32.91, -1.91, -71.78&gt;]
+[&#39;C&#39;, 28, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.80, -1.29, -74.80&gt;]
+[&#39;C&#39;, 29, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 35.59, -1.15, -78.30&gt;]
+[&#39;C&#39;, 30, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 34.83, -3.70, -79.02&gt;]
+[&#39;C&#39;, 31, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 31.94, -5.87, -79.25&gt;]
+[&#39;C&#39;, 31, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 27.31, -5.76, -80.49&gt;]
+[&#39;C&#39;, 32, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 30.17, -6.85, -76.52&gt;]
+[&#39;C&#39;, 33, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 28.18, -8.74, -76.50&gt;]
+[&#39;C&#39;, 34, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 28.79, -10.84, -78.28&gt;]
+[&#39;C&#39;, 35, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 30.92, -12.20, -77.15&gt;]
+[&#39;C&#39;, 36, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 32.57, -14.06, -74.52&gt;]
+[&#39;C&#39;, 37, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 32.35, -12.86, -71.33&gt;]
+[&#39;C&#39;, 38, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 34.31, -12.69, -68.54&gt;]
+[&#39;C&#39;, 39, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 34.56, -12.74, -64.97&gt;]
+[&#39;C&#39;, 40, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 37.25, -12.49, -62.83&gt;]
+[&#39;C&#39;, 41, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 38.87, -12.97, -59.80&gt;]
+[&#39;C&#39;, 42, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 41.31, -11.98, -57.28&gt;]
+[&#39;C&#39;, 42, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 47.15, -12.68, -58.39&gt;]
+[&#39;C&#39;, 43, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 42.71, -12.66, -54.34&gt;]
+[&#39;C&#39;, 44, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 44.54, -10.90, -51.75&gt;]
+[&#39;C&#39;, 45, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 47.97, -11.49, -52.05&gt;]
+[&#39;C&#39;, 46, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 47.51, -14.01, -53.14&gt;]
+[&#39;C&#39;, 47, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 46.58, -16.43, -55.71&gt;]
+[&#39;C&#39;, 48, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 44.97, -16.30, -58.99&gt;]
+[&#39;C&#39;, 49, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 41.41, -16.55, -59.22&gt;]
+[&#39;C&#39;, 50, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 38.71, -17.93, -60.79&gt;]
+[&#39;C&#39;, 51, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 35.43, -16.63, -61.26&gt;]
+[&#39;C&#39;, 52, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 32.87, -16.05, -62.54&gt;]
+[&#39;C&#39;, 53, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 31.08, -16.23, -65.69&gt;]
+[&#39;C&#39;, 54, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 29.72, -14.95, -68.76&gt;]
+[&#39;C&#39;, 55, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 28.01, -15.46, -71.77&gt;]
+[&#39;C&#39;, 56, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 26.34, -14.05, -73.93&gt;]
+[&#39;C&#39;, 57, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 25.38, -14.25, -76.58&gt;]
+[&#39;C&#39;, 58, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 25.25, -17.02, -76.98&gt;]
+[&#39;C&#39;, 59, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 23.46, -17.68, -75.03&gt;]
+[&#39;C&#39;, 60, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 24.34, -18.25, -72.35&gt;]
+[&#39;C&#39;, 61, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 25.42, -18.64, -69.01&gt;]
+[&#39;C&#39;, 62, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 27.76, -18.98, -66.35&gt;]
+[&#39;C&#39;, 63, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 28.98, -20.12, -63.17&gt;]
+[&#39;C&#39;, 64, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 31.33, -20.16, -60.51&gt;]
+[&#39;C&#39;, 65, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 31.57, -22.61, -57.88&gt;]
+[&#39;C&#39;, 66, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 31.98, -21.53, -55.32&gt;]
+[&#39;C&#39;, 67, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 30.68, -19.11, -55.32&gt;]
+[&#39;C&#39;, 68, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 28.13, -19.51, -56.22&gt;]
+[&#39;C&#39;, 69, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 24.67, -18.86, -56.26&gt;]
+[&#39;C&#39;, 70, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 24.99, -16.58, -54.68&gt;]
+[&#39;C&#39;, 71, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 26.25, -14.56, -56.23&gt;]
+[&#39;C&#39;, 72, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 25.42, -12.80, -59.24&gt;]
+[&#39;C&#39;, 73, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 25.77, -12.64, -62.64&gt;]
+[&#39;C&#39;, 74, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 25.51, -10.43, -65.40&gt;]
+[&#39;C&#39;, 75, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 24.54, -8.61, -68.40&gt;]
+[&#39;C&#39;, 76, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 24.42, -5.58, -70.31&gt;]
+[&#39;C&#39;, 77, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 23.57, -4.88, -73.35&gt;]
+[&#39;C&#39;, 78, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 23.01, -2.55, -74.79&gt;]
+[&#39;C&#39;, 79, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 24.52, -0.66, -73.44&gt;]
+[&#39;C&#39;, 80, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 26.96, -1.81, -73.72&gt;]
+[&#39;C&#39;, 80, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 31.17, -2.45, -76.09&gt;]
+[&#39;C&#39;, 81, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 28.16, -3.22, -71.63&gt;]
+[&#39;C&#39;, 82, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 29.06, -5.29, -68.90&gt;]
+[&#39;C&#39;, 83, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 28.01, -6.84, -65.82&gt;]
+[&#39;C&#39;, 84, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 28.52, -7.66, -62.37&gt;]
+[&#39;C&#39;, 85, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 26.63, -8.75, -59.88&gt;]
+[&#39;C&#39;, 85, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 23.68, -6.73, -55.90&gt;]
+[&#39;C&#39;, 86, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 26.88, -8.79, -56.55&gt;]
+[&#39;C&#39;, 87, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 25.87, -10.48, -53.79&gt;]
+[&#39;C&#39;, 87, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 22.10, -10.57, -54.74&gt;]
+[&#39;C&#39;, 88, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 25.20, -11.32, -50.32&gt;]
+[&#39;C&#39;, 89, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 27.77, -11.04, -49.14&gt;]
+[&#39;C&#39;, 90, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 31.04, -12.05, -48.06&gt;]
+[&#39;C&#39;, 91, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 33.87, -12.13, -45.82&gt;]
+[&#39;C&#39;, 92, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 35.85, -13.62, -47.06&gt;]
+[&#39;C&#39;, 93, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 35.43, -13.03, -49.70&gt;]
+[&#39;C&#39;, 94, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 36.98, -10.85, -50.24&gt;]
+[&#39;C&#39;, 95, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 39.05, -9.25, -52.47&gt;]
+[&#39;C&#39;, 96, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 40.94, -8.27, -55.38&gt;]
+[&#39;C&#39;, 97, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 39.02, -7.61, -58.15&gt;]
+[&#39;C&#39;, 98, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 38.82, -8.59, -61.45&gt;]
+[&#39;C&#39;, 99, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 37.71, -8.05, -64.82&gt;]
+[&#39;C&#39;, 100, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 37.45, -9.81, -67.92&gt;]
+[&#39;C&#39;, 101, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 37.89, -10.64, -71.38&gt;]
+[&#39;C&#39;, 102, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 36.96, -13.36, -73.36&gt;]
+[&#39;C&#39;, 103, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 37.53, -14.61, -76.51&gt;]
+[&#39;C&#39;, 104, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 35.51, -15.77, -79.28&gt;]
+[&#39;C&#39;, 105, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.97, -17.62, -82.26&gt;]
+[&#39;C&#39;, 106, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 33.15, -19.31, -83.89&gt;]
+[&#39;C&#39;, 107, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 29.90, -20.83, -83.52&gt;]
+[&#39;C&#39;, 108, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 29.91, -23.51, -82.88&gt;]
+[&#39;C&#39;, 109, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 32.34, -23.98, -81.63&gt;]
+[&#39;C&#39;, 110, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 34.52, -25.14, -79.01&gt;]
+[&#39;C&#39;, 111, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 35.88, -23.67, -75.93&gt;]
+[&#39;C&#39;, 112, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 38.82, -21.88, -76.73&gt;]
+[&#39;C&#39;, 113, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 40.61, -19.74, -77.13&gt;]
+[&#39;C&#39;, 114, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 41.43, -18.40, -74.85&gt;]
+[&#39;C&#39;, 115, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 41.81, -15.64, -72.49&gt;]
+[&#39;C&#39;, 116, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 42.11, -12.59, -73.69&gt;]
+[&#39;C&#39;, 117, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 41.95, -9.79, -73.31&gt;]
+[&#39;C&#39;, 118, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 42.00, -7.65, -70.51&gt;]
+[&#39;C&#39;, 119, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.54, -5.95, -67.78&gt;]
+[&#39;C&#39;, 120, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 41.40, -3.16, -65.59&gt;]
+[&#39;C&#39;, 120, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 39.14, 0.02, -63.31&gt;]
+[&#39;C&#39;, 121, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.95, -3.86, -62.99&gt;]
+[&#39;C&#39;, 122, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 39.21, -3.82, -59.84&gt;]
+[&#39;C&#39;, 123, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 39.01, -3.03, -56.43&gt;]
+[&#39;C&#39;, 124, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 37.59, -4.87, -53.84&gt;]
+[&#39;C&#39;, 125, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 36.66, -4.84, -50.57&gt;]
+[&#39;C&#39;, 126, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 35.67, -6.66, -47.88&gt;]
+[&#39;C&#39;, 127, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 34.47, -6.44, -44.72&gt;]
+[&#39;C&#39;, 128, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 33.76, -6.40, -41.21&gt;]
+[&#39;C&#39;, 129, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 34.81, -4.34, -39.76&gt;]
+[&#39;C&#39;, 130, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 35.01, -0.91, -38.74&gt;]
+[&#39;C&#39;, 131, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 36.16, 2.15, -40.20&gt;]
+[&#39;C&#39;, 132, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 39.31, 3.06, -39.04&gt;]
+[&#39;C&#39;, 133, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 41.98, 4.74, -37.51&gt;]
+[&#39;C&#39;, 134, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 45.54, 4.13, -37.14&gt;]
+[&#39;C&#39;, 135, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 47.52, 3.14, -34.24&gt;]
+[&#39;C&#39;, 136, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 50.78, 4.23, -33.42&gt;]
+[&#39;C&#39;, 137, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 53.85, 2.94, -32.65&gt;]
+[&#39;C&#39;, 138, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 57.17, 3.17, -31.34&gt;]
+[&#39;C&#39;, 139, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 59.97, 1.37, -32.62&gt;]
+[&#39;C&#39;, 140, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 62.63, 0.67, -30.97&gt;]
+[&#39;C&#39;, 141, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 66.11, 0.03, -30.40&gt;]
+[&#39;C&#39;, 142, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 67.50, -1.88, -27.66&gt;]
+[&#39;C&#39;, 144, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 72.42, -3.17, -26.35&gt;]
+[&#39;C&#39;, 145, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 73.57, -2.94, -28.88&gt;]
+[&#39;C&#39;, 146, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 75.30, -3.51, -32.03&gt;]
+[&#39;C&#39;, 147, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 78.60, -2.99, -31.53&gt;]
+[&#39;C&#39;, 148, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 80.17, -0.33, -32.90&gt;]
+[&#39;C&#39;, 149, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 78.90, -0.63, -35.43&gt;]
+[&#39;C&#39;, 150, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 76.01, -1.32, -37.44&gt;]
+[&#39;C&#39;, 151, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 72.80, -0.13, -36.70&gt;]
+[&#39;C&#39;, 152, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 69.32, -0.82, -36.27&gt;]
+[&#39;C&#39;, 153, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 66.09, 0.62, -36.59&gt;]
+[&#39;C&#39;, 154, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 62.61, 1.45, -36.16&gt;]
+[&#39;C&#39;, 155, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 59.05, 1.73, -36.81&gt;]
+[&#39;C&#39;, 156, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 56.08, 0.57, -35.41&gt;]
+[&#39;C&#39;, 157, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 53.03, 0.02, -36.80&gt;]
+[&#39;C&#39;, 158, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 49.95, -0.25, -35.83&gt;]
+[&#39;C&#39;, 159, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 46.74, -1.85, -35.73&gt;]
+[&#39;C&#39;, 160, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 44.73, -0.75, -37.64&gt;]
+[&#39;C&#39;, 161, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 42.25, 0.25, -40.11&gt;]
+[&#39;C&#39;, 162, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 40.85, 0.94, -43.28&gt;]
+[&#39;C&#39;, 163, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 43.27, -0.78, -45.45&gt;]
+[&#39;C&#39;, 164, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 45.33, 1.45, -47.45&gt;]
+[&#39;C&#39;, 165, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 48.38, 2.18, -45.49&gt;]
+[&#39;C&#39;, 166, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 50.87, 4.73, -45.53&gt;]
+[&#39;C&#39;, 167, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 54.35, 5.09, -45.00&gt;]
+[&#39;C&#39;, 168, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 56.94, 7.26, -44.31&gt;]
+[&#39;C&#39;, 169, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 60.31, 8.49, -43.76&gt;]
+[&#39;C&#39;, 170, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 61.82, 10.92, -41.82&gt;]
+[&#39;C&#39;, 170, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 65.74, 11.40, -40.67&gt;]
+[&#39;C&#39;, 171, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 60.41, 12.90, -43.20&gt;]
+[&#39;C&#39;, 172, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 60.60, 12.09, -45.90&gt;]
+[&#39;C&#39;, 173, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 63.30, 12.51, -46.40&gt;]
+[&#39;C&#39;, 174, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 65.05, 10.49, -45.63&gt;]
+[&#39;C&#39;, 175, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 65.56, 7.57, -47.21&gt;]
+[&#39;C&#39;, 176, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 67.07, 5.49, -48.17&gt;]
+[&#39;C&#39;, 177, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 67.75, 2.12, -47.45&gt;]
+[&#39;C&#39;, 178, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 65.29, 1.63, -46.24&gt;]
+[&#39;C&#39;, 179, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 62.65, -0.44, -45.25&gt;]
+[&#39;C&#39;, 180, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 59.38, -1.32, -45.63&gt;]
+[&#39;C&#39;, 181, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 56.98, -3.40, -44.43&gt;]
+[&#39;C&#39;, 182, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 54.56, -5.78, -45.76&gt;]
+[&#39;C&#39;, 183, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 51.14, -5.46, -44.77&gt;]
+[&#39;C&#39;, 184, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 49.49, -7.39, -42.22&gt;]
+[&#39;C&#39;, 185, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 46.46, -9.09, -41.78&gt;]
+[&#39;C&#39;, 186, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 44.94, -9.10, -38.83&gt;]
+[&#39;C&#39;, 186, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 46.11, -6.01, -35.88&gt;]
+[&#39;C&#39;, 187, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 43.26, -11.23, -36.40&gt;]
+[&#39;C&#39;, 188, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.33, -9.71, -35.17&gt;]
+[&#39;C&#39;, 189, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.23, -8.24, -37.20&gt;]
+[&#39;C&#39;, 190, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 41.56, -5.93, -37.91&gt;]
+[&#39;C&#39;, 191, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 44.42, -4.34, -39.42&gt;]
+[&#39;C&#39;, 192, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 48.05, -4.58, -39.28&gt;]
+[&#39;C&#39;, 193, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 51.43, -3.42, -39.40&gt;]
+[&#39;C&#39;, 194, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 55.01, -3.10, -39.77&gt;]
+[&#39;C&#39;, 195, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 57.58, -0.66, -40.30&gt;]
+[&#39;C&#39;, 196, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 60.92, -0.40, -41.10&gt;]
+[&#39;C&#39;, 197, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 64.27, 0.86, -40.75&gt;]
+[&#39;C&#39;, 198, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 67.74, 1.05, -41.39&gt;]
+[&#39;C&#39;, 199, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 70.52, 2.40, -39.69&gt;]
+[&#39;C&#39;, 200, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 73.58, 4.17, -38.81&gt;]
+[&#39;C&#39;, 201, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 75.05, 2.94, -35.80&gt;]
+[&#39;C&#39;, 202, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 76.06, 4.70, -33.90&gt;]
+[&#39;C&#39;, 203, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 74.72, 7.09, -34.26&gt;]
+[&#39;C&#39;, 204, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 72.36, 7.05, -32.89&gt;]
+[&#39;C&#39;, 205, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 71.86, 8.48, -30.55&gt;]
+[&#39;C&#39;, 206, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 72.22, 11.07, -31.30&gt;]
+[&#39;C&#39;, 207, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 71.42, 11.95, -34.06&gt;]
+[&#39;C&#39;, 207, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 68.94, 13.45, -38.51&gt;]
+[&#39;C&#39;, 208, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 68.19, 12.76, -35.32&gt;]
+[&#39;C&#39;, 209, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 65.36, 10.74, -35.76&gt;]
+[&#39;C&#39;, 210, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 62.41, 10.33, -37.35&gt;]
+[&#39;C&#39;, 211, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 59.35, 8.80, -38.03&gt;]
+[&#39;C&#39;, 212, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 56.89, 9.06, -40.49&gt;]
+[&#39;C&#39;, 212, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 57.31, 12.38, -40.49&gt;]
+[&#39;C&#39;, 213, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 53.74, 8.41, -40.51&gt;]
+[&#39;C&#39;, 214, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 50.97, 7.89, -42.42&gt;]
+[&#39;C&#39;, 214, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 48.05, 9.79, -45.41&gt;]
+[&#39;C&#39;, 215, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 47.53, 7.64, -42.71&gt;]
+[&#39;C&#39;, 216, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 45.34, 7.91, -44.85&gt;]
+[&#39;C&#39;, 217, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 42.54, 7.11, -45.32&gt;]
+[&#39;C&#39;, 218, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.30, 7.37, -42.76&gt;]
+[&#39;C&#39;, 219, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 41.88, 9.95, -42.14&gt;]
+[&#39;C&#39;, 219, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 41.20, 14.76, -41.50&gt;]
+[&#39;C&#39;, 220, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 44.28, 10.36, -40.62&gt;]
+[&#39;C&#39;, 221, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 47.42, 11.25, -39.39&gt;]
+[&#39;C&#39;, 222, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 50.49, 10.63, -38.17&gt;]
+[&#39;C&#39;, 223, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 53.43, 11.56, -36.56&gt;]
+[&#39;C&#39;, 224, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 56.20, 10.15, -35.34&gt;]
+[&#39;C&#39;, 225, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 58.89, 10.19, -33.19&gt;]
+[&#39;C&#39;, 226, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 61.81, 8.22, -32.97&gt;]
+[&#39;C&#39;, 227, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 63.89, 6.79, -30.71&gt;]
+[&#39;C&#39;, 228, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 66.32, 5.11, -28.63&gt;]
+[&#39;C&#39;, 229, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 65.60, 3.93, -25.25&gt;]
+[&#39;C&#39;, 230, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 65.75, 6.08, -22.31&gt;]
+[&#39;C&#39;, 231, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 66.49, 5.41, -19.76&gt;]
+[&#39;D&#39;, 8, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 48.51, -19.53, -52.59&gt;]
+[&#39;D&#39;, 9, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 51.29, -18.69, -54.64&gt;]
+[&#39;D&#39;, 10, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 53.71, -20.86, -56.23&gt;]
+[&#39;D&#39;, 11, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 57.34, -20.97, -56.16&gt;]
+[&#39;D&#39;, 12, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 60.27, -20.19, -58.04&gt;]
+[&#39;D&#39;, 13, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 63.64, -20.05, -58.70&gt;]
+[&#39;D&#39;, 14, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 65.90, -18.35, -60.76&gt;]
+[&#39;D&#39;, 15, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 68.33, -17.36, -63.26&gt;]
+[&#39;D&#39;, 16, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 69.22, -14.60, -65.43&gt;]
+[&#39;D&#39;, 17, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 69.16, -15.49, -68.80&gt;]
+[&#39;D&#39;, 18, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 68.81, -18.19, -68.33&gt;]
+[&#39;D&#39;, 19, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 67.09, -21.23, -69.18&gt;]
+[&#39;D&#39;, 20, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 63.72, -21.99, -68.72&gt;]
+[&#39;D&#39;, 21, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 61.16, -24.20, -67.77&gt;]
+[&#39;D&#39;, 22, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 57.86, -24.58, -67.15&gt;]
+[&#39;D&#39;, 23, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 55.44, -26.67, -65.77&gt;]
+[&#39;D&#39;, 24, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 52.04, -27.23, -66.30&gt;]
+[&#39;D&#39;, 25, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 49.63, -27.94, -63.87&gt;]
+[&#39;D&#39;, 26, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 47.62, -29.91, -64.73&gt;]
+[&#39;D&#39;, 27, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 45.01, -31.67, -63.69&gt;]
+[&#39;D&#39;, 28, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 42.65, -33.79, -63.71&gt;]
+[&#39;D&#39;, 28, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 38.08, -36.00, -63.18&gt;]
+[&#39;D&#39;, 29, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.98, -35.46, -66.84&gt;]
+[&#39;D&#39;, 30, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 42.13, -33.38, -69.67&gt;]
+[&#39;D&#39;, 31, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.51, -30.83, -72.20&gt;]
+[&#39;D&#39;, 32, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 43.14, -29.45, -75.15&gt;]
+[&#39;D&#39;, 33, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 42.71, -26.84, -74.71&gt;]
+[&#39;D&#39;, 34, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 44.32, -24.84, -73.18&gt;]
+[&#39;D&#39;, 35, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 45.62, -22.09, -71.58&gt;]
+[&#39;D&#39;, 36, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 48.19, -19.66, -71.03&gt;]
+[&#39;D&#39;, 37, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 49.45, -17.24, -68.75&gt;]
+[&#39;D&#39;, 38, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 51.00, -14.14, -67.81&gt;]
+[&#39;D&#39;, 38, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 56.43, -12.05, -68.32&gt;]
+[&#39;D&#39;, 39, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 51.81, -12.24, -64.97&gt;]
+[&#39;D&#39;, 39, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 47.51, -10.10, -61.21&gt;]
+[&#39;D&#39;, 40, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 52.52, -9.22, -63.35&gt;]
+[&#39;D&#39;, 41, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 53.41, -7.60, -60.26&gt;]
+[&#39;D&#39;, 42, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 50.75, -5.73, -58.96&gt;]
+[&#39;D&#39;, 43, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 49.43, -5.30, -61.37&gt;]
+[&#39;D&#39;, 44, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 47.22, -6.21, -64.09&gt;]
+[&#39;D&#39;, 45, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 46.81, -9.59, -65.34&gt;]
+[&#39;D&#39;, 46, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 48.38, -10.86, -68.37&gt;]
+[&#39;D&#39;, 47, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 47.81, -12.27, -71.56&gt;]
+[&#39;D&#39;, 48, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 49.71, -14.96, -72.78&gt;]
+[&#39;D&#39;, 49, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 49.95, -17.43, -74.22&gt;]
+[&#39;D&#39;, 50, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 47.73, -19.49, -76.03&gt;]
+[&#39;D&#39;, 51, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 45.43, -22.20, -76.60&gt;]
+[&#39;D&#39;, 52, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 47.20, -24.28, -75.89&gt;]
+[&#39;D&#39;, 53, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 49.66, -24.13, -77.40&gt;]
+[&#39;D&#39;, 54, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 49.72, -21.94, -79.18&gt;]
+[&#39;D&#39;, 55, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 51.10, -18.87, -79.88&gt;]
+[&#39;D&#39;, 56, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 50.30, -15.80, -78.47&gt;]
+[&#39;D&#39;, 57, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 49.39, -12.76, -80.15&gt;]
+[&#39;D&#39;, 58, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 51.97, -10.47, -80.40&gt;]
+[&#39;D&#39;, 59, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 53.48, -11.37, -78.28&gt;]
+[&#39;D&#39;, 60, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 56.76, -12.09, -77.14&gt;]
+[&#39;D&#39;, 61, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 59.02, -14.25, -78.97&gt;]
+[&#39;D&#39;, 62, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 60.53, -16.00, -77.47&gt;]
+[&#39;D&#39;, 63, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 58.93, -17.19, -75.61&gt;]
+[&#39;D&#39;, 64, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 57.24, -20.24, -75.42&gt;]
+[&#39;D&#39;, 65, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 54.88, -22.90, -75.86&gt;]
+[&#39;D&#39;, 66, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 53.85, -26.24, -75.10&gt;]
+[&#39;D&#39;, 67, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 52.38, -29.49, -75.63&gt;]
+[&#39;D&#39;, 68, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 52.04, -32.80, -74.54&gt;]
+[&#39;D&#39;, 69, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 51.72, -35.57, -73.01&gt;]
+[&#39;D&#39;, 70, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 49.05, -35.44, -71.25&gt;]
+[&#39;D&#39;, 71, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 50.22, -33.45, -69.93&gt;]
+[&#39;D&#39;, 72, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 50.96, -30.07, -69.87&gt;]
+[&#39;D&#39;, 73, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 53.18, -27.60, -70.90&gt;]
+[&#39;D&#39;, 74, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 55.09, -24.62, -70.34&gt;]
+[&#39;D&#39;, 75, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 57.63, -22.79, -71.78&gt;]
+[&#39;D&#39;, 76, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 60.39, -20.72, -71.39&gt;]
+[&#39;D&#39;, 77, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 62.87, -19.75, -73.39&gt;]
+[&#39;D&#39;, 78, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 65.23, -18.31, -73.00&gt;]
+[&#39;D&#39;, 79, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 65.79, -16.50, -70.27&gt;]
+[&#39;D&#39;, 80, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 64.88, -13.14, -69.79&gt;]
+[&#39;D&#39;, 80, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 66.99, -10.27, -72.75&gt;]
+[&#39;D&#39;, 81, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 65.42, -9.90, -68.21&gt;]
+[&#39;D&#39;, 82, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 62.88, -8.63, -67.84&gt;]
+[&#39;D&#39;, 83, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 61.17, -10.76, -67.60&gt;]
+[&#39;D&#39;, 84, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 60.90, -11.94, -65.11&gt;]
+[&#39;D&#39;, 85, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 58.42, -12.80, -63.04&gt;]
+[&#39;D&#39;, 86, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 55.03, -13.74, -62.15&gt;]
+[&#39;D&#39;, 87, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 53.47, -16.70, -63.25&gt;]
+[&#39;D&#39;, 88, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 50.62, -18.17, -64.71&gt;]
+[&#39;D&#39;, 89, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 48.65, -21.01, -65.53&gt;]
+[&#39;D&#39;, 90, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 45.70, -21.82, -67.38&gt;]
+[&#39;D&#39;, 90, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 40.65, -20.30, -69.79&gt;]
+[&#39;D&#39;, 91, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 42.75, -23.67, -67.62&gt;]
+[&#39;D&#39;, 91, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 42.05, -28.37, -65.99&gt;]
+[&#39;D&#39;, 92, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 39.84, -25.19, -69.14&gt;]
+[&#39;D&#39;, 93, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 37.81, -27.19, -67.81&gt;]
+[&#39;D&#39;, 94, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 35.19, -28.29, -68.24&gt;]
+[&#39;D&#39;, 94, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 33.38, -31.85, -68.29&gt;]
+[&#39;D&#39;, 95, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 32.60, -27.30, -70.57&gt;]
+[&#39;D&#39;, 96, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 31.54, -24.94, -69.50&gt;]
+[&#39;D&#39;, 97, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 32.96, -24.50, -67.06&gt;]
+[&#39;D&#39;, 98, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 35.84, -22.95, -65.51&gt;]
+[&#39;D&#39;, 99, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 39.21, -22.96, -64.54&gt;]
+[&#39;D&#39;, 100, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 42.02, -21.79, -62.76&gt;]
+[&#39;D&#39;, 101, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 45.55, -22.29, -62.45&gt;]
+[&#39;D&#39;, 102, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 47.84, -22.87, -59.65&gt;]
+[&#39;D&#39;, 102, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 51.34, -23.20, -54.58&gt;]
+[&#39;D&#39;, 103, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 49.96, -21.08, -59.89&gt;]
+[&#39;D&#39;, 104, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 53.21, -19.85, -60.65&gt;]
+[&#39;D&#39;, 105, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 55.90, -18.22, -59.37&gt;]
+[&#39;D&#39;, 106, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 58.55, -16.63, -60.77&gt;]
+[&#39;D&#39;, 107, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 61.69, -15.93, -59.66&gt;]
+[&#39;D&#39;, 108, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 64.59, -13.85, -58.94&gt;]
+[&#39;D&#39;, 109, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 67.77, -15.15, -59.04&gt;]
+[&#39;D&#39;, 110, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 70.55, -15.07, -56.79&gt;]
+[&#39;D&#39;, 111, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 73.67, -14.56, -54.97&gt;]
+[&#39;D&#39;, 112, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 74.25, -16.27, -51.83&gt;]
+[&#39;D&#39;, 113, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 73.16, -14.60, -48.96&gt;]
+[&#39;D&#39;, 114, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 73.63, -13.76, -45.67&gt;]
+[&#39;D&#39;, 115, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 71.25, -13.00, -43.09&gt;]
+[&#39;D&#39;, 116, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 70.93, -9.88, -41.33&gt;]
+[&#39;D&#39;, 117, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 70.24, -9.52, -37.97&gt;]
+[&#39;D&#39;, 118, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 67.86, -8.14, -35.77&gt;]
+[&#39;D&#39;, 119, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 66.33, -7.25, -32.68&gt;]
+[&#39;D&#39;, 120, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 63.44, -5.93, -31.13&gt;]
+[&#39;D&#39;, 121, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 62.22, -4.45, -28.23&gt;]
+[&#39;D&#39;, 122, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 58.91, -4.09, -26.70&gt;]
+[&#39;D&#39;, 123, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 57.26, -0.88, -26.71&gt;]
+[&#39;D&#39;, 124, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 56.83, 1.56, -24.06&gt;]
+[&#39;D&#39;, 125, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 54.47, 3.02, -24.29&gt;]
+[&#39;D&#39;, 126, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 52.73, 1.35, -25.75&gt;]
+[&#39;D&#39;, 126, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 51.62, -3.71, -29.11&gt;]
+[&#39;D&#39;, 127, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 52.61, -0.80, -23.94&gt;]
+[&#39;D&#39;, 128, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 51.24, 0.27, -21.72&gt;]
+[&#39;D&#39;, 129, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 48.67, 0.28, -22.71&gt;]
+[&#39;D&#39;, 130, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 47.86, -2.33, -22.56&gt;]
+[&#39;D&#39;, 131, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 48.83, -4.38, -24.19&gt;]
+[&#39;D&#39;, 132, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 51.59, -6.18, -25.64&gt;]
+[&#39;D&#39;, 133, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 53.96, -6.09, -28.10&gt;]
+[&#39;D&#39;, 134, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 56.58, -7.78, -29.56&gt;]
+[&#39;D&#39;, 135, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 59.30, -7.49, -31.68&gt;]
+[&#39;D&#39;, 136, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 61.15, -9.05, -34.17&gt;]
+[&#39;D&#39;, 137, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 63.63, -8.55, -36.50&gt;]
+[&#39;D&#39;, 138, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 64.76, -9.56, -39.65&gt;]
+[&#39;D&#39;, 139, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 67.17, -8.85, -41.86&gt;]
+[&#39;D&#39;, 139, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 68.61, -4.36, -42.94&gt;]
+[&#39;D&#39;, 140, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 67.84, -8.07, -45.22&gt;]
+[&#39;D&#39;, 140, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 69.78, -4.62, -46.66&gt;]
+[&#39;D&#39;, 141, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 68.57, -10.60, -46.73&gt;]
+[&#39;D&#39;, 142, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 69.32, -13.72, -48.44&gt;]
+[&#39;D&#39;, 143, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 68.83, -17.03, -49.59&gt;]
+[&#39;D&#39;, 144, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 65.11, -16.92, -49.60&gt;]
+[&#39;D&#39;, 145, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 64.21, -18.71, -47.64&gt;]
+[&#39;D&#39;, 146, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 64.03, -19.20, -44.17&gt;]
+[&#39;D&#39;, 147, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 64.29, -19.67, -40.63&gt;]
+[&#39;D&#39;, 148, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 62.62, -18.74, -37.74&gt;]
+[&#39;D&#39;, 149, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 62.74, -18.70, -34.30&gt;]
+[&#39;D&#39;, 149, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 60.44, -21.35, -30.69&gt;]
+[&#39;D&#39;, 150, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 61.16, -18.12, -31.33&gt;]
+[&#39;D&#39;, 151, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 61.98, -17.35, -27.94&gt;]
+[&#39;D&#39;, 152, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 61.10, -17.19, -24.56&gt;]
+[&#39;D&#39;, 153, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 62.06, -16.38, -21.49&gt;]
+[&#39;D&#39;, 154, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 63.69, -18.55, -21.92&gt;]
+[&#39;D&#39;, 154, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 67.07, -22.05, -21.72&gt;]
+[&#39;D&#39;, 155, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 61.85, -20.45, -22.71&gt;]
+[&#39;D&#39;, 156, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 60.45, -22.21, -25.34&gt;]
+[&#39;D&#39;, 157, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 58.48, -20.82, -27.90&gt;]
+[&#39;D&#39;, 157, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 57.30, -19.03, -24.77&gt;]
+[&#39;D&#39;, 158, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 55.36, -20.96, -29.74&gt;]
+[&#39;D&#39;, 159, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 52.85, -20.25, -32.01&gt;]
+[&#39;D&#39;, 160, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 52.10, -17.70, -31.22&gt;]
+[&#39;D&#39;, 160, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 53.71, -16.62, -27.55&gt;]
+[&#39;D&#39;, 161, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 53.09, -15.69, -32.81&gt;]
+[&#39;D&#39;, 162, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 53.57, -13.76, -35.81&gt;]
+[&#39;D&#39;, 162, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 48.69, -12.07, -37.16&gt;]
+[&#39;D&#39;, 163, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 54.56, -13.52, -39.23&gt;]
+[&#39;D&#39;, 164, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 56.05, -11.47, -41.79&gt;]
+[&#39;D&#39;, 165, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 57.03, -10.73, -45.06&gt;]
+[&#39;D&#39;, 166, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 59.06, -8.95, -47.36&gt;]
+[&#39;D&#39;, 167, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 59.08, -8.23, -50.93&gt;]
+[&#39;D&#39;, 168, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 61.59, -9.21, -53.38&gt;]
+[&#39;D&#39;, 168, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 65.59, -12.39, -55.64&gt;]
+[&#39;D&#39;, 169, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 64.34, -7.07, -53.19&gt;]
+[&#39;D&#39;, 170, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 64.70, -4.21, -55.26&gt;]
+[&#39;D&#39;, 171, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 67.25, -3.40, -55.93&gt;]
+[&#39;D&#39;, 172, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 69.41, -5.04, -54.69&gt;]
+[&#39;D&#39;, 173, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 68.24, -7.53, -54.69&gt;]
+[&#39;D&#39;, 174, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 67.51, -8.98, -52.41&gt;]
+[&#39;D&#39;, 175, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 65.72, -10.29, -49.51&gt;]
+[&#39;D&#39;, 176, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 63.65, -9.12, -46.79&gt;]
+[&#39;D&#39;, 177, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 62.47, -9.70, -43.47&gt;]
+[&#39;D&#39;, 178, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 59.96, -9.55, -41.03&gt;]
+[&#39;D&#39;, 179, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 59.18, -10.66, -37.78&gt;]
+[&#39;D&#39;, 180, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 56.67, -10.87, -35.55&gt;]
+[&#39;D&#39;, 181, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 55.90, -11.06, -32.28&gt;]
+[&#39;D&#39;, 182, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 53.22, -11.44, -30.11&gt;]
+[&#39;D&#39;, 183, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 51.99, -10.54, -26.98&gt;]
+[&#39;D&#39;, 184, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 50.08, -10.41, -23.93&gt;]
+[&#39;D&#39;, 185, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 50.08, -7.60, -21.65&gt;]
+[&#39;D&#39;, 186, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 50.36, -8.40, -18.95&gt;]
+[&#39;D&#39;, 187, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 51.42, -11.02, -19.11&gt;]
+[&#39;D&#39;, 188, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 53.82, -10.44, -20.45&gt;]
+[&#39;D&#39;, 189, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 55.18, -8.92, -18.54&gt;]
+[&#39;D&#39;, 190, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 55.74, -10.83, -16.66&gt;]
+[&#39;D&#39;, 191, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 58.08, -12.11, -17.34&gt;]
+[&#39;D&#39;, 192, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 61.61, -12.07, -18.20&gt;]
+[&#39;D&#39;, 193, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 63.82, -12.50, -20.11&gt;]
+[&#39;D&#39;, 194, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 63.93, -12.12, -23.54&gt;]
+[&#39;D&#39;, 195, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 64.13, -13.51, -26.67&gt;]
+[&#39;D&#39;, 196, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 65.05, -14.03, -30.06&gt;]
+[&#39;D&#39;, 197, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 65.69, -16.53, -32.31&gt;]
+[&#39;D&#39;, 198, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 67.47, -17.20, -35.15&gt;]
+[&#39;D&#39;, 199, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 67.67, -19.14, -38.02&gt;]
+[&#39;D&#39;, 200, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 69.44, -19.79, -40.95&gt;]
+[&#39;D&#39;, 201, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 70.56, -20.27, -44.35&gt;]
+[&#39;D&#39;, 201, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 73.09, -24.09, -47.52&gt;]
+[&#39;D&#39;, 202, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 72.93, -18.89, -44.98&gt;]
+[&#39;D&#39;, 203, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 74.10, -18.59, -42.47&gt;]
+[&#39;D&#39;, 204, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 76.45, -20.00, -40.43&gt;]
+[&#39;D&#39;, 205, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 75.86, -21.06, -37.94&gt;]
+[&#39;D&#39;, 206, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 72.93, -20.95, -35.84&gt;]
+[&#39;D&#39;, 207, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 71.73, -17.64, -35.14&gt;]
+[&#39;D&#39;, 208, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 71.15, -15.59, -32.38&gt;]
+[&#39;D&#39;, 209, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 69.35, -12.93, -31.04&gt;]
+[&#39;D&#39;, 210, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 68.74, -10.91, -28.23&gt;]
+[&#39;D&#39;, 211, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 67.01, -9.36, -25.45&gt;]
+[&#39;D&#39;, 212, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 66.75, -7.97, -22.14&gt;]
+[&#39;D&#39;, 212, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 69.56, -8.81, -19.71&gt;]
+[&#39;D&#39;, 213, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 63.94, -7.49, -20.15&gt;]
+[&#39;D&#39;, 214, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 63.07, -4.22, -19.37&gt;]
+[&#39;D&#39;, 215, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 65.56, -2.97, -18.86&gt;]
+[&#39;D&#39;, 216, &#39;CYS&#39;, &#39;N&#39;, &lt;Vector 68.36, -0.81, -19.73&gt;]
+[&#39;A&#39;, 1, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 48.67, 3.45, -94.27&gt;]
+[&#39;A&#39;, 2, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 48.07, 5.53, -95.94&gt;]
+[&#39;A&#39;, 3, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 46.72, 6.97, -98.80&gt;]
+[&#39;A&#39;, 4, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 47.88, 6.07, -102.00&gt;]
+[&#39;A&#39;, 5, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 49.17, 7.78, -104.83&gt;]
+[&#39;A&#39;, 6, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 47.89, 10.24, -104.65&gt;]
+[&#39;A&#39;, 7, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 47.65, 13.45, -103.00&gt;]
+[&#39;A&#39;, 8, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 47.44, 14.53, -99.69&gt;]
+[&#39;A&#39;, 9, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 47.06, 17.37, -97.79&gt;]
+[&#39;A&#39;, 10, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 47.86, 19.26, -94.95&gt;]
+[&#39;A&#39;, 11, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 47.15, 22.26, -93.32&gt;]
+[&#39;A&#39;, 12, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 47.13, 25.16, -91.25&gt;]
+[&#39;A&#39;, 12, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 46.70, 27.77, -87.18&gt;]
+[&#39;A&#39;, 13, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 44.06, 26.68, -90.12&gt;]
+[&#39;A&#39;, 14, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 44.21, 29.44, -90.04&gt;]
+[&#39;A&#39;, 15, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 45.71, 30.16, -92.19&gt;]
+[&#39;A&#39;, 16, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 46.01, 30.82, -95.76&gt;]
+[&#39;A&#39;, 17, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 44.22, 28.63, -96.96&gt;]
+[&#39;A&#39;, 18, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 42.33, 28.12, -98.94&gt;]
+[&#39;A&#39;, 18, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 38.41, 29.26, -98.79&gt;]
+[&#39;A&#39;, 19, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 43.49, 29.49, -101.05&gt;]
+[&#39;A&#39;, 20, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 45.80, 27.89, -101.25&gt;]
+[&#39;A&#39;, 21, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 44.47, 25.58, -102.02&gt;]
+[&#39;A&#39;, 22, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 43.82, 26.25, -104.62&gt;]
+[&#39;A&#39;, 23, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 46.33, 26.08, -105.85&gt;]
+[&#39;A&#39;, 24, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 46.67, 23.33, -105.62&gt;]
+[&#39;A&#39;, 25, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 44.60, 22.59, -107.36&gt;]
+[&#39;A&#39;, 26, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 45.66, 23.47, -109.86&gt;]
+[&#39;A&#39;, 27, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 47.86, 21.74, -109.88&gt;]
+[&#39;A&#39;, 28, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 46.59, 19.23, -110.05&gt;]
+[&#39;A&#39;, 29, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 45.29, 19.54, -112.51&gt;]
+[&#39;A&#39;, 30, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 47.44, 19.56, -114.27&gt;]
+[&#39;A&#39;, 31, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 48.99, 17.25, -113.74&gt;]
+[&#39;A&#39;, 32, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 47.26, 15.16, -113.24&gt;]
+[&#39;A&#39;, 33, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 47.06, 14.26, -110.62&gt;]
+[&#39;A&#39;, 34, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 45.20, 14.13, -107.78&gt;]
+[&#39;A&#39;, 35, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 44.72, 16.61, -105.31&gt;]
+[&#39;A&#39;, 36, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 44.18, 17.24, -101.94&gt;]
+[&#39;A&#39;, 37, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 43.41, 19.64, -99.71&gt;]
+[&#39;A&#39;, 38, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 43.39, 20.26, -96.30&gt;]
+[&#39;A&#39;, 39, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 42.30, 21.74, -93.24&gt;]
+[&#39;A&#39;, 40, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 42.51, 20.84, -90.37&gt;]
+[&#39;A&#39;, 41, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 41.40, 21.06, -86.96&gt;]
+[&#39;A&#39;, 42, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 43.76, 21.97, -84.54&gt;]
+[&#39;A&#39;, 43, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 45.99, 20.71, -85.83&gt;]
+[&#39;A&#39;, 44, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 48.72, 20.28, -85.54&gt;]
+[&#39;A&#39;, 45, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 48.89, 18.89, -83.19&gt;]
+[&#39;A&#39;, 46, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 47.39, 16.63, -83.72&gt;]
+[&#39;A&#39;, 47, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 48.90, 15.46, -85.75&gt;]
+[&#39;A&#39;, 48, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 51.40, 14.09, -84.77&gt;]
+[&#39;A&#39;, 49, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 50.06, 11.98, -83.53&gt;]
+[&#39;A&#39;, 49, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 49.24, 12.39, -79.24&gt;]
+[&#39;A&#39;, 50, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 48.63, 10.45, -85.46&gt;]
+[&#39;A&#39;, 51, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 50.57, 10.08, -87.45&gt;]
+[&#39;A&#39;, 52, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 52.43, 8.48, -86.20&gt;]
+[&#39;A&#39;, 53, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 51.37, 5.95, -86.44&gt;]
+[&#39;A&#39;, 54, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 51.58, 5.32, -89.12&gt;]
+[&#39;A&#39;, 55, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 49.70, 6.84, -90.50&gt;]
+[&#39;A&#39;, 56, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 47.99, 9.93, -91.43&gt;]
+[&#39;A&#39;, 57, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 48.55, 13.15, -93.08&gt;]
+[&#39;A&#39;, 58, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 50.09, 13.66, -96.36&gt;]
+[&#39;A&#39;, 59, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 51.64, 15.96, -96.59&gt;]
+[&#39;A&#39;, 60, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 52.49, 18.48, -94.26&gt;]
+[&#39;A&#39;, 61, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 51.96, 21.67, -92.96&gt;]
+[&#39;A&#39;, 62, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 53.46, 23.88, -90.74&gt;]
+[&#39;A&#39;, 63, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 54.76, 25.86, -87.98&gt;]
+[&#39;A&#39;, 64, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 58.31, 26.10, -87.73&gt;]
+[&#39;A&#39;, 65, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 59.59, 25.30, -85.35&gt;]
+[&#39;A&#39;, 66, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 58.11, 23.32, -84.04&gt;]
+[&#39;A&#39;, 67, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 58.57, 21.15, -85.69&gt;]
+[&#39;A&#39;, 68, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 60.98, 20.09, -84.91&gt;]
+[&#39;A&#39;, 69, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 60.60, 18.27, -82.74&gt;]
+[&#39;A&#39;, 70, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 59.02, 16.44, -84.19&gt;]
+[&#39;A&#39;, 71, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 60.85, 15.38, -86.11&gt;]
+[&#39;A&#39;, 72, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 62.64, 14.36, -84.26&gt;]
+[&#39;A&#39;, 72, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 65.26, 13.11, -79.24&gt;]
+[&#39;A&#39;, 73, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 61.10, 12.20, -83.33&gt;]
+[&#39;A&#39;, 74, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 61.11, 10.80, -85.68&gt;]
+[&#39;A&#39;, 75, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 59.15, 11.30, -87.65&gt;]
+[&#39;A&#39;, 76, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 59.16, 12.81, -89.96&gt;]
+[&#39;A&#39;, 77, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 60.09, 12.92, -93.33&gt;]
+[&#39;A&#39;, 78, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 63.30, 13.10, -94.93&gt;]
+[&#39;A&#39;, 79, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 64.03, 15.81, -97.00&gt;]
+[&#39;A&#39;, 80, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 64.97, 16.55, -100.41&gt;]
+[&#39;A&#39;, 81, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 66.13, 18.88, -101.93&gt;]
+[&#39;A&#39;, 82, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 67.88, 20.25, -104.69&gt;]
+[&#39;A&#39;, 83, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 70.98, 22.06, -105.39&gt;]
+[&#39;A&#39;, 84, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 70.40, 24.34, -106.94&gt;]
+[&#39;A&#39;, 85, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 67.70, 24.88, -106.36&gt;]
+[&#39;A&#39;, 86, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 67.77, 25.47, -103.61&gt;]
+[&#39;A&#39;, 86, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 70.02, 21.93, -100.68&gt;]
+[&#39;A&#39;, 87, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 69.12, 27.86, -103.71&gt;]
+[&#39;A&#39;, 88, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 67.19, 29.69, -104.42&gt;]
+[&#39;A&#39;, 89, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 65.86, 30.50, -102.16&gt;]
+[&#39;A&#39;, 90, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 66.22, 32.46, -99.16&gt;]
+[&#39;A&#39;, 91, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 69.34, 32.14, -97.47&gt;]
+[&#39;A&#39;, 92, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 69.33, 31.80, -94.62&gt;]
+[&#39;A&#39;, 93, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 66.83, 30.79, -93.96&gt;]
+[&#39;A&#39;, 94, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 66.86, 28.08, -94.44&gt;]
+[&#39;A&#39;, 95, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 68.25, 27.19, -92.24&gt;]
+[&#39;A&#39;, 96, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 66.34, 26.95, -90.28&gt;]
+[&#39;A&#39;, 97, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 64.96, 24.62, -90.77&gt;]
+[&#39;A&#39;, 98, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 66.43, 22.42, -90.35&gt;]
+[&#39;A&#39;, 99, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 67.52, 19.47, -88.83&gt;]
+[&#39;A&#39;, 100, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 69.65, 17.78, -86.85&gt;]
+[&#39;A&#39;, 100, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 69.45, 14.58, -84.25&gt;]
+[&#39;A&#39;, 101, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 71.64, 17.89, -88.84&gt;]
+[&#39;A&#39;, 102, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 70.16, 17.40, -91.17&gt;]
+[&#39;A&#39;, 103, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 67.94, 18.33, -93.71&gt;]
+[&#39;A&#39;, 104, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 64.51, 18.81, -93.23&gt;]
+[&#39;A&#39;, 105, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 62.19, 19.95, -93.94&gt;]
+[&#39;A&#39;, 106, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 60.45, 22.38, -96.00&gt;]
+[&#39;A&#39;, 107, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 61.09, 25.81, -96.20&gt;]
+[&#39;A&#39;, 108, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 58.60, 28.33, -95.99&gt;]
+[&#39;A&#39;, 109, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 57.27, 30.81, -95.17&gt;]
+[&#39;A&#39;, 110, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 58.19, 33.85, -93.39&gt;]
+[&#39;A&#39;, 111, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 58.37, 35.29, -90.25&gt;]
+[&#39;A&#39;, 112, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 58.60, 37.91, -87.83&gt;]
+[&#39;A&#39;, 113, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 59.15, 40.10, -85.03&gt;]
+[&#39;A&#39;, 114, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 58.45, 43.62, -85.26&gt;]
+[&#39;A&#39;, 115, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 59.02, 47.22, -85.22&gt;]
+[&#39;A&#39;, 116, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 56.29, 49.08, -84.57&gt;]
+[&#39;A&#39;, 117, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 54.57, 52.00, -85.30&gt;]
+[&#39;A&#39;, 118, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 52.83, 55.12, -84.75&gt;]
+[&#39;A&#39;, 118, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 48.62, 57.03, -83.67&gt;]
+[&#39;A&#39;, 119, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 51.99, 57.06, -87.37&gt;]
+[&#39;A&#39;, 120, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 50.93, 59.64, -87.36&gt;]
+[&#39;A&#39;, 121, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 51.31, 60.64, -84.73&gt;]
+[&#39;A&#39;, 122, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 54.04, 60.42, -84.76&gt;]
+[&#39;A&#39;, 123, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 55.95, 61.00, -87.20&gt;]
+[&#39;A&#39;, 124, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 58.61, 60.34, -87.95&gt;]
+[&#39;A&#39;, 124, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 60.83, 62.91, -89.33&gt;]
+[&#39;A&#39;, 125, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 60.08, 57.54, -86.89&gt;]
+[&#39;A&#39;, 126, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 62.04, 56.54, -84.01&gt;]
+[&#39;A&#39;, 127, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 65.52, 55.63, -84.31&gt;]
+[&#39;A&#39;, 128, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 67.14, 54.46, -82.42&gt;]
+[&#39;A&#39;, 129, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 67.24, 52.84, -79.20&gt;]
+[&#39;A&#39;, 130, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 68.09, 54.49, -77.13&gt;]
+[&#39;A&#39;, 131, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 67.13, 57.04, -77.63&gt;]
+[&#39;A&#39;, 132, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 64.49, 56.94, -76.84&gt;]
+[&#39;A&#39;, 133, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 63.68, 57.54, -74.10&gt;]
+[&#39;A&#39;, 134, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 63.89, 60.46, -74.04&gt;]
+[&#39;A&#39;, 135, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 62.03, 60.99, -76.04&gt;]
+[&#39;A&#39;, 136, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 59.67, 60.03, -74.89&gt;]
+[&#39;A&#39;, 137, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 59.31, 61.89, -72.88&gt;]
+[&#39;A&#39;, 138, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 58.56, 64.22, -74.27&gt;]
+[&#39;A&#39;, 139, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 56.15, 63.34, -75.30&gt;]
+[&#39;A&#39;, 140, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 54.65, 62.61, -73.05&gt;]
+[&#39;A&#39;, 141, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 54.05, 65.11, -72.01&gt;]
+[&#39;A&#39;, 142, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 51.98, 65.82, -73.64&gt;]
+[&#39;A&#39;, 143, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 49.90, 64.24, -72.86&gt;]
+[&#39;A&#39;, 144, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 50.21, 61.72, -73.98&gt;]
+[&#39;A&#39;, 145, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 52.08, 58.68, -74.74&gt;]
+[&#39;A&#39;, 146, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 55.30, 57.13, -75.33&gt;]
+[&#39;A&#39;, 147, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 56.16, 54.40, -76.00&gt;]
+[&#39;A&#39;, 148, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 54.69, 51.20, -75.77&gt;]
+[&#39;A&#39;, 149, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 54.72, 47.89, -75.03&gt;]
+[&#39;A&#39;, 150, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 54.43, 44.29, -74.77&gt;]
+[&#39;A&#39;, 150, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 53.59, 39.56, -74.11&gt;]
+[&#39;A&#39;, 151, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 55.66, 43.44, -71.80&gt;]
+[&#39;A&#39;, 152, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 55.64, 41.22, -70.21&gt;]
+[&#39;A&#39;, 152, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 54.41, 42.75, -67.34&gt;]
+[&#39;A&#39;, 153, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 56.35, 38.75, -71.28&gt;]
+[&#39;A&#39;, 154, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 59.07, 36.71, -72.35&gt;]
+[&#39;A&#39;, 155, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 59.54, 36.42, -75.12&gt;]
+[&#39;A&#39;, 156, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 58.94, 38.89, -76.25&gt;]
+[&#39;A&#39;, 157, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 60.64, 40.69, -74.93&gt;]
+[&#39;A&#39;, 158, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 63.26, 39.81, -75.24&gt;]
+[&#39;A&#39;, 159, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 64.52, 40.69, -77.78&gt;]
+[&#39;A&#39;, 160, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 65.69, 43.28, -77.26&gt;]
+[&#39;A&#39;, 161, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 67.36, 42.65, -75.09&gt;]
+[&#39;A&#39;, 162, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 69.13, 40.82, -76.21&gt;]
+[&#39;A&#39;, 163, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 70.50, 42.46, -77.94&gt;]
+[&#39;A&#39;, 164, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 73.06, 43.63, -77.52&gt;]
+[&#39;A&#39;, 165, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 74.74, 41.47, -77.15&gt;]
+[&#39;A&#39;, 166, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 73.60, 39.22, -76.01&gt;]
+[&#39;A&#39;, 167, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 72.48, 35.81, -76.23&gt;]
+[&#39;A&#39;, 168, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 70.75, 32.75, -77.02&gt;]
+[&#39;A&#39;, 169, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 71.44, 29.82, -77.43&gt;]
+[&#39;A&#39;, 170, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 74.65, 28.93, -78.41&gt;]
+[&#39;A&#39;, 171, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 75.22, 29.03, -81.79&gt;]
+[&#39;A&#39;, 172, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 76.54, 27.14, -84.33&gt;]
+[&#39;A&#39;, 173, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 77.54, 25.32, -86.84&gt;]
+[&#39;A&#39;, 173, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 79.62, 25.89, -89.94&gt;]
+[&#39;A&#39;, 174, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 74.91, 24.60, -87.97&gt;]
+[&#39;A&#39;, 175, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 74.31, 23.24, -85.67&gt;]
+[&#39;A&#39;, 176, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 73.25, 23.38, -82.38&gt;]
+[&#39;A&#39;, 177, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 74.74, 24.45, -79.34&gt;]
+[&#39;A&#39;, 178, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 74.18, 23.23, -76.34&gt;]
+[&#39;A&#39;, 179, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 75.51, 23.74, -74.01&gt;]
+[&#39;A&#39;, 180, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 76.67, 26.24, -74.10&gt;]
+[&#39;A&#39;, 181, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 75.39, 28.97, -73.19&gt;]
+[&#39;A&#39;, 182, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 74.04, 32.23, -73.51&gt;]
+[&#39;A&#39;, 183, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 72.79, 34.06, -71.69&gt;]
+[&#39;A&#39;, 184, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 73.61, 35.23, -69.31&gt;]
+[&#39;A&#39;, 185, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 75.64, 37.32, -69.72&gt;]
+[&#39;A&#39;, 185, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 76.03, 36.72, -73.64&gt;]
+[&#39;A&#39;, 186, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 77.80, 40.14, -70.54&gt;]
+[&#39;A&#39;, 187, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 76.57, 41.55, -72.59&gt;]
+[&#39;A&#39;, 188, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 73.82, 40.87, -72.39&gt;]
+[&#39;A&#39;, 189, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 73.32, 41.88, -69.83&gt;]
+[&#39;A&#39;, 190, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 73.54, 44.68, -70.15&gt;]
+[&#39;A&#39;, 191, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 71.37, 45.21, -71.85&gt;]
+[&#39;A&#39;, 192, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 69.04, 44.39, -70.38&gt;]
+[&#39;A&#39;, 193, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 69.40, 46.12, -68.22&gt;]
+[&#39;A&#39;, 194, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 68.97, 48.64, -69.42&gt;]
+[&#39;A&#39;, 195, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 66.30, 48.25, -70.10&gt;]
+[&#39;A&#39;, 196, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 65.10, 47.93, -67.54&gt;]
+[&#39;A&#39;, 197, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 65.73, 50.43, -66.50&gt;]
+[&#39;A&#39;, 198, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 64.11, 52.03, -68.11&gt;]
+[&#39;A&#39;, 199, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 61.65, 51.43, -66.98&gt;]
+[&#39;A&#39;, 200, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 62.00, 52.16, -64.25&gt;]
+[&#39;A&#39;, 201, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 62.44, 54.91, -64.57&gt;]
+[&#39;A&#39;, 201, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 65.69, 56.64, -66.35&gt;]
+[&#39;A&#39;, 202, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 59.91, 55.67, -65.26&gt;]
+[&#39;A&#39;, 203, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 59.04, 55.53, -67.94&gt;]
+[&#39;A&#39;, 204, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 57.91, 53.28, -69.01&gt;]
+[&#39;A&#39;, 205, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 55.43, 50.92, -67.98&gt;]
+[&#39;A&#39;, 205, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 51.60, 50.86, -65.18&gt;]
+[&#39;A&#39;, 206, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 55.71, 48.36, -65.63&gt;]
+[&#39;A&#39;, 207, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 53.71, 46.49, -65.57&gt;]
+[&#39;A&#39;, 208, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 52.55, 46.23, -68.04&gt;]
+[&#39;A&#39;, 209, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 51.09, 44.25, -70.51&gt;]
+[&#39;A&#39;, 210, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 50.44, 41.97, -73.28&gt;]
+[&#39;A&#39;, 211, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 47.78, 42.53, -74.08&gt;]
+[&#39;A&#39;, 212, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 47.11, 45.02, -72.93&gt;]
+[&#39;A&#39;, 213, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 49.02, 46.72, -74.12&gt;]
+[&#39;A&#39;, 214, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 48.36, 46.46, -76.83&gt;]
+[&#39;A&#39;, 215, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 45.76, 47.52, -76.88&gt;]
+[&#39;A&#39;, 216, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 46.22, 50.20, -76.11&gt;]
+[&#39;A&#39;, 217, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 47.84, 51.24, -78.20&gt;]
+[&#39;A&#39;, 218, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 46.16, 50.91, -80.45&gt;]
+[&#39;A&#39;, 218, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 44.66, 47.34, -82.22&gt;]
+[&#39;A&#39;, 219, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 44.10, 52.59, -79.81&gt;]
+[&#39;A&#39;, 220, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 45.32, 55.01, -80.00&gt;]
+[&#39;A&#39;, 221, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 46.73, 56.03, -77.82&gt;]
+[&#39;A&#39;, 222, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 49.41, 55.66, -77.26&gt;]
+[&#39;A&#39;, 223, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 52.56, 56.08, -78.92&gt;]
+[&#39;A&#39;, 224, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 54.13, 54.12, -80.11&gt;]
+[&#39;A&#39;, 225, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 54.55, 50.56, -80.55&gt;]
+[&#39;A&#39;, 226, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 55.51, 47.10, -80.14&gt;]
+[&#39;A&#39;, 227, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 55.29, 44.38, -82.14&gt;]
+[&#39;A&#39;, 227, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 51.25, 42.81, -80.74&gt;]
+[&#39;A&#39;, 228, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 54.17, 41.58, -84.16&gt;]
+[&#39;A&#39;, 229, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 53.50, 40.52, -87.62&gt;]
+[&#39;A&#39;, 230, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 51.03, 39.25, -87.36&gt;]
+[&#39;A&#39;, 231, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 49.41, 40.91, -85.87&gt;]
+[&#39;A&#39;, 232, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 48.50, 43.01, -87.39&gt;]
+[&#39;A&#39;, 233, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 45.94, 43.10, -88.54&gt;]
+[&#39;A&#39;, 234, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 44.15, 43.79, -86.50&gt;]
+[&#39;A&#39;, 234, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 43.78, 42.08, -82.65&gt;]
+[&#39;A&#39;, 235, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 44.92, 46.42, -86.07&gt;]
+[&#39;A&#39;, 236, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 44.29, 47.58, -88.52&gt;]
+[&#39;A&#39;, 237, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 41.50, 47.67, -88.42&gt;]
+[&#39;A&#39;, 238, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 41.22, 49.48, -86.34&gt;]
+[&#39;A&#39;, 239, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 41.74, 51.85, -87.61&gt;]
+[&#39;A&#39;, 240, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 43.96, 53.45, -87.30&gt;]
+[&#39;A&#39;, 241, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 46.59, 55.43, -88.45&gt;]
+[&#39;A&#39;, 241, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 48.93, 58.40, -91.50&gt;]
+[&#39;A&#39;, 242, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 49.25, 53.84, -89.21&gt;]
+[&#39;A&#39;, 243, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 52.69, 52.67, -89.18&gt;]
+[&#39;A&#39;, 244, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 55.31, 50.36, -90.10&gt;]
+[&#39;A&#39;, 245, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 58.48, 49.38, -89.18&gt;]
+[&#39;A&#39;, 246, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 62.12, 49.07, -88.96&gt;]
+[&#39;A&#39;, 247, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 63.42, 47.67, -85.93&gt;]
+[&#39;A&#39;, 248, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 64.49, 49.57, -83.06&gt;]
+[&#39;A&#39;, 249, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 67.98, 50.34, -82.51&gt;]
+[&#39;A&#39;, 250, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 70.43, 49.26, -80.09&gt;]
+[&#39;A&#39;, 251, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 73.09, 50.47, -78.27&gt;]
+[&#39;A&#39;, 252, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 74.32, 50.98, -80.71&gt;]
+[&#39;A&#39;, 253, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 73.87, 48.58, -82.02&gt;]
+[&#39;A&#39;, 253, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 77.78, 46.92, -82.46&gt;]
+[&#39;A&#39;, 254, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 71.85, 46.16, -83.76&gt;]
+[&#39;A&#39;, 255, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 68.46, 45.32, -82.76&gt;]
+[&#39;A&#39;, 256, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 67.53, 41.99, -81.88&gt;]
+[&#39;A&#39;, 257, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 65.30, 39.95, -82.74&gt;]
+[&#39;A&#39;, 258, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 63.52, 36.83, -82.33&gt;]
+[&#39;A&#39;, 259, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 63.04, 34.39, -84.94&gt;]
+[&#39;A&#39;, 260, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 60.38, 33.05, -86.71&gt;]
+[&#39;A&#39;, 261, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 59.50, 30.41, -88.83&gt;]
+[&#39;A&#39;, 262, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 57.30, 29.43, -91.14&gt;]
+[&#39;A&#39;, 263, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 56.78, 26.20, -92.22&gt;]
+[&#39;A&#39;, 264, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 56.95, 23.40, -94.48&gt;]
+[&#39;A&#39;, 265, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 56.57, 20.08, -94.16&gt;]
+[&#39;A&#39;, 266, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 57.26, 16.65, -95.11&gt;]
+[&#39;A&#39;, 267, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 55.51, 13.70, -94.73&gt;]
+[&#39;A&#39;, 267, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 52.16, 11.22, -92.39&gt;]
+[&#39;A&#39;, 268, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 56.95, 10.92, -93.13&gt;]
+[&#39;A&#39;, 269, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 55.88, 8.40, -93.44&gt;]
+[&#39;A&#39;, 270, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 54.60, 8.57, -95.86&gt;]
+[&#39;A&#39;, 271, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 53.65, 7.37, -99.07&gt;]
+[&#39;A&#39;, 272, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 54.05, 8.97, -101.33&gt;]
+[&#39;A&#39;, 272, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 50.81, 9.57, -101.33&gt;]
+[&#39;A&#39;, 273, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 56.28, 10.61, -101.75&gt;]
+[&#39;A&#39;, 274, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 57.91, 11.67, -103.79&gt;]
+[&#39;A&#39;, 275, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 56.00, 12.89, -105.46&gt;]
+[&#39;A&#39;, 276, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 55.06, 14.77, -103.59&gt;]
+[&#39;A&#39;, 277, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 57.41, 16.28, -103.27&gt;]
+[&#39;A&#39;, 278, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 57.59, 17.30, -105.88&gt;]
+[&#39;A&#39;, 279, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 55.24, 18.84, -106.02&gt;]
+[&#39;A&#39;, 280, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 55.66, 20.78, -103.98&gt;]
+[&#39;A&#39;, 281, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 58.11, 22.01, -104.68&gt;]
+[&#39;A&#39;, 282, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 57.91, 22.78, -107.39&gt;]
+[&#39;A&#39;, 282, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 59.16, 20.17, -109.92&gt;]
+[&#39;A&#39;, 283, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 55.44, 23.96, -107.85&gt;]
+[&#39;A&#39;, 284, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 54.16, 25.20, -105.55&gt;]
+[&#39;A&#39;, 285, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 56.28, 26.65, -104.17&gt;]
+[&#39;A&#39;, 286, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 56.88, 28.88, -105.88&gt;]
+[&#39;A&#39;, 287, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 56.65, 32.01, -107.69&gt;]
+[&#39;A&#39;, 288, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 54.04, 32.21, -108.66&gt;]
+[&#39;A&#39;, 289, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 52.59, 30.28, -107.20&gt;]
+[&#39;A&#39;, 290, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 52.88, 31.00, -104.45&gt;]
+[&#39;A&#39;, 291, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 51.68, 33.49, -104.56&gt;]
+[&#39;A&#39;, 292, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 49.00, 32.86, -105.04&gt;]
+[&#39;A&#39;, 293, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 48.30, 31.69, -102.57&gt;]
+[&#39;A&#39;, 294, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 48.90, 33.91, -100.98&gt;]
+[&#39;A&#39;, 294, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 50.14, 38.42, -100.79&gt;]
+[&#39;A&#39;, 295, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 47.11, 35.88, -101.90&gt;]
+[&#39;A&#39;, 296, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 44.71, 34.87, -100.90&gt;]
+[&#39;A&#39;, 297, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 45.02, 34.71, -97.99&gt;]
+[&#39;A&#39;, 298, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 47.29, 36.87, -96.53&gt;]
+[&#39;A&#39;, 299, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 50.76, 36.01, -96.48&gt;]
+[&#39;A&#39;, 300, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 52.71, 37.38, -95.15&gt;]
+[&#39;A&#39;, 301, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 56.16, 38.13, -94.88&gt;]
+[&#39;A&#39;, 302, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 58.11, 36.17, -97.16&gt;]
+[&#39;A&#39;, 303, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 60.03, 33.18, -97.87&gt;]
+[&#39;A&#39;, 304, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 60.93, 32.69, -100.44&gt;]
+[&#39;A&#39;, 305, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 63.01, 34.28, -102.64&gt;]
+[&#39;A&#39;, 306, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 62.49, 35.81, -105.02&gt;]
+[&#39;A&#39;, 307, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 59.72, 36.36, -104.96&gt;]
+[&#39;A&#39;, 308, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 59.51, 37.59, -102.48&gt;]
+[&#39;A&#39;, 309, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 60.93, 39.98, -102.92&gt;]
+[&#39;A&#39;, 310, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 59.07, 41.27, -104.55&gt;]
+[&#39;A&#39;, 311, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 56.84, 41.47, -102.77&gt;]
+[&#39;A&#39;, 312, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 58.04, 43.07, -100.84&gt;]
+[&#39;A&#39;, 313, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 57.67, 45.66, -101.65&gt;]
+[&#39;A&#39;, 314, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 55.61, 46.64, -100.18&gt;]
+[&#39;A&#39;, 315, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 56.23, 48.44, -97.42&gt;]
+[&#39;A&#39;, 316, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 55.93, 47.51, -94.79&gt;]
+[&#39;A&#39;, 317, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 56.25, 44.72, -94.97&gt;]
+[&#39;A&#39;, 318, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 58.88, 44.58, -95.90&gt;]
+[&#39;A&#39;, 319, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 60.22, 45.60, -93.66&gt;]
+[&#39;A&#39;, 320, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 59.64, 43.56, -91.83&gt;]
+[&#39;A&#39;, 321, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 61.09, 41.35, -92.92&gt;]
+[&#39;A&#39;, 322, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 63.61, 42.50, -92.78&gt;]
+[&#39;A&#39;, 323, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 64.06, 42.90, -89.98&gt;]
+[&#39;A&#39;, 323, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 61.71, 44.96, -87.72&gt;]
+[&#39;A&#39;, 324, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 63.93, 40.19, -89.27&gt;]
+[&#39;A&#39;, 325, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 66.18, 39.11, -90.61&gt;]
+[&#39;A&#39;, 325, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 67.57, 38.57, -95.92&gt;]
+[&#39;A&#39;, 326, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 68.16, 40.45, -89.22&gt;]
+[&#39;A&#39;, 327, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 67.79, 39.29, -86.79&gt;]
+[&#39;A&#39;, 328, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 67.54, 36.13, -85.04&gt;]
+[&#39;A&#39;, 329, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 67.12, 32.69, -85.89&gt;]
+[&#39;A&#39;, 330, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 64.60, 30.97, -84.21&gt;]
+[&#39;A&#39;, 331, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 65.46, 28.63, -81.78&gt;]
+[&#39;A&#39;, 332, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 64.91, 25.10, -82.16&gt;]
+[&#39;A&#39;, 332, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 64.53, 22.67, -85.53&gt;]
+[&#39;A&#39;, 333, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 65.05, 23.16, -80.16&gt;]
+[&#39;A&#39;, 334, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 64.64, 21.05, -77.26&gt;]
+[&#39;A&#39;, 335, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 65.76, 22.25, -75.02&gt;]
+[&#39;A&#39;, 335, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 68.55, 19.42, -74.73&gt;]
+[&#39;A&#39;, 336, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 65.05, 24.91, -74.95&gt;]
+[&#39;A&#39;, 337, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 63.05, 25.46, -73.13&gt;]
+[&#39;A&#39;, 338, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 64.20, 25.80, -70.56&gt;]
+[&#39;A&#39;, 339, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 65.67, 28.09, -71.17&gt;]
+[&#39;A&#39;, 340, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 63.66, 30.05, -71.69&gt;]
+[&#39;A&#39;, 341, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 62.54, 30.24, -69.13&gt;]
+[&#39;A&#39;, 342, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 64.62, 31.40, -67.63&gt;]
+[&#39;A&#39;, 343, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 64.93, 33.96, -68.82&gt;]
+[&#39;A&#39;, 344, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 62.36, 35.10, -68.54&gt;]
+[&#39;A&#39;, 345, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 62.18, 35.09, -65.74&gt;]
+[&#39;A&#39;, 346, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 64.35, 36.70, -64.87&gt;]
+[&#39;A&#39;, 347, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 63.62, 39.20, -65.86&gt;]
+[&#39;A&#39;, 348, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 61.18, 39.86, -64.57&gt;]
+[&#39;A&#39;, 349, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 61.93, 39.89, -61.90&gt;]
+[&#39;A&#39;, 349, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 63.65, 36.70, -59.92&gt;]
+[&#39;A&#39;, 350, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 63.89, 41.91, -61.84&gt;]
+[&#39;A&#39;, 351, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 62.55, 44.12, -62.92&gt;]
+[&#39;A&#39;, 352, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 60.44, 44.69, -61.14&gt;]
+[&#39;A&#39;, 353, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 61.96, 45.66, -59.08&gt;]
+[&#39;A&#39;, 354, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 62.86, 44.14, -56.96&gt;]
+[&#39;A&#39;, 355, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 65.26, 42.68, -57.15&gt;]
+[&#39;A&#39;, 355, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 66.60, 37.48, -56.46&gt;]
+[&#39;A&#39;, 356, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 68.64, 43.29, -58.23&gt;]
+[&#39;A&#39;, 357, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 69.91, 43.82, -61.60&gt;]
+[&#39;A&#39;, 358, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 72.10, 42.15, -62.17&gt;]
+[&#39;A&#39;, 359, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 71.84, 40.26, -60.09&gt;]
+[&#39;A&#39;, 360, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 69.31, 39.28, -60.76&gt;]
+[&#39;A&#39;, 361, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 69.75, 37.92, -63.17&gt;]
+[&#39;A&#39;, 362, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 71.67, 35.89, -62.60&gt;]
+[&#39;A&#39;, 363, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 70.34, 34.42, -60.66&gt;]
+[&#39;A&#39;, 364, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 68.25, 33.39, -62.12&gt;]
+[&#39;A&#39;, 365, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 69.34, 31.30, -63.51&gt;]
+[&#39;A&#39;, 365, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 70.66, 31.24, -67.73&gt;]
+[&#39;A&#39;, 366, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 70.14, 29.45, -61.54&gt;]
+[&#39;B&#39;, 1, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 35.46, 7.03, -96.63&gt;]
+[&#39;B&#39;, 2, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 36.40, 5.05, -98.21&gt;]
+[&#39;B&#39;, 3, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 38.24, 3.66, -100.83&gt;]
+[&#39;B&#39;, 4, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 37.68, 4.47, -104.25&gt;]
+[&#39;B&#39;, 5, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 38.29, 3.36, -106.81&gt;]
+[&#39;B&#39;, 6, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 38.93, 0.62, -106.49&gt;]
+[&#39;B&#39;, 7, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 38.72, -2.70, -104.98&gt;]
+[&#39;B&#39;, 8, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 38.38, -3.91, -101.75&gt;]
+[&#39;B&#39;, 9, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 38.62, -6.77, -99.84&gt;]
+[&#39;B&#39;, 10, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 37.57, -8.74, -97.13&gt;]
+[&#39;B&#39;, 11, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 38.27, -11.70, -95.42&gt;]
+[&#39;B&#39;, 12, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 38.25, -14.65, -93.41&gt;]
+[&#39;B&#39;, 12, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 38.28, -17.45, -89.44&gt;]
+[&#39;B&#39;, 13, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 41.24, -15.90, -91.79&gt;]
+[&#39;B&#39;, 14, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 41.40, -18.67, -91.78&gt;]
+[&#39;B&#39;, 15, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 40.37, -19.50, -94.16&gt;]
+[&#39;B&#39;, 16, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.68, -20.11, -97.73&gt;]
+[&#39;B&#39;, 17, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 42.37, -17.73, -98.66&gt;]
+[&#39;B&#39;, 18, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 44.43, -16.97, -100.36&gt;]
+[&#39;B&#39;, 18, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 48.33, -17.79, -99.60&gt;]
+[&#39;B&#39;, 19, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 43.72, -18.36, -102.66&gt;]
+[&#39;B&#39;, 20, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 41.31, -16.95, -103.15&gt;]
+[&#39;B&#39;, 21, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 42.51, -14.51, -103.71&gt;]
+[&#39;B&#39;, 22, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 43.66, -15.06, -106.17&gt;]
+[&#39;B&#39;, 23, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 41.40, -15.23, -107.78&gt;]
+[&#39;B&#39;, 24, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.60, -12.57, -107.66&gt;]
+[&#39;B&#39;, 25, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 42.83, -11.50, -108.96&gt;]
+[&#39;B&#39;, 26, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 42.46, -12.45, -111.60&gt;]
+[&#39;B&#39;, 27, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 40.12, -11.02, -112.03&gt;]
+[&#39;B&#39;, 28, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 41.16, -8.42, -111.96&gt;]
+[&#39;B&#39;, 29, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 42.77, -8.54, -114.22&gt;]
+[&#39;B&#39;, 30, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 40.90, -8.62, -116.28&gt;]
+[&#39;B&#39;, 31, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 39.19, -6.39, -115.96&gt;]
+[&#39;B&#39;, 32, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.73, -4.27, -115.06&gt;]
+[&#39;B&#39;, 33, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 40.40, -3.43, -112.45&gt;]
+[&#39;B&#39;, 34, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 41.76, -3.25, -109.35&gt;]
+[&#39;B&#39;, 35, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 42.06, -5.79, -106.92&gt;]
+[&#39;B&#39;, 36, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 42.07, -6.42, -103.54&gt;]
+[&#39;B&#39;, 37, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 42.71, -8.71, -101.16&gt;]
+[&#39;B&#39;, 38, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 42.32, -9.32, -97.77&gt;]
+[&#39;B&#39;, 39, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 43.08, -10.72, -94.58&gt;]
+[&#39;B&#39;, 40, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 42.42, -9.85, -91.76&gt;]
+[&#39;B&#39;, 41, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 42.97, -10.03, -88.20&gt;]
+[&#39;B&#39;, 42, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 40.31, -11.18, -86.23&gt;]
+[&#39;B&#39;, 43, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 38.22, -10.07, -87.85&gt;]
+[&#39;B&#39;, 44, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 35.45, -9.87, -88.04&gt;]
+[&#39;B&#39;, 45, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 34.72, -8.53, -85.77&gt;]
+[&#39;B&#39;, 46, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 36.01, -6.10, -86.02&gt;]
+[&#39;B&#39;, 47, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 34.80, -5.06, -88.30&gt;]
+[&#39;B&#39;, 48, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 32.05, -3.90, -87.80&gt;]
+[&#39;B&#39;, 49, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 32.88, -1.60, -86.45&gt;]
+[&#39;B&#39;, 49, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 36.14, -3.11, -83.20&gt;]
+[&#39;B&#39;, 50, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 34.40, 0.05, -88.16&gt;]
+[&#39;B&#39;, 51, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 32.75, 0.20, -90.40&gt;]
+[&#39;B&#39;, 52, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 30.57, 1.61, -89.46&gt;]
+[&#39;B&#39;, 53, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 31.40, 4.24, -89.57&gt;]
+[&#39;B&#39;, 54, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 31.64, 4.87, -92.27&gt;]
+[&#39;B&#39;, 55, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 33.89, 3.52, -93.21&gt;]
+[&#39;B&#39;, 56, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 36.01, 0.61, -93.83&gt;]
+[&#39;B&#39;, 57, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 36.06, -2.66, -95.50&gt;]
+[&#39;B&#39;, 58, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 35.06, -3.39, -98.94&gt;]
+[&#39;B&#39;, 59, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 33.78, -5.83, -99.35&gt;]
+[&#39;B&#39;, 60, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 32.83, -8.44, -97.15&gt;]
+[&#39;B&#39;, 61, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 33.47, -11.59, -95.81&gt;]
+[&#39;B&#39;, 62, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 31.80, -13.87, -93.82&gt;]
+[&#39;B&#39;, 63, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 30.17, -15.84, -91.23&gt;]
+[&#39;B&#39;, 64, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 26.66, -16.44, -91.68&gt;]
+[&#39;B&#39;, 65, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 24.83, -15.79, -89.66&gt;]
+[&#39;B&#39;, 66, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 25.92, -13.78, -88.07&gt;]
+[&#39;B&#39;, 67, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 25.68, -11.64, -89.79&gt;]
+[&#39;B&#39;, 68, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 23.13, -10.74, -89.38&gt;]
+[&#39;B&#39;, 69, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 23.08, -8.92, -87.17&gt;]
+[&#39;B&#39;, 70, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 24.69, -6.97, -88.38&gt;]
+[&#39;B&#39;, 71, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 23.09, -6.05, -90.56&gt;]
+[&#39;B&#39;, 72, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 20.90, -5.12, -89.09&gt;]
+[&#39;B&#39;, 72, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 17.26, -3.62, -84.85&gt;]
+[&#39;B&#39;, 73, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 22.07, -2.81, -88.00&gt;]
+[&#39;B&#39;, 74, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 22.32, -1.41, -90.33&gt;]
+[&#39;B&#39;, 75, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 24.60, -1.73, -91.95&gt;]
+[&#39;B&#39;, 76, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 25.06, -3.27, -94.17&gt;]
+[&#39;B&#39;, 77, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 24.65, -3.45, -97.62&gt;]
+[&#39;B&#39;, 78, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 21.75, -3.87, -99.70&gt;]
+[&#39;B&#39;, 79, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 21.67, -6.64, -101.76&gt;]
+[&#39;B&#39;, 80, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 21.41, -7.46, -105.26&gt;]
+[&#39;B&#39;, 81, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 20.76, -9.87, -106.93&gt;]
+[&#39;B&#39;, 82, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 19.48, -11.40, -109.86&gt;]
+[&#39;B&#39;, 83, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 16.65, -13.47, -110.91&gt;]
+[&#39;B&#39;, 84, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 17.60, -15.61, -112.46&gt;]
+[&#39;B&#39;, 85, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 20.24, -15.92, -111.58&gt;]
+[&#39;B&#39;, 86, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 19.81, -16.58, -108.89&gt;]
+[&#39;B&#39;, 86, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 16.90, -13.19, -106.42&gt;]
+[&#39;B&#39;, 87, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 18.66, -19.09, -109.11&gt;]
+[&#39;B&#39;, 88, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 20.79, -20.75, -109.57&gt;]
+[&#39;B&#39;, 89, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 21.89, -21.42, -107.18&gt;]
+[&#39;B&#39;, 90, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 21.28, -23.42, -104.24&gt;]
+[&#39;B&#39;, 91, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 17.92, -23.42, -103.08&gt;]
+[&#39;B&#39;, 92, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 17.38, -23.15, -100.30&gt;]
+[&#39;B&#39;, 93, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 19.61, -21.95, -99.23&gt;]
+[&#39;B&#39;, 94, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 19.44, -19.24, -99.72&gt;]
+[&#39;B&#39;, 95, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 17.67, -18.41, -97.78&gt;]
+[&#39;B&#39;, 96, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 19.26, -18.06, -95.56&gt;]
+[&#39;B&#39;, 97, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 20.53, -15.64, -95.85&gt;]
+[&#39;B&#39;, 98, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 18.86, -13.53, -95.68&gt;]
+[&#39;B&#39;, 99, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 17.37, -10.66, -94.37&gt;]
+[&#39;B&#39;, 100, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 14.90, -9.05, -92.71&gt;]
+[&#39;B&#39;, 100, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 12.31, -6.34, -90.75&gt;]
+[&#39;B&#39;, 101, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 13.18, -9.33, -94.92&gt;]
+[&#39;B&#39;, 102, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 14.88, -8.77, -97.06&gt;]
+[&#39;B&#39;, 103, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 17.55, -9.46, -99.25&gt;]
+[&#39;B&#39;, 104, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 20.88, -9.71, -98.22&gt;]
+[&#39;B&#39;, 105, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 23.38, -10.67, -98.53&gt;]
+[&#39;B&#39;, 106, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 25.65, -12.94, -100.24&gt;]
+[&#39;B&#39;, 107, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 25.47, -16.42, -100.56&gt;]
+[&#39;B&#39;, 108, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 28.14, -18.70, -99.87&gt;]
+[&#39;B&#39;, 109, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 29.51, -21.05, -98.77&gt;]
+[&#39;B&#39;, 110, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 28.46, -24.10, -97.10&gt;]
+[&#39;B&#39;, 111, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 27.64, -25.50, -94.03&gt;]
+[&#39;B&#39;, 112, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 27.13, -28.17, -91.70&gt;]
+[&#39;B&#39;, 113, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 26.23, -30.48, -89.09&gt;]
+[&#39;B&#39;, 114, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 27.31, -33.91, -89.17&gt;]
+[&#39;B&#39;, 115, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 27.08, -37.53, -89.21&gt;]
+[&#39;B&#39;, 116, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 29.74, -39.19, -88.00&gt;]
+[&#39;B&#39;, 117, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 31.80, -41.97, -88.33&gt;]
+[&#39;B&#39;, 118, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 33.69, -44.90, -87.40&gt;]
+[&#39;B&#39;, 118, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 37.78, -46.45, -85.48&gt;]
+[&#39;B&#39;, 119, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 35.24, -46.77, -89.75&gt;]
+[&#39;B&#39;, 120, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 36.50, -49.22, -89.41&gt;]
+[&#39;B&#39;, 121, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 35.75, -50.21, -86.82&gt;]
+[&#39;B&#39;, 122, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 33.04, -50.24, -87.26&gt;]
+[&#39;B&#39;, 123, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 31.67, -51.06, -89.96&gt;]
+[&#39;B&#39;, 124, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 29.14, -50.70, -91.22&gt;]
+[&#39;B&#39;, 124, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 27.46, -53.50, -92.93&gt;]
+[&#39;B&#39;, 125, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 27.24, -48.06, -90.55&gt;]
+[&#39;B&#39;, 126, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 24.66, -47.21, -88.16&gt;]
+[&#39;B&#39;, 127, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 21.27, -46.61, -89.21&gt;]
+[&#39;B&#39;, 128, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 19.25, -45.47, -87.75&gt;]
+[&#39;B&#39;, 129, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 18.43, -43.72, -84.71&gt;]
+[&#39;B&#39;, 130, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 17.39, -45.38, -82.77&gt;]
+[&#39;B&#39;, 131, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 18.69, -47.82, -83.03&gt;]
+[&#39;B&#39;, 132, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 21.09, -47.59, -81.67&gt;]
+[&#39;B&#39;, 133, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 21.30, -48.08, -78.78&gt;]
+[&#39;B&#39;, 134, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 21.31, -51.00, -78.62&gt;]
+[&#39;B&#39;, 135, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 23.56, -51.41, -80.18&gt;]
+[&#39;B&#39;, 136, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 25.55, -50.22, -78.62&gt;]
+[&#39;B&#39;, 137, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 25.75, -51.98, -76.48&gt;]
+[&#39;B&#39;, 138, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 26.88, -54.35, -77.59&gt;]
+[&#39;B&#39;, 139, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 29.30, -53.31, -78.45&gt;]
+[&#39;B&#39;, 140, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 30.58, -52.32, -76.15&gt;]
+[&#39;B&#39;, 141, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 31.26, -54.71, -74.96&gt;]
+[&#39;B&#39;, 142, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 33.52, -55.25, -76.37&gt;]
+[&#39;B&#39;, 143, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 35.37, -53.56, -75.34&gt;]
+[&#39;B&#39;, 144, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 35.05, -51.02, -76.42&gt;]
+[&#39;B&#39;, 145, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 32.96, -48.19, -77.39&gt;]
+[&#39;B&#39;, 146, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 29.72, -46.99, -78.49&gt;]
+[&#39;B&#39;, 147, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 28.76, -44.35, -79.37&gt;]
+[&#39;B&#39;, 148, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 29.91, -41.03, -79.01&gt;]
+[&#39;B&#39;, 149, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 29.51, -37.72, -78.34&gt;]
+[&#39;B&#39;, 150, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 29.49, -34.10, -78.09&gt;]
+[&#39;B&#39;, 150, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 29.78, -29.33, -77.30&gt;]
+[&#39;B&#39;, 151, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 27.67, -33.37, -75.41&gt;]
+[&#39;B&#39;, 152, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 27.21, -31.15, -73.87&gt;]
+[&#39;B&#39;, 152, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 27.83, -32.52, -70.68&gt;]
+[&#39;B&#39;, 153, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 26.53, -28.75, -75.09&gt;]
+[&#39;B&#39;, 154, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 23.93, -26.89, -76.69&gt;]
+[&#39;B&#39;, 155, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 23.94, -26.69, -79.50&gt;]
+[&#39;B&#39;, 156, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 24.88, -29.15, -80.43&gt;]
+[&#39;B&#39;, 157, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 23.14, -31.07, -79.40&gt;]
+[&#39;B&#39;, 158, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 20.59, -30.39, -80.26&gt;]
+[&#39;B&#39;, 159, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 19.94, -31.48, -82.93&gt;]
+[&#39;B&#39;, 160, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 18.88, -34.16, -82.55&gt;]
+[&#39;B&#39;, 161, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 16.78, -33.58, -80.80&gt;]
+[&#39;B&#39;, 162, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 15.12, -31.86, -82.26&gt;]
+[&#39;B&#39;, 163, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 14.22, -33.55, -84.25&gt;]
+[&#39;B&#39;, 164, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 11.73, -34.92, -84.30&gt;]
+[&#39;B&#39;, 165, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 9.87, -32.92, -84.29&gt;]
+[&#39;B&#39;, 166, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 10.60, -30.54, -83.02&gt;]
+[&#39;B&#39;, 167, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 11.51, -27.07, -83.12&gt;]
+[&#39;B&#39;, 168, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 13.20, -23.92, -83.61&gt;]
+[&#39;B&#39;, 169, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 12.42, -21.03, -84.18&gt;]
+[&#39;B&#39;, 170, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 9.46, -20.32, -85.88&gt;]
+[&#39;B&#39;, 171, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 9.71, -20.06, -89.29&gt;]
+[&#39;B&#39;, 172, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 8.49, -18.05, -91.62&gt;]
+[&#39;B&#39;, 173, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 7.84, -16.87, -94.81&gt;]
+[&#39;B&#39;, 173, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 5.48, -16.43, -97.40&gt;]
+[&#39;B&#39;, 174, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 10.32, -15.45, -95.29&gt;]
+[&#39;B&#39;, 175, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 10.52, -14.27, -92.78&gt;]
+[&#39;B&#39;, 176, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 11.08, -14.51, -89.31&gt;]
+[&#39;B&#39;, 177, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 9.12, -15.69, -86.60&gt;]
+[&#39;B&#39;, 178, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 8.99, -14.52, -83.50&gt;]
+[&#39;B&#39;, 179, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 7.24, -15.21, -81.55&gt;]
+[&#39;B&#39;, 180, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 6.38, -17.79, -81.94&gt;]
+[&#39;B&#39;, 181, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 7.66, -20.43, -80.79&gt;]
+[&#39;B&#39;, 182, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 9.26, -23.59, -80.78&gt;]
+[&#39;B&#39;, 183, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 10.09, -25.36, -78.71&gt;]
+[&#39;B&#39;, 184, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 8.71, -26.51, -76.63&gt;]
+[&#39;B&#39;, 185, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 6.98, -28.84, -77.40&gt;]
+[&#39;B&#39;, 185, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 7.30, -28.42, -81.30&gt;]
+[&#39;B&#39;, 186, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 5.36, -31.95, -78.39&gt;]
+[&#39;B&#39;, 187, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 7.09, -33.26, -80.12&gt;]
+[&#39;B&#39;, 188, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 9.71, -32.30, -79.50&gt;]
+[&#39;B&#39;, 189, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 9.77, -33.15, -76.86&gt;]
+[&#39;B&#39;, 190, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 9.74, -35.96, -77.07&gt;]
+[&#39;B&#39;, 191, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 12.18, -36.36, -78.38&gt;]
+[&#39;B&#39;, 192, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 14.13, -35.31, -76.58&gt;]
+[&#39;B&#39;, 193, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 13.68, -37.03, -74.44&gt;]
+[&#39;B&#39;, 194, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 14.62, -39.51, -75.43&gt;]
+[&#39;B&#39;, 195, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 17.33, -38.88, -75.67&gt;]
+[&#39;B&#39;, 196, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 18.02, -38.38, -72.96&gt;]
+[&#39;B&#39;, 197, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 17.39, -40.90, -71.92&gt;]
+[&#39;B&#39;, 198, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 19.32, -42.47, -73.17&gt;]
+[&#39;B&#39;, 199, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 21.55, -41.62, -71.73&gt;]
+[&#39;B&#39;, 200, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 20.89, -42.28, -69.07&gt;]
+[&#39;B&#39;, 201, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 20.76, -45.06, -69.24&gt;]
+[&#39;B&#39;, 201, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 18.03, -47.06, -71.50&gt;]
+[&#39;B&#39;, 202, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 23.42, -45.69, -69.39&gt;]
+[&#39;B&#39;, 203, &#39;HIS&#39;, &#39;N&#39;, &lt;Vector 24.63, -45.53, -71.89&gt;]
+[&#39;B&#39;, 204, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 25.70, -43.22, -72.86&gt;]
+[&#39;B&#39;, 205, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 27.81, -40.71, -71.47&gt;]
+[&#39;B&#39;, 205, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 31.07, -40.35, -68.03&gt;]
+[&#39;B&#39;, 206, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 26.91, -38.18, -69.25&gt;]
+[&#39;B&#39;, 207, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 28.67, -36.10, -68.84&gt;]
+[&#39;B&#39;, 208, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 30.23, -35.75, -71.04&gt;]
+[&#39;B&#39;, 209, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 31.99, -33.74, -73.28&gt;]
+[&#39;B&#39;, 210, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 32.98, -31.52, -75.99&gt;]
+[&#39;B&#39;, 211, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 35.76, -31.92, -76.36&gt;]
+[&#39;B&#39;, 212, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 36.40, -34.32, -75.04&gt;]
+[&#39;B&#39;, 213, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 34.89, -36.19, -76.51&gt;]
+[&#39;B&#39;, 214, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 36.05, -35.91, -79.06&gt;]
+[&#39;B&#39;, 215, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 38.70, -36.74, -78.62&gt;]
+[&#39;B&#39;, 216, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 38.27, -39.41, -77.87&gt;]
+[&#39;B&#39;, 217, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 37.16, -40.58, -80.21&gt;]
+[&#39;B&#39;, 218, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 39.20, -40.12, -82.08&gt;]
+[&#39;B&#39;, 218, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 40.74, -36.43, -83.54&gt;]
+[&#39;B&#39;, 219, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 41.24, -41.61, -81.00&gt;]
+[&#39;B&#39;, 220, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 40.34, -44.14, -81.38&gt;]
+[&#39;B&#39;, 221, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 38.65, -45.28, -79.48&gt;]
+[&#39;B&#39;, 222, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 35.90, -45.09, -79.49&gt;]
+[&#39;B&#39;, 223, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 33.13, -45.76, -81.66&gt;]
+[&#39;B&#39;, 224, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 31.53, -43.99, -83.12&gt;]
+[&#39;B&#39;, 225, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 30.81, -40.50, -83.70&gt;]
+[&#39;B&#39;, 226, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 29.55, -37.11, -83.54&gt;]
+[&#39;B&#39;, 227, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 29.93, -34.38, -85.50&gt;]
+[&#39;B&#39;, 227, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 33.53, -32.48, -83.44&gt;]
+[&#39;B&#39;, 228, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 31.23, -31.54, -87.38&gt;]
+[&#39;B&#39;, 229, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 32.46, -30.44, -90.68&gt;]
+[&#39;B&#39;, 230, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 34.74, -28.99, -89.99&gt;]
+[&#39;B&#39;, 231, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 36.12, -30.56, -88.21&gt;]
+[&#39;B&#39;, 232, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 37.31, -32.64, -89.54&gt;]
+[&#39;B&#39;, 233, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 40.01, -32.57, -90.27&gt;]
+[&#39;B&#39;, 234, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 41.57, -33.05, -87.98&gt;]
+[&#39;B&#39;, 234, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 41.28, -31.23, -84.17&gt;]
+[&#39;B&#39;, 235, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 41.01, -35.73, -87.56&gt;]
+[&#39;B&#39;, 236, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 42.12, -36.85, -89.81&gt;]
+[&#39;B&#39;, 237, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 44.85, -36.66, -89.23&gt;]
+[&#39;B&#39;, 238, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 44.94, -38.44, -87.09&gt;]
+[&#39;B&#39;, 239, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 44.89, -40.87, -88.36&gt;]
+[&#39;B&#39;, 240, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 42.79, -42.65, -88.41&gt;]
+[&#39;B&#39;, 241, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 40.56, -44.84, -89.96&gt;]
+[&#39;B&#39;, 241, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 39.03, -48.00, -93.34&gt;]
+[&#39;B&#39;, 242, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 37.97, -43.46, -91.15&gt;]
+[&#39;B&#39;, 243, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 34.51, -42.50, -91.71&gt;]
+[&#39;B&#39;, 244, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 31.91, -40.42, -93.16&gt;]
+[&#39;B&#39;, 245, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 28.55, -39.72, -92.87&gt;]
+[&#39;B&#39;, 246, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 24.93, -39.65, -93.34&gt;]
+[&#39;B&#39;, 247, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 22.98, -38.28, -90.68&gt;]
+[&#39;B&#39;, 248, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 21.52, -40.23, -88.01&gt;]
+[&#39;B&#39;, 249, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 18.06, -41.31, -88.02&gt;]
+[&#39;B&#39;, 250, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 15.15, -40.39, -86.08&gt;]
+[&#39;B&#39;, 251, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 12.29, -41.74, -84.72&gt;]
+[&#39;B&#39;, 252, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 11.53, -42.33, -87.33&gt;]
+[&#39;B&#39;, 253, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 11.92, -39.88, -88.61&gt;]
+[&#39;B&#39;, 253, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 8.68, -38.60, -90.31&gt;]
+[&#39;B&#39;, 254, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 14.16, -37.43, -90.01&gt;]
+[&#39;B&#39;, 255, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 17.21, -36.37, -88.40&gt;]
+[&#39;B&#39;, 256, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 17.74, -32.96, -87.51&gt;]
+[&#39;B&#39;, 257, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 19.98, -30.82, -87.93&gt;]
+[&#39;B&#39;, 258, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 21.45, -27.58, -87.21&gt;]
+[&#39;B&#39;, 259, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 22.18, -25.16, -89.76&gt;]
+[&#39;B&#39;, 260, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 24.96, -23.57, -91.04&gt;]
+[&#39;B&#39;, 261, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 26.01, -20.85, -92.99&gt;]
+[&#39;B&#39;, 262, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 28.53, -19.72, -94.91&gt;]
+[&#39;B&#39;, 263, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 28.92, -16.47, -95.93&gt;]
+[&#39;B&#39;, 264, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 28.97, -13.66, -98.18&gt;]
+[&#39;B&#39;, 265, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 28.95, -10.34, -97.80&gt;]
+[&#39;B&#39;, 266, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 28.08, -6.97, -98.84&gt;]
+[&#39;B&#39;, 267, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 29.51, -3.91, -98.14&gt;]
+[&#39;B&#39;, 267, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 32.12, -1.08, -95.30&gt;]
+[&#39;B&#39;, 268, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 27.56, -1.28, -96.89&gt;]
+[&#39;B&#39;, 269, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 28.44, 1.32, -97.01&gt;]
+[&#39;B&#39;, 270, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 30.06, 1.28, -99.19&gt;]
+[&#39;B&#39;, 271, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 31.47, 2.58, -102.18&gt;]
+[&#39;B&#39;, 272, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 31.65, 0.98, -104.46&gt;]
+[&#39;B&#39;, 272, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 34.46, 1.58, -106.03&gt;]
+[&#39;B&#39;, 273, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 29.68, -0.84, -105.19&gt;]
+[&#39;B&#39;, 274, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 28.44, -2.00, -107.45&gt;]
+[&#39;B&#39;, 275, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 30.70, -2.96, -108.75&gt;]
+[&#39;B&#39;, 276, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 31.55, -4.84, -106.80&gt;]
+[&#39;B&#39;, 277, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 29.38, -6.61, -106.92&gt;]
+[&#39;B&#39;, 278, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 29.67, -7.61, -109.55&gt;]
+[&#39;B&#39;, 279, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 32.13, -8.96, -109.33&gt;]
+[&#39;B&#39;, 280, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 31.51, -10.91, -107.37&gt;]
+[&#39;B&#39;, 281, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 29.29, -12.30, -108.46&gt;]
+[&#39;B&#39;, 282, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 30.01, -13.01, -111.10&gt;]
+[&#39;B&#39;, 282, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 29.04, -10.53, -113.89&gt;]
+[&#39;B&#39;, 283, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 32.63, -13.95, -111.09&gt;]
+[&#39;B&#39;, 284, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 33.60, -15.09, -108.63&gt;]
+[&#39;B&#39;, 285, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 31.45, -16.82, -107.66&gt;]
+[&#39;B&#39;, 286, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 31.42, -19.09, -109.46&gt;]
+[&#39;B&#39;, 287, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 32.28, -22.16, -111.18&gt;]
+[&#39;B&#39;, 288, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 35.05, -22.10, -111.66&gt;]
+[&#39;B&#39;, 289, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 35.94, -20.03, -109.98&gt;]
+[&#39;B&#39;, 290, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 35.26, -20.76, -107.27&gt;]
+[&#39;B&#39;, 291, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 36.64, -23.16, -107.15&gt;]
+[&#39;B&#39;, 292, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 39.29, -22.35, -107.30&gt;]
+[&#39;B&#39;, 293, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 39.54, -21.08, -104.79&gt;]
+[&#39;B&#39;, 294, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 38.94, -23.32, -103.26&gt;]
+[&#39;B&#39;, 294, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 38.14, -27.93, -103.19&gt;]
+[&#39;B&#39;, 295, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 41.09, -25.02, -103.82&gt;]
+[&#39;B&#39;, 296, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 43.13, -23.78, -102.36&gt;]
+[&#39;B&#39;, 297, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 42.37, -23.71, -99.53&gt;]
+[&#39;B&#39;, 298, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 40.15, -26.11, -98.47&gt;]
+[&#39;B&#39;, 299, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 36.65, -25.62, -99.00&gt;]
+[&#39;B&#39;, 300, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 34.57, -27.18, -98.09&gt;]
+[&#39;B&#39;, 301, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 31.17, -28.17, -98.33&gt;]
+[&#39;B&#39;, 302, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 29.38, -26.36, -100.86&gt;]
+[&#39;B&#39;, 303, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 27.26, -23.62, -101.90&gt;]
+[&#39;B&#39;, 304, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 26.73, -23.17, -104.58&gt;]
+[&#39;B&#39;, 305, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 25.25, -24.88, -107.16&gt;]
+[&#39;B&#39;, 306, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 26.34, -26.28, -109.43&gt;]
+[&#39;B&#39;, 307, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 29.09, -26.59, -108.87&gt;]
+[&#39;B&#39;, 308, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 28.96, -27.88, -106.41&gt;]
+[&#39;B&#39;, 309, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 27.94, -30.41, -107.06&gt;]
+[&#39;B&#39;, 310, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 30.18, -31.49, -108.32&gt;]
+[&#39;B&#39;, 311, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 32.07, -31.50, -106.17&gt;]
+[&#39;B&#39;, 312, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 30.65, -33.20, -104.48&gt;]
+[&#39;B&#39;, 313, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 31.30, -35.78, -105.17&gt;]
+[&#39;B&#39;, 314, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 33.09, -36.64, -103.32&gt;]
+[&#39;B&#39;, 315, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 32.04, -38.48, -100.69&gt;]
+[&#39;B&#39;, 316, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 31.83, -37.53, -98.09&gt;]
+[&#39;B&#39;, 317, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 31.38, -34.79, -98.41&gt;]
+[&#39;B&#39;, 318, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 28.93, -34.91, -99.73&gt;]
+[&#39;B&#39;, 319, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 27.39, -36.03, -97.68&gt;]
+[&#39;B&#39;, 320, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 27.53, -33.93, -95.80&gt;]
+[&#39;B&#39;, 321, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 26.11, -31.84, -97.16&gt;]
+[&#39;B&#39;, 322, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 23.67, -33.19, -97.48&gt;]
+[&#39;B&#39;, 323, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 22.71, -33.60, -94.83&gt;]
+[&#39;B&#39;, 323, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 24.79, -35.40, -92.09&gt;]
+[&#39;B&#39;, 324, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 22.48, -30.89, -94.25&gt;]
+[&#39;B&#39;, 325, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 20.36, -29.96, -95.93&gt;]
+[&#39;B&#39;, 325, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 19.34, -29.54, -101.38&gt;]
+[&#39;B&#39;, 326, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 18.29, -31.40, -94.80&gt;]
+[&#39;B&#39;, 327, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 18.17, -30.23, -92.33&gt;]
+[&#39;B&#39;, 328, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 17.84, -27.12, -90.51&gt;]
+[&#39;B&#39;, 329, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 18.15, -23.65, -91.25&gt;]
+[&#39;B&#39;, 330, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 20.26, -21.75, -89.21&gt;]
+[&#39;B&#39;, 331, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 18.83, -19.37, -87.13&gt;]
+[&#39;B&#39;, 332, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 19.23, -15.82, -87.55&gt;]
+[&#39;B&#39;, 332, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 19.82, -13.36, -90.86&gt;]
+[&#39;B&#39;, 333, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 18.65, -13.89, -85.60&gt;]
+[&#39;B&#39;, 334, &#39;PRO&#39;, &#39;N&#39;, &lt;Vector 18.49, -11.83, -82.62&gt;]
+[&#39;B&#39;, 335, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 16.99, -13.11, -80.64&gt;]
+[&#39;B&#39;, 335, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 14.03, -10.39, -80.82&gt;]
+[&#39;B&#39;, 336, &#39;MET&#39;, &#39;N&#39;, &lt;Vector 17.76, -15.74, -80.42&gt;]
+[&#39;B&#39;, 337, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 19.37, -16.17, -78.21&gt;]
+[&#39;B&#39;, 338, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 17.73, -16.58, -75.95&gt;]
+[&#39;B&#39;, 339, &#39;PHE&#39;, &#39;N&#39;, &lt;Vector 16.58, -18.96, -76.85&gt;]
+[&#39;B&#39;, 340, &#39;TRP&#39;, &#39;N&#39;, &lt;Vector 18.80, -20.74, -76.93&gt;]
+[&#39;B&#39;, 341, &#39;TYR&#39;, &#39;N&#39;, &lt;Vector 19.40, -20.81, -74.20&gt;]
+[&#39;B&#39;, 342, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 17.12, -22.08, -73.12&gt;]
+[&#39;B&#39;, 343, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 17.22, -24.67, -74.29&gt;]
+[&#39;B&#39;, 344, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 19.77, -25.66, -73.51&gt;]
+[&#39;B&#39;, 345, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 19.46, -25.61, -70.72&gt;]
+[&#39;B&#39;, 346, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 17.22, -27.27, -70.28&gt;]
+[&#39;B&#39;, 347, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 18.21, -29.77, -71.02&gt;]
+[&#39;B&#39;, 348, &#39;ILE&#39;, &#39;N&#39;, &lt;Vector 20.26, -30.38, -69.16&gt;]
+[&#39;B&#39;, 349, &#39;ASN&#39;, &#39;N&#39;, &lt;Vector 18.82, -30.37, -66.77&gt;]
+[&#39;B&#39;, 349, &#39;ASN&#39;, &#39;ND2&#39;, &lt;Vector 16.41, -27.27, -65.34&gt;]
+[&#39;B&#39;, 350, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 17.02, -32.49, -67.16&gt;]
+[&#39;B&#39;, 351, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 18.64, -34.72, -67.77&gt;]
+[&#39;B&#39;, 352, &#39;SER&#39;, &#39;N&#39;, &lt;Vector 20.35, -35.01, -65.54&gt;]
+[&#39;B&#39;, 353, &#39;GLY&#39;, &#39;N&#39;, &lt;Vector 18.43, -35.61, -63.67&gt;]
+[&#39;B&#39;, 354, &#39;ARG&#39;, &#39;N&#39;, &lt;Vector 17.10, -33.65, -62.23&gt;]
+[&#39;B&#39;, 355, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 14.67, -32.49, -63.07&gt;]
+[&#39;B&#39;, 355, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 12.25, -27.65, -63.05&gt;]
+[&#39;B&#39;, 356, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 11.71, -33.77, -64.67&gt;]
+[&#39;B&#39;, 357, &#39;VAL&#39;, &#39;N&#39;, &lt;Vector 11.23, -34.70, -68.16&gt;]
+[&#39;B&#39;, 358, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 9.04, -33.30, -69.22&gt;]
+[&#39;B&#39;, 359, &#39;GLU&#39;, &#39;N&#39;, &lt;Vector 8.80, -31.35, -67.19&gt;]
+[&#39;B&#39;, 360, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 11.36, -30.16, -67.35&gt;]
+[&#39;B&#39;, 361, &#39;LEU&#39;, &#39;N&#39;, &lt;Vector 11.43, -28.93, -69.88&gt;]
+[&#39;B&#39;, 362, &#39;LYS&#39;, &#39;N&#39;, &lt;Vector 9.11, -27.27, -69.96&gt;]
+[&#39;B&#39;, 363, &#39;ASP&#39;, &#39;N&#39;, &lt;Vector 9.43, -25.56, -67.77&gt;]
+[&#39;B&#39;, 364, &#39;ALA&#39;, &#39;N&#39;, &lt;Vector 11.68, -24.13, -68.48&gt;]
+[&#39;B&#39;, 365, &#39;GLN&#39;, &#39;N&#39;, &lt;Vector 10.93, -22.29, -70.43&gt;]
+[&#39;B&#39;, 365, &#39;GLN&#39;, &#39;NE2&#39;, &lt;Vector 11.56, -22.70, -74.78&gt;]
+[&#39;B&#39;, 366, &#39;THR&#39;, &#39;N&#39;, &lt;Vector 9.11, -20.40, -69.29&gt;]
 </pre>
 </div>
 </div>
