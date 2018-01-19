@@ -3,7 +3,7 @@
 
 # Importing the pdb structure
 
-# In[45]:
+# In[1]:
 
 
 import Bio
@@ -40,7 +40,7 @@ def find_structure_params(structure):
 
 # How to find different atoms for the 11 layers
 
-# In[46]:
+# In[2]:
 
 
 def make_atom_layers(structure_data):
@@ -93,7 +93,7 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[47]:
+# In[3]:
 
 
 def main():
@@ -104,9 +104,7 @@ def main():
     
     structure_data = find_structure_params(structure)
     layers = make_atom_layers(structure_data)
-    
-    for i in layers[1]:
-        print i
+
     
 if __name__ == '__main__':
   main()
