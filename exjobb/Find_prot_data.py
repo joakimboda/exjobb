@@ -3,7 +3,27 @@
 
 # Importing the pdb structure
 
-# In[1]:
+# from biopandas.pdb import PandasPdb
+# import sys
+# import re
+# import matplotlib.pyplot as plt
+# from matplotlib import cm
+# import math
+# import numpy as np
+# 
+# 
+# def find_structure_params(structure):
+#     
+#     structure_data={}
+#     
+#     for index, row in structure_atoms.iterrows():
+#         print  row.keys#row['atom_name']
+#         
+# 
+# 
+# 
+
+# In[351]:
 
 
 import Bio
@@ -18,15 +38,16 @@ import math
 def find_structure_params(structure):
     
     #structure_data.append([Chain_id,Seg_id, residue_name, atom_name, atom_coord_vector])
-    structure_data=[]
+    structure_data={}
     
     for model in structure:
         for chain in model:
             #for atom in structure.get_atoms():  If I want all atoms in a structure, depends if I want the residue
             for residue in chain:
-              #  if residue.get_full_id()[3][0]==' ':  #If I want to remove HOH etc (hetero-atoms) use this!
+                #if residue.get_full_id()[3][0]==' ':  #If I want to remove HOH etc (hetero-atoms) use this!
                     for atom in residue:
-                        structure_data.append([chain.get_id(),residue.get_id()[1],residue.get_resname(),atom.get_name(),atom.get_vector()])
+                        key = chain.get_id() + str(atom.serial_number)
+                        structure_data[key]=([chain.get_id(),residue.get_resname(),atom.get_name(),atom.get_vector()])
 
    # for i in structure_data:
        # if i[0]=='L':
@@ -40,7 +61,7 @@ def find_structure_params(structure):
 
 # How to find different atoms for the 11 layers
 
-# In[2]:
+# In[352]:
 
 
 def make_atom_layers(structure_data):
@@ -56,17 +77,23 @@ def make_atom_layers(structure_data):
     layer9_check = ['ARG:CZ','ASN:CG','ASP:CG','GLN:CD','GLU:CD'] #Backbone C?
     layer10_check = ['HIS:CG','HIS:CD2','HIS:CE1','PHE:CG','PHE:CD1','PHE:CD2','PHE:CD3','PHE:CE1','PHE:CE2','PHE:CE3''PHE:CZ','TRP:CG','TRP:CD1','TRP:CD2','TRP:CD3','TRP:CD3','TRP:CE1','TRP:CE2','TRP:CE3','TRP:CZ1','TRP:CZ2','TRP:CZ3','TRP:CH2','TYR:CG','TYR:CD1','TYR:CD2','TYR:CD3','TYR:CE1','TYR:CE2','TYR:CE3','TYR:CZ']
     layer11_check = ['ALA:CB','ARG:CB','ARG:CG','ARG:CD','ASN:CB','ASP:CB','CYS:CB','GLN:CB','GLN:CG','GLU:CB','GLU:CG','HIS:CB','ILE:CB','ILE:CG1','ILE:CG2','ILE:CG3','ILE:CD1','LEU:CB','LEU:CG','LEU:CD1','LEU:CD2','LEU:CD3','LYS:CB','LYS:CG','LYS:CD','LYS:CE','MET:CB','MET:CG','MET:CE','MSE:CB','MSE:CG','MSE:CE','PHE:CB','PRO:CB','PRO:CG','PRO:CD','SER:CB','THR:CB','THR:CG2','TRP:CB','TYR:CB','VAL:CB','VAL:CG1','VAL:CG2','VAL:CG3'] #Backbone CA?
-    layers=[[],[],[],[],[],[],[],[],[],[],[]]
+    layers=[[],[],[],[],[],[],[],[],[],[],[],[]] #Fult, vill göra på något annat sätt
     
-    for atom in structure_data:
-        if atom[3] == 'N':
+    layers={}
+    
+    for key, atom in structure_data.iteritems():
+        if atom[2] == 'N':
             layers[1].append(atom)
-        elif atom[3] == 'O':
+        elif atom[2] == 'O':
             layers[5].append(atom)
-        elif atom[3] == 'C':
+        elif atom[2] == 'C':
             layers[8].append(atom)
+        elif atom[2] == 'CA':
+            layers[10].append(atom)
+        elif atom[2] == 'OXT':
+            layers[7].append(atom)
         else:
-            atom_type = atom[2] + ':' + atom[3]
+            atom_type = atom[1] + ':' + atom[2]
             if atom_type in layer1_check:
                 layers[0].append(atom)
             elif atom_type in layer2_check:
@@ -89,22 +116,35 @@ def make_atom_layers(structure_data):
                 layers[9].append(atom)
             elif atom_type in layer11_check:
                 layers[10].append(atom)
+            else:
+                layers[11].append(atom)
 
     return(layers)
 
 
-# In[3]:
+# In[353]:
 
 
 def main():
-    filename_pdb = '/home/joakim/Downloads/5bk1.pdb'
+    filename_pdb = '/home/joakim/Downloads/2HIY_A.pdb' # '/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
     
     PDBobj = PDBParser()
     structure = PDBobj.get_structure(filename_pdb, filename_pdb)
     
-    structure_data = find_structure_params(structure)
-    layers = make_atom_layers(structure_data)
+   # structure=PandasPdb().read_pdb(filename_pdb)
+   # structure_atoms = structure.df['ATOM']
 
+    
+    structure_data = find_structure_params(structure)
+    #print structure_data
+    layers = make_atom_layers(structure_data)
+    l=0
+    for i in layers:
+        l=l+1
+        print l
+        print len(i)
+        for j in i:
+            print j
     
 if __name__ == '__main__':
   main()
