@@ -23,7 +23,7 @@
 # 
 # 
 
-# In[249]:
+# In[10]:
 
 
 import Bio
@@ -63,7 +63,7 @@ def find_structure_params(structure):
 
 # How to find different atoms for the 11 layers
 
-# In[250]:
+# In[11]:
 
 
 def make_atom_layers(structure_data):
@@ -130,7 +130,7 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[251]:
+# In[12]:
 
 
 def find_midpoint(structure_data):
@@ -146,7 +146,7 @@ def find_midpoint(structure_data):
     return(midpoint)    
 
 
-# In[252]:
+# In[13]:
 
 
 def normalize_in_origo(midpoint,structure_data):
@@ -159,7 +159,7 @@ def normalize_in_origo(midpoint,structure_data):
     return (structure_data)
 
 
-# In[253]:
+# In[14]:
 
 
 def make_density_maps(layers):
@@ -200,7 +200,7 @@ def make_density_maps(layers):
         return (density_maps,x_values,y_values,z_values,density_values)               
 
 
-# In[254]:
+# In[15]:
 
 
 def plot_4d(x_values,y_values,z_values,density_value):
@@ -229,13 +229,13 @@ def plot_4d(x_values,y_values,z_values,density_value):
 
 
 
-# In[255]:
+# In[16]:
 
 
 def make_mrcfile(density_maps):
     import mrcfile
     
-    density_map1=density_maps[10].astype(np.float32)
+    density_map1=density_maps[1].astype(np.float32)
 
     mrc=mrcfile.open('tmp.mrc')
     print mrc.data
@@ -243,7 +243,7 @@ def make_mrcfile(density_maps):
         #mrc.set_data(density_map1)
 
 
-# In[256]:
+# In[17]:
 
 
 def main():
@@ -281,13 +281,13 @@ def main():
     
     make_mrcfile(density_maps)
 
-    #plot_4d(x_values,y_values,z_values,density_values)
+    plot_4d(x_values,y_values,z_values,density_values)
 
     
     
 
 
-# In[257]:
+# In[18]:
 
 
 if __name__ == '__main__':
