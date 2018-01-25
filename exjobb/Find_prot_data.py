@@ -47,7 +47,7 @@ def find_structure_params(structure):
         for chain in model:
             #for atom in structure.get_atoms():  If I want all atoms in a structure, depends if I want the residue
             for residue in chain:
-                #if residue.get_full_id()[3][0]==' ':  #If I want to remove HOH etc (hetero-atoms) use this!
+                if residue.get_full_id()[3][0]==' ':  #If I want to remove HOH etc (hetero-atoms) use this!
                     for atom in residue:
                         key = chain.get_id() + str(atom.serial_number)
                         structure_data[key]=([chain.get_id(),residue.get_resname(),atom.get_name(),atom.get_vector()])
@@ -181,8 +181,8 @@ def make_density_maps(layers):
                             density=math.exp(-((r**2)/2))
                             density_maps[(int(key)-1)][x+xx][y+yy][z+zz]=density_maps[(int(key)-1)][x+xx][y+yy][z+zz]+density
 
-                            
-        #Denna del är bara för att kunna plotta datan
+
+        #This is only for plotting the data in python, otherwise a numpy array is made over all layers
         x_values=[]
         y_values=[]
         z_values=[]
@@ -235,19 +235,19 @@ def plot_4d(x_values,y_values,z_values,density_value):
 def make_mrcfile(density_maps):
     import mrcfile
     
-    density_map1=density_maps[1].astype(np.float32)
+    density_map1=density_maps[3].astype(np.float32)
 
-    mrc=mrcfile.open('tmp.mrc')
-    print mrc.data
-    #with mrcfile.new('tmp.mrc',overwrite=True) as mrc:
-        #mrc.set_data(density_map1)
+    #mrc=mrcfile.open('tmp.mrc')
+    #print mrc.data
+    with mrcfile.new('tmp.mrc',overwrite=True) as mrc:
+        mrc.set_data(density_map1)
 
 
 # In[17]:
 
 
 def main():
-    filename_pdb = '/home/joakim/Downloads/5eh6.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
+    filename_pdb = '/home/joakim/Downloads/D1A2K-a0a-merged.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
     try: 
         PDBobj = PDBParser()
         structure = PDBobj.get_structure(filename_pdb, filename_pdb)
@@ -274,7 +274,7 @@ def main():
     
     #for key,values in layers.iteritems():
         #print key, len(values)
-
+    
     #Create 11 density maps (zeros)
     (density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers)
     density_maps=density_maps
@@ -285,11 +285,12 @@ def main():
 
     
     
+if __name__ == '__main__':
+  main()
 
 
 # In[18]:
 
 
-if __name__ == '__main__':
-  main()
+
 

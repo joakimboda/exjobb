@@ -23,7 +23,7 @@
 # 
 # 
 
-# In[2]:
+# In[15]:
 
 
 import Bio
@@ -57,14 +57,14 @@ except IOError:
     
 
 
-# In[3]:
+# In[ ]:
 
 
 
     
     #structure_data.append([Chain_id,Seg_id, residue_name, atom_name, atom_coord_vector])
 structure_data={}
-    
+
 for model in structure:
     for chain in model:
             #for atom in structure.get_atoms():  If I want all atoms in a structure, depends if I want the residue
@@ -84,7 +84,7 @@ for model in structure:
 
 # How to find different atoms for the 11 layers
 
-# In[4]:
+# In[ ]:
 
 
 
@@ -149,7 +149,7 @@ for key, atom in structure_data.iteritems():
 
 
 
-# In[5]:
+# In[ ]:
 
 
 
@@ -164,7 +164,7 @@ midpoint=allvectors/i
  
 
 
-# In[6]:
+# In[ ]:
 
 
 for key,atom in structure_data.iteritems():
@@ -173,7 +173,7 @@ for key,atom in structure_data.iteritems():
     structure_data[key]=atom_new
 
 
-# In[7]:
+# In[ ]:
 
 
 
@@ -213,7 +213,7 @@ for x in range(0,120):
  
 
 
-# In[8]:
+# In[ ]:
 
 
 
@@ -237,7 +237,7 @@ plt.show()
 
 
 
-# In[11]:
+# In[ ]:
 
 
 import mrcfile
