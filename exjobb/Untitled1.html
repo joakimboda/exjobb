@@ -11773,7 +11773,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">Bio</span>
@@ -11785,31 +11785,124 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="n">r</span><span class="o">=</span><span class="mi">1</span>
-<span class="n">d</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">density</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="o">**</span><span class="n">d</span>
-<span class="k">print</span> <span class="n">density</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">calc_residue_dist</span><span class="p">(</span><span class="n">residue1</span><span class="p">,</span> <span class="n">residue2</span><span class="p">,</span><span class="n">layers</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns the C-alpha distance between two residues&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">atom1</span> <span class="ow">in</span> <span class="n">residue1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">atom2</span> <span class="ow">in</span> <span class="n">residue2</span><span class="p">:</span>
+            
+                
+                
+                
+            <span class="n">distance</span><span class="o">=</span><span class="n">atom1</span><span class="o">-</span><span class="n">atom2</span>    
+
+            <span class="k">if</span> <span class="n">distance</span><span class="o">&gt;</span><span class="mi">17</span><span class="p">:</span><span class="c1">#If the residues is to far from eachother there is no need to calculate the distance for the rest of the atoms</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span><span class="mi">8</span><span class="p">:</span><span class="c1">#Go to the next atom</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">distance</span><span class="o">&lt;=</span><span class="mf">0.5</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;VDW&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">residue1</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span> <span class="n">residue1</span><span class="o">.</span><span class="n">get_resname</span><span class="p">()</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">residue2</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span> <span class="n">residue2</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span> <span class="n">atom2</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">distance</span><span class="p">])</span>
+
+                
+            <span class="k">if</span> <span class="s1">&#39;H&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_id</span><span class="p">()</span> <span class="ow">and</span> <span class="s1">&#39;H&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">atom2</span><span class="o">.</span><span class="n">get_id</span><span class="p">():</span> <span class="c1"># DUBBELKOLLA ATT DET INTE FINNS H I ANDRA!!!!</span>
+            <span class="c1">#if atom1.get_id() != &#39;H&#39; and atom2.get_id() != &#39;H&#39;:    </span>
+                <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;CA&#39;</span> <span class="ow">and</span> <span class="n">atom2</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;CA&#39;</span> <span class="ow">and</span> <span class="n">distance</span><span class="o">&lt;=</span><span class="mi">8</span><span class="p">:</span>
+                    <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;CA-CA&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">residue1</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span> <span class="n">residue1</span><span class="o">.</span><span class="n">get_resname</span><span class="p">()</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">residue2</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span> <span class="n">residue2</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span> <span class="n">atom2</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">distance</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">distance</span><span class="o">&lt;=</span><span class="mi">5</span><span class="p">:</span> <span class="c1">#Heavy atoms distance</span>
+                    <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;H-A&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">residue1</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span> <span class="n">residue1</span><span class="o">.</span><span class="n">get_resname</span><span class="p">()</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">residue2</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="o">+</span> <span class="n">residue2</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span> <span class="n">atom2</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">distance</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">layers</span><span class="p">)</span>
 
 
-<div class="output_area">
 
-<div class="prompt"></div>
+<span class="k">def</span> <span class="nf">calc_dist_matrix</span><span class="p">(</span><span class="n">chain_one</span><span class="p">,</span> <span class="n">chain_two</span><span class="p">,</span><span class="n">layers</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a matrix of C-alpha distances between two chains&quot;&quot;&quot;</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">chain_one</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain_two</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">residue_one</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chain_one</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">residue_two</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chain_two</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="n">calc_residue_dist</span><span class="p">(</span><span class="n">residue_one</span><span class="p">,</span> <span class="n">residue_two</span><span class="p">,</span><span class="n">layers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+</pre></div>
 
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>1.0
-</pre>
 </div>
 </div>
+</div>
 
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">filename_pdb</span> <span class="o">=</span> <span class="s1">&#39;/home/joakim/Downloads/5bk1.pdb&#39;</span><span class="c1">#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">PDBobj</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">()</span>
+        <span class="n">structure</span> <span class="o">=</span> <span class="n">PDBobj</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">structure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> 
+        <span class="k">print</span> <span class="s1">&#39;IO Error&#39;</span><span class="p">,</span> <span class="n">filename_pdb</span>       
+        <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+            <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Error parsing PDB file! Continue(y/n)...&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;y&#39;</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    
+    <span class="n">chain_used</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">layers</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;VDW&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;Check&#39;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">chain1</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chain2</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">chain1</span><span class="o">!=</span><span class="n">chain2</span> <span class="ow">and</span> <span class="n">chain2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">chain_used</span><span class="p">:</span>
+                <span class="n">chain_used</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chain1</span><span class="p">)</span>
+                <span class="n">layers</span> <span class="o">=</span> <span class="n">calc_dist_matrix</span><span class="p">(</span><span class="n">chain1</span><span class="p">,</span> <span class="n">chain2</span><span class="p">,</span><span class="n">layers</span><span class="p">)</span>
+                <span class="c1">#contact_map = dist_matrix &lt; 12.0</span>
+    
+    <span class="n">t</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">print</span> <span class="s1">&#39;CA-CA&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">[</span><span class="s1">&#39;CA-CA&#39;</span><span class="p">]:</span>
+        <span class="k">print</span> <span class="n">i</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span>
+    
+    <span class="n">g</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">print</span> <span class="s1">&#39;H-A&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">[</span><span class="s1">&#39;H-A&#39;</span><span class="p">]:</span>
+        <span class="k">print</span> <span class="n">i</span>
+        <span class="n">g</span><span class="o">=</span><span class="n">g</span><span class="o">+</span><span class="mi">1</span>
+    
+    <span class="n">d</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="k">print</span> <span class="s1">&#39;VDW&#39;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">[</span><span class="s1">&#39;VDW&#39;</span><span class="p">]:</span>
+        <span class="k">print</span> <span class="n">i</span>
+        <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="k">print</span> <span class="n">d</span>
+    <span class="k">print</span> <span class="n">g</span>
+    <span class="k">print</span> <span class="n">t</span>
+<span class="c1">#    for i in contact_map:</span>
+<span class="c1">#        for g in i:</span>
+<span class="c1">#            if g!= False:</span>
+<span class="c1">#                print g</span>
+
+    
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+</div>
 </div>
 </div>
 

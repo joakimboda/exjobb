@@ -23,7 +23,7 @@
 # 
 # 
 
-# In[10]:
+# In[421]:
 
 
 import Bio
@@ -36,12 +36,15 @@ import math
 import numpy as np
 
 from mpl_toolkits.mplot3d import Axes3D
+
+#import pandas as pd #pandas är en python modul for att hantera s.k DataFrames.
  
         
 def find_structure_params(structure):
     
     #structure_data.append([Chain_id,Seg_id, residue_name, atom_name, atom_coord_vector])
     structure_data={}
+    res_key = ''
     
     for model in structure:
         for chain in model:
@@ -51,6 +54,11 @@ def find_structure_params(structure):
                     for atom in residue:
                         key = chain.get_id() + str(atom.serial_number)
                         structure_data[key]=([chain.get_id(),residue.get_resname(),atom.get_name(),atom.get_vector()])
+                        
+                        #Giving the C-terminal O its own name for when making the atom layers
+                        if atom.get_name()=='OXT':
+                            structure_data[res_key][2]=structure_data[res_key][2]+'Cterm'
+                        res_key = key
    # for i in structure_data:
        # if i[0]=='L':
      #       print i
@@ -63,7 +71,7 @@ def find_structure_params(structure):
 
 # How to find different atoms for the 11 layers
 
-# In[11]:
+# In[422]:
 
 
 def make_atom_layers(structure_data):
@@ -79,7 +87,6 @@ def make_atom_layers(structure_data):
     layer9_check = ['ARG:CZ','ASN:CG','ASP:CG','GLN:CD','GLU:CD'] #Backbone C?
     layer10_check = ['HIS:CG','HIS:CD2','HIS:CE1','PHE:CG','PHE:CD1','PHE:CD2','PHE:CD3','PHE:CE1','PHE:CE2','PHE:CE3','PHE:CZ','TRP:CG','TRP:CD1','TRP:CD2','TRP:CD3','TRP:CD3','TRP:CE1','TRP:CE2','TRP:CE3','TRP:CZ1','TRP:CZ2','TRP:CZ3','TRP:CH2','TYR:CG','TYR:CD1','TYR:CD2','TYR:CD3','TYR:CE1','TYR:CE2','TYR:CE3','TYR:CZ']
     layer11_check = ['ALA:CB','ARG:CB','ARG:CG','ARG:CD','ASN:CB','ASP:CB','CYS:CB','GLN:CB','GLN:CG','GLU:CB','GLU:CG','HIS:CB','ILE:CB','ILE:CG1','ILE:CG2','ILE:CG3','ILE:CD1','LEU:CB','LEU:CG','LEU:CD1','LEU:CD2','LEU:CD3','LYS:CB','LYS:CG','LYS:CD','LYS:CE','MET:CB','MET:CG','MET:CE','MSE:CB','MSE:CG','MSE:CE','PHE:CB','PRO:CB','PRO:CG','PRO:CD','SER:CB','THR:CB','THR:CG2','TRP:CB','TYR:CB','VAL:CB','VAL:CG1','VAL:CG2','VAL:CG3'] #Backbone CA?
-    #layers=[[],[],[],[],[],[],[],[],[],[],[],[]] #Fult, vill göra på något annat sätt
     
     layers={}
     
@@ -93,6 +100,8 @@ def make_atom_layers(structure_data):
         elif atom[2] == 'CA':
             layers.setdefault('11', []).append(atom)
         elif atom[2] == 'OXT':
+            layers.setdefault('8', []).append(atom)
+        elif atom[2] == 'OCterm': #C-terminal O
             layers.setdefault('8', []).append(atom)
         else:
             atom_type = atom[1] + ':' + atom[2]
@@ -119,7 +128,7 @@ def make_atom_layers(structure_data):
             elif atom_type in layer11_check:
                 layers.setdefault('11', []).append(atom)
             else:
-                g=1#layers.setdefault('12', []).append(atom)
+                print str(key) + str(atom[1:3]) + ' Has not been assigned to any layer' #layers.setdefault('12', []).append(atom)
     
     #This is to check if anything is not sorted into a layer            
     #for key,atom in layers.iteritems():
@@ -130,12 +139,11 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[12]:
+# In[423]:
 
 
 def find_midpoint(structure_data):
     
-    #allvectors = structure_data.values()[1][3]-structure_data.values()[1][3] #forstå hur man gör ett vector object!
     allvectors = Vector([0,0,0])
 
     i=0     
@@ -146,7 +154,7 @@ def find_midpoint(structure_data):
     return(midpoint)    
 
 
-# In[13]:
+# In[424]:
 
 
 def normalize_in_origo(midpoint,structure_data):
@@ -159,7 +167,7 @@ def normalize_in_origo(midpoint,structure_data):
     return (structure_data)
 
 
-# In[14]:
+# In[425]:
 
 
 def make_density_maps(layers):
@@ -200,7 +208,7 @@ def make_density_maps(layers):
         return (density_maps,x_values,y_values,z_values,density_values)               
 
 
-# In[15]:
+# In[426]:
 
 
 def plot_4d(x_values,y_values,z_values,density_value):
@@ -229,13 +237,13 @@ def plot_4d(x_values,y_values,z_values,density_value):
 
 
 
-# In[16]:
+# In[427]:
 
 
 def make_mrcfile(density_maps):
     import mrcfile
     
-    density_map1=density_maps[3].astype(np.float32)
+    density_map1=density_maps[7].astype(np.float32)
 
     #mrc=mrcfile.open('tmp.mrc')
     #print mrc.data
@@ -243,7 +251,7 @@ def make_mrcfile(density_maps):
         mrc.set_data(density_map1)
 
 
-# In[17]:
+# In[428]:
 
 
 def main():
@@ -262,19 +270,23 @@ def main():
                 sys.exit()
    # structure=PandasPdb().read_pdb(filename_pdb)
    # structure_atoms = structure.df['ATOM']
+    
+    
+    #df=pd.read_excel('cross_val_sets.xls')
+    #print df
 
     
     structure_data = find_structure_params(structure)
     
     midpoint = find_midpoint(structure_data) #Avrundning gör att det blir lite konstigt,!! Kolla upp
-    print midpoint
+
     structure_data = normalize_in_origo(midpoint,structure_data)
     
     layers = make_atom_layers(structure_data)
     
     #for key,values in layers.iteritems():
         #print key, len(values)
-    
+
     #Create 11 density maps (zeros)
     (density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers)
     density_maps=density_maps
@@ -287,10 +299,4 @@ def main():
     
 if __name__ == '__main__':
   main()
-
-
-# In[18]:
-
-
-
 
