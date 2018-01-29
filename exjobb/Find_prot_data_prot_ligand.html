@@ -11803,10 +11803,11 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">Bio</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">Bio</span>
 <span class="kn">from</span> <span class="nn">Bio.PDB</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -11816,6 +11817,7 @@ for index, row in structure_atoms.iterrows():
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+
 
 <span class="c1">#import pandas as pd #pandas är en python modul for att hantera s.k DataFrames.</span>
  
@@ -11853,115 +11855,6 @@ for index, row in structure_atoms.iterrows():
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">Bio</span>
-<span class="kn">from</span> <span class="nn">Bio.PDB</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="n">filename_pdb</span> <span class="o">=</span> <span class="s1">&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span><span class="c1">#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
-<span class="k">try</span><span class="p">:</span> 
-    <span class="n">PDBobj</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">()</span>
-    <span class="n">structure</span> <span class="o">=</span> <span class="n">PDBobj</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>
-
-<span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> 
-    <span class="k">print</span> <span class="s1">&#39;IO Error&#39;</span><span class="p">,</span> <span class="n">filename_pdb</span>       
-    <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
-        <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Error parsing PDB file! Continue(y/n)...&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;y&#39;</span><span class="p">:</span>
-            <span class="k">break</span>
-        <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-
-
-
-
-<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">chain1</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">chain2</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">chain1</span><span class="o">==</span><span class="n">chain2</span><span class="p">:</span>
-                <span class="k">print</span> <span class="n">chain1</span><span class="p">,</span> <span class="n">chain2</span>
-                <span class="k">continue</span>
-            <span class="k">for</span> <span class="n">residue1</span> <span class="ow">in</span> <span class="n">chain1</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">residue2</span> <span class="ow">in</span> <span class="n">chain2</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">atom1</span> <span class="ow">in</span> <span class="n">chain1</span><span class="p">:</span>
-                        <span class="k">for</span> <span class="n">atom2</span> <span class="ow">in</span> <span class="n">chain2</span><span class="p">:</span>
-                            <span class="n">g</span><span class="o">=</span><span class="mi">1</span>
-                            
-<span class="k">print</span> <span class="s1">&#39;done&#39;</span>
-<span class="k">for</span> <span class="n">residue1</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">residue1</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39; &#39;</span><span class="p">:</span>
-            <span class="n">index1</span><span class="o">=</span><span class="n">index1</span><span class="o">+</span><span class="mi">1</span>
-            <span class="n">index2</span><span class="o">=</span><span class="mi">0</span> <span class="c1">#counting for residue2</span>
-             
-             
-            <span class="k">for</span> <span class="n">residue2</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">residue2</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39; &#39;</span><span class="p">:</span>
-                    <span class="n">index2</span><span class="o">=</span><span class="n">index2</span><span class="o">+</span><span class="mi">1</span>
-                     
-                    <span class="k">if</span> <span class="n">residue1</span> <span class="o">!=</span> <span class="n">residue2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">residue2</span> <span class="ow">in</span> <span class="n">rescheck</span><span class="p">:</span>
-                        <span class="c1"># compute distance between CB or CA(GLY) atoms</span>
- 
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="c1"># If an GLY measure distance from C-alfa -- C-alfa instead</span>
-                            <span class="k">if</span> <span class="n">residue1</span><span class="o">.</span><span class="n">get_resname</span><span class="p">()</span><span class="o">==</span><span class="p">(</span><span class="s1">&#39;GLY&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">residue2</span><span class="o">.</span><span class="n">get_resname</span><span class="p">()</span><span class="o">==</span><span class="p">(</span><span class="s1">&#39;GLY&#39;</span><span class="p">):</span>
-                                <span class="n">atom1</span><span class="o">=</span><span class="n">residue1</span><span class="p">[</span><span class="s1">&#39;CA&#39;</span><span class="p">]</span>
-                                <span class="n">atom2</span><span class="o">=</span><span class="n">residue2</span><span class="p">[</span><span class="s1">&#39;CA&#39;</span><span class="p">]</span>
-                                <span class="n">distance</span> <span class="o">=</span> <span class="n">atom1</span> <span class="o">-</span> <span class="n">atom2</span>
-                                 
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="n">atom1</span><span class="o">=</span><span class="n">residue1</span><span class="p">[</span><span class="s1">&#39;CB&#39;</span><span class="p">]</span>
-                                <span class="n">atom2</span><span class="o">=</span><span class="n">residue2</span><span class="p">[</span><span class="s1">&#39;CB&#39;</span><span class="p">]</span>
-                                <span class="n">distance</span> <span class="o">=</span> <span class="n">atom1</span> <span class="o">-</span> <span class="n">atom2</span>
-                                 
-                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                            <span class="c1">## no CA or CB atom, e.g. for H_NAG</span>
-                            <span class="k">continue</span>
- 
-                        <span class="c1">#rr_all_distance.append([residue1, residue2, distance])</span>
-                        <span class="n">rr_all_distance</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">,</span> <span class="n">distance</span><span class="p">])</span> <span class="c1">#tabort residue1 o reside2</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-4-d9eba8367951&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     27</span> <span class="ansi-green-fg">for</span> model <span class="ansi-green-fg">in</span> structure<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     28</span>     <span class="ansi-green-fg">for</span> chain1 <span class="ansi-green-fg">in</span> model<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 29</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">print</span> len<span class="ansi-blue-fg">(</span>chain1<span class="ansi-blue-fg">.</span>get_atoms<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     30</span>         <span class="ansi-green-fg">for</span> chain2 <span class="ansi-green-fg">in</span> model<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     31</span>             <span class="ansi-green-fg">if</span> chain1<span class="ansi-blue-fg">==</span>chain2<span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">TypeError</span>: object of type &#39;generator&#39; has no len()</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11973,7 +11866,7 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -12030,7 +11923,7 @@ for index, row in structure_atoms.iterrows():
             <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer11_check</span><span class="p">:</span>
                 <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39; Has not been assigned to any layer&#39;</span> <span class="c1">#layers.setdefault(&#39;12&#39;, []).append(atom)</span>
+                <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="c1"># print str(key) + str(atom[1:3]) + &#39; Has not been assigned to any layer&#39; #layers.setdefault(&#39;12&#39;, []).append(atom)</span>
     
     <span class="c1">#This is to check if anything is not sorted into a layer            </span>
     <span class="c1">#for key,atom in layers.iteritems():</span>
@@ -12048,7 +11941,7 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -12070,7 +11963,7 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">):</span>
@@ -12090,14 +11983,13 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">):</span>
     
-        <span class="n">density_maps</span><span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span>
-            <span class="n">density_maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">)))</span>
+            <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">)))</span>
             
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">atom</span> <span class="ow">in</span> <span class="n">layers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">atom</span><span class="p">:</span>
@@ -12110,7 +12002,7 @@ for index, row in structure_atoms.iterrows():
                         <span class="k">for</span> <span class="n">zz</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
                             <span class="n">r</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">zz</span><span class="p">)))</span>
                             <span class="n">density</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
-                            <span class="n">density_maps</span><span class="p">[(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)][</span><span class="n">x</span><span class="o">+</span><span class="n">xx</span><span class="p">][</span><span class="n">y</span><span class="o">+</span><span class="n">yy</span><span class="p">][</span><span class="n">z</span><span class="o">+</span><span class="n">zz</span><span class="p">]</span><span class="o">=</span><span class="n">density_maps</span><span class="p">[(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)][</span><span class="n">x</span><span class="o">+</span><span class="n">xx</span><span class="p">][</span><span class="n">y</span><span class="o">+</span><span class="n">yy</span><span class="p">][</span><span class="n">z</span><span class="o">+</span><span class="n">zz</span><span class="p">]</span><span class="o">+</span><span class="n">density</span>
+                            <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)][</span><span class="n">x</span><span class="o">+</span><span class="n">xx</span><span class="p">][</span><span class="n">y</span><span class="o">+</span><span class="n">yy</span><span class="p">][</span><span class="n">z</span><span class="o">+</span><span class="n">zz</span><span class="p">]</span><span class="o">=</span><span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)][</span><span class="n">x</span><span class="o">+</span><span class="n">xx</span><span class="p">][</span><span class="n">y</span><span class="o">+</span><span class="n">yy</span><span class="p">][</span><span class="n">z</span><span class="o">+</span><span class="n">zz</span><span class="p">]</span><span class="o">+</span><span class="n">density</span>
 
 
         <span class="c1">#This is only for plotting the data in python, otherwise a numpy array is made over all layers</span>
@@ -12122,11 +12014,11 @@ for index, row in structure_atoms.iterrows():
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">density_maps</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.0</span><span class="p">:</span>
                         <span class="n">x_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                         <span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
                         <span class="n">z_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-                        <span class="n">density_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">density_maps</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">])</span>
+                        <span class="n">density_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">])</span>
         
         <span class="k">return</span> <span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span>               
 </pre></div>
@@ -12138,7 +12030,7 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">plot_4d</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_value</span><span class="p">):</span>
@@ -12173,7 +12065,7 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_mrcfile</span><span class="p">(</span><span class="n">density_maps</span><span class="p">):</span>
@@ -12194,57 +12086,298 @@ for index, row in structure_atoms.iterrows():
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">deep_learning</span><span class="p">(</span><span class="n">density_maps</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+    <span class="kn">from</span> <span class="nn">keras.layers.convolutional</span> <span class="kn">import</span> <span class="n">Conv3D</span>
+    <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv3D</span><span class="p">,</span> <span class="n">MaxPooling3D</span><span class="p">,</span> <span class="n">Dense</span>
+    <span class="kn">from</span> <span class="nn">keras.layers.normalization</span> <span class="kn">import</span> <span class="n">BatchNormalization</span>
+    
+    <span class="kn">import</span> <span class="nn">keras.backend</span> <span class="kn">as</span> <span class="nn">K</span> <span class="c1">#For compile</span>
+    
+    <span class="k">print</span> <span class="s1">&#39;Start training&#39;</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">)))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+    
+    <span class="k">def</span> <span class="nf">mean_pred</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
+    
+    <span class="n">seq</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;rmsprop&#39;</span><span class="p">,</span>
+              <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">mean_pred</span><span class="p">])</span>
+            
+    <span class="n">seq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">density_maps</span><span class="p">,</span>
+          <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+          <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+    
+    <span class="k">print</span> <span class="s1">&#39;Training done&#39;</span>
+    
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">procent</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span><span class="n">nr_prot</span><span class="p">):</span>
+
+    <span class="k">print</span> <span class="n">counter</span>
+    
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">filename_pdb</span> <span class="o">=</span> <span class="s1">&#39;/home/joakim/Downloads/5eh6.pdb&#39;</span><span class="c1">#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
-    <span class="k">try</span><span class="p">:</span> 
-        <span class="n">PDBobj</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">()</span>
-        <span class="n">structure</span> <span class="o">=</span> <span class="n">PDBobj</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>
+    
+    
+    <span class="c1">#Dir path</span>
+    <span class="c1">#args = sys.argv[1:]</span>
+    <span class="n">args</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/models&#39;</span> <span class="c1">#str(args[0])</span>
+    
+    <span class="n">pdb_list</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">):</span>
+            <span class="n">pdb_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nb">file</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">pdb_list</span>
+    <span class="c1">#filename_pdb = &#39;/home/joakim/Downloads/*.pdb&#39;#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
+    <span class="n">density_maps</span><span class="o">=</span><span class="p">[]</span>
+    
+    <span class="n">nr_prot</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">filename_pdb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">filename_pdb</span>
+        <span class="n">procent</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span><span class="n">nr_prot</span><span class="p">)</span>
 
-    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> 
-        <span class="k">print</span> <span class="s1">&#39;IO Error&#39;</span><span class="p">,</span> <span class="n">filename_pdb</span>       
-        <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
-            <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Error parsing PDB file! Continue(y/n)...&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;y&#39;</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
-                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-   <span class="c1"># structure=PandasPdb().read_pdb(filename_pdb)</span>
-   <span class="c1"># structure_atoms = structure.df[&#39;ATOM&#39;]</span>
-    
-    
-    <span class="c1">#df=pd.read_excel(&#39;cross_val_sets.xls&#39;)</span>
-    <span class="c1">#print df</span>
+        <span class="n">density_maps</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        
+        <span class="c1">#filename_pdb = &#39;/home/joakim/Downloads/5eh6.pdb&#39;#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="n">PDBobj</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">()</span>
+            <span class="n">structure</span> <span class="o">=</span> <span class="n">PDBobj</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> 
+            <span class="k">print</span> <span class="s1">&#39;IO Error&#39;</span><span class="p">,</span> <span class="n">filename_pdb</span>       
+            <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+                <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Error parsing PDB file! Continue(y/n)...&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;y&#39;</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+       <span class="c1"># structure=PandasPdb().read_pdb(filename_pdb)</span>
+       <span class="c1"># structure_atoms = structure.df[&#39;ATOM&#39;]</span>
+
+
+        <span class="c1">#df=pd.read_excel(&#39;cross_val_sets.xls&#39;)</span>
+        <span class="c1">#print df</span>
+
+
+        <span class="n">structure_data</span> <span class="o">=</span> <span class="n">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
+
+        <span class="n">midpoint</span> <span class="o">=</span> <span class="n">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">)</span> <span class="c1">#Avrundning gör att det blir lite konstigt,!! Kolla upp</span>
+
+        <span class="n">structure_data</span> <span class="o">=</span> <span class="n">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">)</span>
+
+        <span class="n">layers</span> <span class="o">=</span> <span class="n">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
+
+        <span class="c1">#for key,values in layers.iteritems():</span>
+            <span class="c1">#print key, len(values)</span>
+
+        <span class="c1">#Create 11 density maps (zeros)</span>
+        <span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span> <span class="o">=</span> <span class="n">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">)</span>
 
     
-    <span class="n">structure_data</span> <span class="o">=</span> <span class="n">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
-    
-    <span class="c1">###midpoint = find_midpoint(structure_data) #Avrundning gör att det blir lite konstigt,!! Kolla upp</span>
+      <span class="c1">###  make_mrcfile(density_maps)</span>
 
-    <span class="c1">###structure_data = normalize_in_origo(midpoint,structure_data)</span>
-    
-    <span class="c1">###layers = make_atom_layers(structure_data)</span>
-    
-    <span class="c1">#for key,values in layers.iteritems():</span>
-        <span class="c1">#print key, len(values)</span>
+      <span class="c1">###  plot_4d(x_values,y_values,z_values,density_values)</span>
 
-    <span class="c1">#Create 11 density maps (zeros)</span>
-    <span class="c1">###(density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers)</span>
-   <span class="c1">### density_maps=density_maps</span>
-    
-  <span class="c1">###  make_mrcfile(density_maps)</span>
+    <span class="n">deep_learning</span><span class="p">(</span><span class="n">density_maps</span><span class="p">)</span>
+        
+            
 
-  <span class="c1">###  plot_4d(x_values,y_values,z_values,density_values)</span>
-
-    
-    
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
   <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;/home/joakim/Downloads/models/D1Z5Y-a94d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a82c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a73d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a69d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a81b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1CGI-a2c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a90d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a95a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a91a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a68c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a94a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a49a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a94c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a89b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a56b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a67d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a4a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a7c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a69b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a91b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a91c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a84d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a70c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a87b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a72c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a5c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a86d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a67c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a66b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a68b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a63d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a86b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a48c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a56d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a70b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a6d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a65a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a49c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a93b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a92a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a73c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a7a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a96c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a64d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a7b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a64a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a88d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a64c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a6b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a55c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a0c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a93d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a95b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a84a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a66c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a96b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a52a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a93a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a1a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a49d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a85b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a1d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a73a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a89a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a49b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a81d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a4b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a68a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a5a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a64b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a2b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a51d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a92d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a70a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a52d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a52b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a63c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a3b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a53b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a4c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a2a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a63a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a88b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a6c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a87c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a53a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a80d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a73b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a88a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a82b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a56c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a92c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a8a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a67a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a65d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a72d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a3a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a83c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a82d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a57a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a72a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a91d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a86c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a54a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a56a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a86a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a70d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a85d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a57b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a54c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a5d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a69a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1A2K-a0a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a71a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a85a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a93c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a95c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a5b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a50a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a55b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a3d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a96a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a71c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a66a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a68d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a96d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a55d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a51c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a50c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a69c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a0d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a90c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a82a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a6a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a54b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a2c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a65b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a85c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a48d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a50b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a89d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a53c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a87d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a0b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a89c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a83d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a66d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a84c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a74a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a1c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a0a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a72b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1HIA-a2b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a74b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a88c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a4d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a54d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a1b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a83a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a90b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a81a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a50d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a52c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a7d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a53d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a95d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a83b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a94b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a3c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a71b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a81c-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a71d-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a55a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a51a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a63b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a51b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a90a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a92b-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1Z5Y-a87a-merged.pdb&#39;, &#39;/home/joakim/Downloads/models/D1I2M-a2d-merged.pdb&#39;]
+/home/joakim/Downloads/models/D1Z5Y-a94d-merged.pdb
+0%
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=N) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CA) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CB) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CG) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CD1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CD2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=C) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=O) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CD) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OE1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OE2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OG) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CG2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CG1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CE) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=NZ) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CE1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CE2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CZ) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=NE) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=NH1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=NH2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OD1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OD2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=ND2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=NE2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OH) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OG1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CE3) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=NE1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CZ2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CZ3) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;C&#39; for Atom (name=CH2) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;S&#39; for Atom (name=SG) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;N&#39; for Atom (name=ND1) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;S&#39; for Atom (name=SD) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/Atom.py:98: PDBConstructionWarning: Used element &#39;O&#39; for Atom (name=OXT) with given element &#39;&#39;
+  warnings.warn(msg, PDBConstructionWarning)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>/home/joakim/Downloads/models/D1Z5Y-a82c-merged.pdb
+0%
+/home/joakim/Downloads/models/D1I2M-a73d-merged.pdb
+0%
+/home/joakim/Downloads/models/D1I2M-a69d-merged.pdb
+0%
+/home/joakim/Downloads/models/D1Z5Y-a81b-merged.pdb
+0%
+/home/joakim/Downloads/models/D1CGI-a2c-merged.pdb
+0%
+/home/joakim/Downloads/models/D1Z5Y-a90d-merged.pdb
+0%
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-56-e5ebcc276bb8&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     67</span> 
+<span class="ansi-green-intense-fg ansi-bold">     68</span> <span class="ansi-green-fg">if</span> __name__ <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;__main__&#39;</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 69</span><span class="ansi-red-fg">   </span>main<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-56-e5ebcc276bb8&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     55</span> 
+<span class="ansi-green-intense-fg ansi-bold">     56</span>         <span class="ansi-red-fg">#Create 11 density maps (zeros)</span>
+<span class="ansi-green-fg">---&gt; 57</span><span class="ansi-red-fg">         </span><span class="ansi-blue-fg">(</span>density_maps<span class="ansi-blue-fg">,</span>x_values<span class="ansi-blue-fg">,</span>y_values<span class="ansi-blue-fg">,</span>z_values<span class="ansi-blue-fg">,</span>density_values<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">=</span> make_density_maps<span class="ansi-blue-fg">(</span>layers<span class="ansi-blue-fg">,</span>density_maps<span class="ansi-blue-fg">,</span>counter<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     58</span> 
+<span class="ansi-green-intense-fg ansi-bold">     59</span> 
+
+<span class="ansi-green-fg">&lt;ipython-input-51-e9e9ebaf21d6&gt;</span> in <span class="ansi-cyan-fg">make_density_maps</span><span class="ansi-blue-fg">(layers, density_maps, counter)</span>
+<span class="ansi-green-intense-fg ansi-bold">     15</span>                             r<span class="ansi-blue-fg">=</span>float<span class="ansi-blue-fg">(</span>max<span class="ansi-blue-fg">(</span>abs<span class="ansi-blue-fg">(</span>xx<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>abs<span class="ansi-blue-fg">(</span>yy<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>abs<span class="ansi-blue-fg">(</span>zz<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>                             density<span class="ansi-blue-fg">=</span>math<span class="ansi-blue-fg">.</span>exp<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">-</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">(</span>r<span class="ansi-blue-fg">**</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">/</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 17</span><span class="ansi-red-fg">                             </span>density_maps<span class="ansi-blue-fg">[</span>counter<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">(</span>int<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>x<span class="ansi-blue-fg">+</span>xx<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>y<span class="ansi-blue-fg">+</span>yy<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>z<span class="ansi-blue-fg">+</span>zz<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">=</span>density_maps<span class="ansi-blue-fg">[</span>counter<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">(</span>int<span class="ansi-blue-fg">(</span>key<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>x<span class="ansi-blue-fg">+</span>xx<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>y<span class="ansi-blue-fg">+</span>yy<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span>z<span class="ansi-blue-fg">+</span>zz<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">+</span>density
+<span class="ansi-green-intense-fg ansi-bold">     18</span> 
+<span class="ansi-green-intense-fg ansi-bold">     19</span> 
+
+<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
+</div>
+</div>
+
 </div>
 </div>
 

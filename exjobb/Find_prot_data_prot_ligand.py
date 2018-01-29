@@ -23,9 +23,10 @@
 # 
 # 
 
-# In[4]:
+# In[47]:
 
 
+import os
 import Bio
 from Bio.PDB import *
 import sys
@@ -36,6 +37,7 @@ import math
 import numpy as np
 
 from mpl_toolkits.mplot3d import Axes3D
+
 
 #import pandas as pd #pandas är en python modul for att hantera s.k DataFrames.
  
@@ -70,84 +72,9 @@ def find_structure_params(structure):
 
 
 
-# In[4]:
-
-
-import Bio
-from Bio.PDB import *
-import sys
-import re
-import matplotlib.pyplot as plt
-from matplotlib import cm
-import math
-import numpy as np
-
-filename_pdb = '/home/joakim/Downloads/D1A2K-a0a-merged.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
-try: 
-    PDBobj = PDBParser()
-    structure = PDBobj.get_structure(filename_pdb, filename_pdb)
-
-except IOError: 
-    print 'IO Error', filename_pdb       
-    while 'true':
-        input1=raw_input("Error parsing PDB file! Continue(y/n)...")
-        if input1.lower()=='y':
-            break
-        elif input1.lower()=='n':
-            sys.exit()
-
-
-
-
-for model in structure:
-    for chain1 in model:
-        for chain2 in model:
-            if chain1==chain2:
-                print chain1, chain2
-                continue
-            for residue1 in chain1:
-                for residue2 in chain2:
-                    for atom1 in chain1:
-                        for atom2 in chain2:
-                            g=1
-                            
-print 'done'
-for residue1 in chain:
-        if residue1.get_full_id()[3][0]==' ':
-            index1=index1+1
-            index2=0 #counting for residue2
-             
-             
-            for residue2 in chain:
-                if residue2.get_full_id()[3][0]==' ':
-                    index2=index2+1
-                     
-                    if residue1 != residue2 and not residue2 in rescheck:
-                        # compute distance between CB or CA(GLY) atoms
- 
-                        try:
-                            # If an GLY measure distance from C-alfa -- C-alfa instead
-                            if residue1.get_resname()==('GLY') or residue2.get_resname()==('GLY'):
-                                atom1=residue1['CA']
-                                atom2=residue2['CA']
-                                distance = atom1 - atom2
-                                 
-                            else:
-                                atom1=residue1['CB']
-                                atom2=residue2['CB']
-                                distance = atom1 - atom2
-                                 
-                        except KeyError:
-                            ## no CA or CB atom, e.g. for H_NAG
-                            continue
- 
-                        #rr_all_distance.append([residue1, residue2, distance])
-                        rr_all_distance.append([index1, index2, distance]) #tabort residue1 o reside2
-
-
 # How to find different atoms for the 11 layers
 
-# In[ ]:
+# In[48]:
 
 
 def make_atom_layers(structure_data):
@@ -204,7 +131,7 @@ def make_atom_layers(structure_data):
             elif atom_type in layer11_check:
                 layers.setdefault('11', []).append(atom)
             else:
-                print str(key) + str(atom[1:3]) + ' Has not been assigned to any layer' #layers.setdefault('12', []).append(atom)
+                d=1# print str(key) + str(atom[1:3]) + ' Has not been assigned to any layer' #layers.setdefault('12', []).append(atom)
     
     #This is to check if anything is not sorted into a layer            
     #for key,atom in layers.iteritems():
@@ -215,7 +142,7 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[ ]:
+# In[49]:
 
 
 def find_midpoint(structure_data):
@@ -230,7 +157,7 @@ def find_midpoint(structure_data):
     return(midpoint)    
 
 
-# In[ ]:
+# In[50]:
 
 
 def normalize_in_origo(midpoint,structure_data):
@@ -243,14 +170,13 @@ def normalize_in_origo(midpoint,structure_data):
     return (structure_data)
 
 
-# In[ ]:
+# In[51]:
 
 
-def make_density_maps(layers):
+def make_density_maps(layers,density_maps,counter):
     
-        density_maps= []
         for g in range(1, 12):
-            density_maps.append(np.zeros((120,120,120)))
+            density_maps[counter].append(np.zeros((120,120,120)))
             
         for key,atom in layers.iteritems():
             for pos in atom:
@@ -263,7 +189,7 @@ def make_density_maps(layers):
                         for zz in range(-2,3):
                             r=float(max(abs(xx),abs(yy),abs(zz)))
                             density=math.exp(-((r**2)/2))
-                            density_maps[(int(key)-1)][x+xx][y+yy][z+zz]=density_maps[(int(key)-1)][x+xx][y+yy][z+zz]+density
+                            density_maps[counter][(int(key)-1)][x+xx][y+yy][z+zz]=density_maps[counter][(int(key)-1)][x+xx][y+yy][z+zz]+density
 
 
         #This is only for plotting the data in python, otherwise a numpy array is made over all layers
@@ -275,16 +201,16 @@ def make_density_maps(layers):
         for x in range(0,120):
             for y in range(0,120):
                 for z in range(0,120):
-                    if density_maps[1][x][y][z]>0.0:
+                    if density_maps[counter][1][x][y][z]>0.0:
                         x_values.append(x)
                         y_values.append(y)
                         z_values.append(z)
-                        density_values.append(density_maps[1][x][y][z])
+                        density_values.append(density_maps[counter][1][x][y][z])
         
         return (density_maps,x_values,y_values,z_values,density_values)               
 
 
-# In[ ]:
+# In[52]:
 
 
 def plot_4d(x_values,y_values,z_values,density_value):
@@ -313,7 +239,7 @@ def plot_4d(x_values,y_values,z_values,density_value):
 
 
 
-# In[ ]:
+# In[53]:
 
 
 def make_mrcfile(density_maps):
@@ -327,52 +253,121 @@ def make_mrcfile(density_maps):
         mrc.set_data(density_map1)
 
 
-# In[ ]:
+# In[54]:
+
+
+def deep_learning(density_maps):
+    from keras.models import Sequential
+    from keras.layers.convolutional import Conv3D
+    from keras.layers import Conv3D, MaxPooling3D, Dense
+    from keras.layers.normalization import BatchNormalization
+    
+    import keras.backend as K #For compile
+    
+    print 'Start training'
+    seq = Sequential()
+    seq.add(Conv3D(filters=3, kernel_size=(120,120,120), strides=(1,1,1), activation='sigmoid',padding='same', data_format='channels_first', input_shape=(11,120, 120, 120)))
+
+    seq.add(Dense(64, activation='relu'))
+
+    seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))
+
+    seq.add(BatchNormalization())
+    
+    def mean_pred(y_true, y_pred):
+        return K.mean(y_pred)
+    
+    seq.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy', mean_pred])
+            
+    seq.fit(density_maps,
+          epochs=20,
+          batch_size=128)
+    
+    print 'Training done'
+    
+
+
+# In[55]:
+
+
+def procent(counter,nr_prot):
+
+    print counter
+    
+
+
+# In[56]:
 
 
 def main():
-    filename_pdb = '/home/joakim/Downloads/5eh6.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
-    try: 
-        PDBobj = PDBParser()
-        structure = PDBobj.get_structure(filename_pdb, filename_pdb)
+    
+    
+    #Dir path
+    #args = sys.argv[1:]
+    args='/home/joakim/Downloads/models' #str(args[0])
+    
+    pdb_list=[]
+    for file in os.listdir(args):
+        if file.endswith(".pdb"):
+            pdb_list.append(args+'/'+file)
+    print pdb_list
+    #filename_pdb = '/home/joakim/Downloads/*.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
+    density_maps=[]
+    
+    nr_prot=len(pdb_list)
+    
+    for counter, filename_pdb in enumerate(pdb_list):
+        print filename_pdb
+        procent(counter,nr_prot)
 
-    except IOError: 
-        print 'IO Error', filename_pdb       
-        while 'true':
-            input1=raw_input("Error parsing PDB file! Continue(y/n)...")
-            if input1.lower()=='y':
-                break
-            elif input1.lower()=='n':
-                sys.exit()
-   # structure=PandasPdb().read_pdb(filename_pdb)
-   # structure_atoms = structure.df['ATOM']
-    
-    
-    #df=pd.read_excel('cross_val_sets.xls')
-    #print df
+        density_maps.append([])
+        
+        #filename_pdb = '/home/joakim/Downloads/5eh6.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
+        try: 
+            PDBobj = PDBParser()
+            structure = PDBobj.get_structure(filename_pdb, filename_pdb)
+
+        except IOError: 
+            print 'IO Error', filename_pdb       
+            while 'true':
+                input1=raw_input("Error parsing PDB file! Continue(y/n)...")
+                if input1.lower()=='y':
+                    break
+                elif input1.lower()=='n':
+                    sys.exit()
+       # structure=PandasPdb().read_pdb(filename_pdb)
+       # structure_atoms = structure.df['ATOM']
+
+
+        #df=pd.read_excel('cross_val_sets.xls')
+        #print df
+
+
+        structure_data = find_structure_params(structure)
+
+        midpoint = find_midpoint(structure_data) #Avrundning gör att det blir lite konstigt,!! Kolla upp
+
+        structure_data = normalize_in_origo(midpoint,structure_data)
+
+        layers = make_atom_layers(structure_data)
+
+        #for key,values in layers.iteritems():
+            #print key, len(values)
+
+        #Create 11 density maps (zeros)
+        (density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_maps,counter)
 
     
-    structure_data = find_structure_params(structure)
-    
-    ###midpoint = find_midpoint(structure_data) #Avrundning gör att det blir lite konstigt,!! Kolla upp
+      ###  make_mrcfile(density_maps)
 
-    ###structure_data = normalize_in_origo(midpoint,structure_data)
-    
-    ###layers = make_atom_layers(structure_data)
-    
-    #for key,values in layers.iteritems():
-        #print key, len(values)
+      ###  plot_4d(x_values,y_values,z_values,density_values)
 
-    #Create 11 density maps (zeros)
-    ###(density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers)
-   ### density_maps=density_maps
-    
-  ###  make_mrcfile(density_maps)
+    deep_learning(density_maps)
+        
+            
 
-  ###  plot_4d(x_values,y_values,z_values,density_values)
-
-    
-    
 if __name__ == '__main__':
   main()
 

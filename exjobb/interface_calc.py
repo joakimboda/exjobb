@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[96]:
+# In[15]:
 
 
 import Bio
@@ -16,8 +16,14 @@ import os
 
 from mpl_toolkits.mplot3d import Axes3D
 
+x_train = np.random.random((1000, 8, 16))
 
-# In[97]:
+for counter, value in enumerate(x_train):
+    print value
+    print counter
+
+
+# In[13]:
 
 
 def calc_residue_dist(residue1, residue2,layers) :
@@ -54,7 +60,7 @@ def calc_dist_matrix(chain_one, chain_two,layers) :
     return (layers)
 
 
-# In[98]:
+# In[14]:
 
 
 def main():
