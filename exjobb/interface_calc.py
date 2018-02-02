@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[15]:
+# In[10]:
 
 
 import Bio
@@ -14,16 +14,9 @@ import math
 import numpy as np
 import os
 
-from mpl_toolkits.mplot3d import Axes3D
-
-x_train = np.random.random((1000, 8, 16))
-
-for counter, value in enumerate(x_train):
-    print value
-    print counter
 
 
-# In[13]:
+# In[11]:
 
 
 def calc_residue_dist(residue1, residue2,layers) :
@@ -60,14 +53,14 @@ def calc_dist_matrix(chain_one, chain_two,layers) :
     return (layers)
 
 
-# In[14]:
+# In[12]:
 
 
 def main():
     
     #Dir path
     #args = sys.argv[1:]
-    args='/home/joakim/Downloads' #str(args[0])
+    args='/home/joakim/Downloads/models' #str(args[0])
     
     pdb_list=[]
     for file in os.listdir(args):
@@ -76,8 +69,9 @@ def main():
     print pdb_list
     #filename_pdb = '/home/joakim/Downloads/*.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
     
-    for filename_pdb in pdb_list:
-    
+    for counter, filename_pdb in enumerate(pdb_list):
+        print counter
+        
         try: 
             PDBobj = PDBParser()
             structure = PDBobj.get_structure(filename_pdb, filename_pdb)
@@ -103,22 +97,22 @@ def main():
                     layers = calc_dist_matrix(chain1, chain2,layers)
                     #contact_map = dist_matrix < 12.0
 
-        t=0
-        for i in layers['CA-CA']:
-            t=t+1
+     #   t=0
+     #   for i in layers['CA-CA']:
+       #     t=t+1
 
-        g=0
-        for i in layers['H-A']:
-            g=g+1
+     #   g=0
+     #   for i in layers['H-A']:
+      #      g=g+1
 
-        d=0
+        #d=0
 
-        for i in layers['VDW']:
-            d=d+1
+        #for i in layers['VDW']:
+         #   d=d+1
 
-        print d-1
-        print g-1
-        print t-1
+        #print d-1
+        #print g-1
+        #print t-1
     #    for i in contact_map:
     #        for g in i:
     #            if g!= False:

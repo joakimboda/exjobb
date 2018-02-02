@@ -36,6 +36,7 @@ from matplotlib import cm
 import math
 import numpy as np
 
+import cPickle as pickle
 from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -275,7 +276,7 @@ def deep_learning(density_maps):
                             #input_shape=(11,120, 120, 120)))
 
 
-    seq.add(Conv3D(filters=11, kernel_size=(3,3,3), strides=(1,1,1), activation='relu',padding='valid', data_format='channels_first', input_shape=(11,120, 120, 120)))
+    #seq.add(Conv3D(filters=11, kernel_size=(3,3,3), strides=(1,1,1), activation='relu',padding='valid', data_format='channels_first', input_shape=(11,120, 120, 120)))
 
     #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
 
@@ -354,9 +355,9 @@ def deep_learning(density_maps):
     seq.compile(loss='binary_crossentropy',
 	      optimizer=adam,
               metrics=['accuracy', mean_pred])
-    class_y = np.random.random((2, 11, 118,118,118))
+    class_y = np.random.random((10, 11, 118,118,118))
 	
-    seq.fit(density_maps,density_maps,
+    seq.fit(density_maps,class_y,
           epochs=20,
           batch_size=9)
     
@@ -367,10 +368,6 @@ def deep_learning(density_maps):
 # In[55]:
 
 
-def procent(counter,nr_prot):
-
-    print(counter)
-    
 
 
 # In[56]:
@@ -380,69 +377,85 @@ def main():
     
     
     #Dir path
-    #args = sys.argv[1:]
-	
-    args='/home/joakim/Downloads/models/' #str(args[0])
-    print(args)
+    args = sys.argv[1:]
+
+    
+    files='/home/joakim/Downloads/models/' #str(args[0])
+
     pdb_list=[]
-    for file in os.listdir(args):
+    for file in os.listdir(files):
         if file.endswith(".pdb"):
-            pdb_list.append(args+'/'+file)
-    print(pdb_list)
-    #filename_pdb = '/home/joakim/Downloads/*.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
-    density_maps=[]
-    
-    nr_prot=len(pdb_list)
-    
-    for counter, filename_pdb in enumerate(pdb_list):
-        print(filename_pdb)
-        procent(counter,nr_prot)
+            pdb_list.append(files+'/'+file)
 
-        density_maps.append([])
+    
+
+    density_maps=[]    
+    
+    if not '-r' in args:
+    	for counter, filename_pdb in enumerate(pdb_list):
+        	print(filename_pdb)
+		percent= np.around((np.float(counter+1) / len(pdb_list)*100), decimals=3)
+		print(str((counter+1)) +'/'+ str(len(pdb_list)) + ', ' + str(percent)+'%')
+        	density_maps.append([])
       
-        #filename_pdb = '/home/joakim/Downloads/5eh6.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
-        try: 
-            PDBobj = PDBParser()
-            structure = PDBobj.get_structure(filename_pdb, filename_pdb)
+        	#filename_pdb = '/home/joakim/Downloads/5eh6.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
+        	try: 
+        	    PDBobj = PDBParser()
+        	    structure = PDBobj.get_structure(filename_pdb, filename_pdb)
 
-        except IOError: 
-            print('IO Error', filename_pdb)       
-            while 'true':
-                input1=raw_input("Error parsing PDB file! Continue(y/n)...")
-                if input1.lower()=='y':
-                    break
-                elif input1.lower()=='n':
-                    sys.exit()
-       # structure=PandasPdb().read_pdb(filename_pdb)
-       # structure_atoms = structure.df['ATOM']
-
-
-        #df=pd.read_excel('cross_val_sets.xls')
-        #print df
+        	except IOError: 
+        	    print('IO Error', filename_pdb)       
+        	    while 'true':
+        	        input1=raw_input("Error parsing PDB file! Continue(y/n)...")
+        	        if input1.lower()=='y':
+        	            break
+        	        elif input1.lower()=='n':
+        	            sys.exit()
+       #	 structure=PandasPdb().read_pdb(filename_pdb)
+       #	 structure_atoms = structure.df['ATOM']
 
 
-        structure_data = find_structure_params(structure)
+        	#df=pd.read_excel('cross_val_sets.xls')
+        	#print df
 
-        midpoint = find_midpoint(structure_data) #Avrundning gör att det blir lite konstigt,!! Kolla upp
 
-        structure_data = normalize_in_origo(midpoint,structure_data)
+        	structure_data = find_structure_params(structure)
 
-        layers = make_atom_layers(structure_data)
+        	midpoint = find_midpoint(structure_data) #Avrundning gör att det blir lite konstigt,!! Kolla upp
 
-        #for key,values in layers.items():
-            #print key, len(values)
+        	structure_data = normalize_in_origo(midpoint,structure_data)
 
-        #Create 11 density maps (zeros)
-        (density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_maps,counter)
+        	layers = make_atom_layers(structure_data)
+
+        	#for key,values in layers.items():
+        	    #print key, len(values)
+
+        	#Create 11 density maps (zeros)
+        	(density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_maps,counter)
 
     
-      ###  make_mrcfile(density_maps)
+      ##	#  make_mrcfile(density_maps)
 
-      ###  plot_4d(x_values,y_values,z_values,density_values)
-    protein_maps=np.array(density_maps)
-    #print(protein_maps)
+      ##	#  plot_4d(x_values,y_values,z_values,density_values)
+
+	protein_maps=np.array(density_maps)
+    
+#For saving and loading the array as an compressed npz file
+    if '-s' in args and '-r' in args:
+	print('Do not use save(-s) and read(-r) at the same time')
+	sys.exit()
+    elif '-s' in args:
+	print('-Saving file...')
+	np.savez_compressed('density_maps', protein_maps)
+	print('-File saved as "density_maps.npz"')
+
+    elif '-r' in args:
+	print('-Loading file...')
+	protein_maps = np.load('density_maps.npz')
+    	for key,array in protein_maps.items():
+    		protein_maps=protein_maps[key]
+	print('-File loaded')
 	
-    print(protein_maps[0][10][33][40][50])
     print(type(protein_maps))
     print(type(protein_maps[0]))
     print(type(protein_maps[0][0]))
