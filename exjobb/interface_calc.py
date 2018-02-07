@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[10]:
+# In[42]:
 
 
 import Bio
@@ -14,9 +14,10 @@ import math
 import numpy as np
 import os
 
+import pandas
 
 
-# In[11]:
+# In[43]:
 
 
 def calc_residue_dist(residue1, residue2,layers) :
@@ -53,7 +54,15 @@ def calc_dist_matrix(chain_one, chain_two,layers) :
     return (layers)
 
 
-# In[12]:
+# In[44]:
+
+
+def find_protein_value(pdb_name,value_file):
+    import re
+    #Re.search(r”([\w.]+)@([\w.]+)”, value_file) 
+
+
+# In[45]:
 
 
 def main():
@@ -68,6 +77,14 @@ def main():
             pdb_list.append(args+'/'+file)
     print pdb_list
     #filename_pdb = '/home/joakim/Downloads/*.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
+    
+    
+    value_df=pandas.read_csv('/home/joakim/Downloads/CnM.featuresNPqDNZ',delim_whitespace=1)
+    print(value_df)
+    
+    value_file=open('/home/joakim/Downloads/CnM.featuresNPqDNZ', 'r').read().splitlines()
+    #print(value_file)
+    
     
     for counter, filename_pdb in enumerate(pdb_list):
         print counter

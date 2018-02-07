@@ -11773,7 +11773,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[91]:</div>
+<div class="prompt input_prompt">In&nbsp;[335]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -11832,7 +11832,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[92]:</div>
+<div class="prompt input_prompt">In&nbsp;[336]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11907,7 +11907,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[93]:</div>
+<div class="prompt input_prompt">In&nbsp;[337]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11940,7 +11940,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[94]:</div>
+<div class="prompt input_prompt">In&nbsp;[338]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">):</span>
@@ -11987,10 +11987,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[339]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">deep_learning</span><span class="p">(</span><span class="n">density_maps</span><span class="p">):</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">deep_learning</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">,</span><span class="n">protein_targets</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
     <span class="kn">from</span> <span class="nn">keras.layers.convolutional</span> <span class="kn">import</span> <span class="n">Conv3D</span>
     <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv3D</span><span class="p">,</span> <span class="n">MaxPooling3D</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">Reshape</span>
@@ -12009,18 +12009,18 @@ div#notebook {
                             <span class="c1">#input_shape=(11,120, 120, 120)))</span>
 
 
-    <span class="c1">#seq.add(Conv3D(filters=11, kernel_size=(3,3,3), strides=(1,1,1), activation=&#39;relu&#39;,padding=&#39;valid&#39;, data_format=&#39;channels_first&#39;, input_shape=(11,120, 120, 120)))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">)))</span>
 
-    <span class="c1">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format=&#39;channels_first&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
     
-    <span class="c1">#seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+   <span class="c1"># seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+   <span class="c1"># seq.add(BatchNormalization())</span>
     
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+   <span class="c1"># seq.add(Activation(&#39;relu&#39;))</span>
 
-    <span class="c1">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))</span>
+   <span class="c1"># seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))</span>
 
     
     <span class="c1">#seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
@@ -12085,12 +12085,12 @@ div#notebook {
 
 
     <span class="n">adam</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
-    <span class="n">seq</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mean_squared_error&#39;</span><span class="p">,</span>
 	      <span class="n">optimizer</span><span class="o">=</span><span class="n">adam</span><span class="p">,</span>
               <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">mean_pred</span><span class="p">])</span>
-    <span class="n">class_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span><span class="mi">118</span><span class="p">,</span><span class="mi">118</span><span class="p">))</span>
+
 	
-    <span class="n">seq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">class_y</span><span class="p">,</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">,</span><span class="n">protein_targets</span><span class="p">,</span>
           <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
           <span class="n">batch_size</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
     
@@ -12105,7 +12105,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[340]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -12116,57 +12116,70 @@ div#notebook {
 
     
     <span class="n">files</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/models/&#39;</span> <span class="c1">#str(args[0])</span>
-
-
-
-    <span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/cross_val_sets.xls&#39;</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">=</span><span class="p">{}</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-         <span class="n">targets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Targets&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-
-    <span class="n">datasets</span><span class="o">=</span><span class="p">{}</span>
-    <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark/&#39;</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
-                <span class="n">datasets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
-
-    <span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">print</span> <span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-
+    
+    <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+        <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Save or load&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;-r&#39;</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;-s&#39;</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
     
 
-            
-    <span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/cross_val_sets.xls&#39;</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">=</span><span class="p">{}</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-         <span class="n">targets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Targets&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 
-    <span class="n">dir_home</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/&#39;</span>
-    <span class="n">datasets</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/cross_val_sets.xls&#39;</span><span class="p">)</span>
+        <span class="n">targets</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+             <span class="n">targets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Targets&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
 
-    <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_home</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
-                <span class="n">datasets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+        <span class="n">datasets</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark/&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+                    <span class="n">datasets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
 
-    <span class="n">protein_maps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">protein_list</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        
-        <span class="k">for</span> <span class="n">prot_counter</span><span class="p">,</span><span class="n">protein</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">protein_list</span><span class="p">):</span>
-            
 
-            <span class="n">pdb_list</span><span class="o">=</span><span class="p">[]</span>
-            <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_home</span> <span class="o">+</span> <span class="n">protein</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">):</span>
-                    <span class="n">pdb_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dir_home</span> <span class="o">+</span> <span class="n">protein</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nb">file</span><span class="p">)</span>
-               
-            <span class="n">density_maps</span><span class="o">=</span><span class="p">[]</span> 
-            <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/cross_val_sets.xls&#39;</span><span class="p">)</span>
+        <span class="n">targets</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+             <span class="n">targets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Targets&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="n">dir_home</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/&#39;</span>
+        <span class="n">datasets</span><span class="o">=</span><span class="p">{}</span>
+
+        <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_home</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+                    <span class="n">datasets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+
+        <span class="n">protein_maps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">])</span>
+        <span class="n">protein_targets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">protein_list</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="k">for</span> <span class="n">prot_counter</span><span class="p">,</span><span class="n">protein</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">protein_list</span><span class="p">):</span>
+
+
+                <span class="n">pdb_list</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_home</span> <span class="o">+</span> <span class="n">protein</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">):</span>
+                        <span class="n">pdb_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dir_home</span> <span class="o">+</span> <span class="n">protein</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nb">file</span><span class="p">)</span>
+
+                <span class="n">density_target</span><span class="o">=</span><span class="p">[]</span>  
+                <span class="n">density_maps</span><span class="o">=</span><span class="p">[]</span>
+                <span class="n">counterr</span><span class="o">=</span><span class="mi">0</span>
+                <span class="n">countertargets</span><span class="o">=</span><span class="mi">0</span>
+           <span class="c1"># if not &#39;-r&#39; in args:</span>
                 <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">filename_pdb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">):</span>
                     <span class="k">print</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">)</span>
                     <span class="n">percent</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">),</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
                     <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">((</span><span class="n">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">percent</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
-                    <span class="n">density_maps</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                    
+                    
+
 
                     <span class="c1">#filename_pdb = &#39;/home/joakim/Downloads/5eh6.pdb&#39;#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
                     <span class="k">try</span><span class="p">:</span> 
@@ -12190,36 +12203,62 @@ div#notebook {
                     <span class="n">structure_data</span> <span class="o">=</span> <span class="n">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">)</span>
 
                     <span class="n">layers</span> <span class="o">=</span> <span class="n">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
-
-
-
+                    
+                    <span class="k">if</span> <span class="s1">&#39;a0a&#39;</span> <span class="ow">in</span> <span class="n">filename_pdb</span><span class="p">:</span>
+                        <span class="n">density_target</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                        <span class="p">(</span><span class="n">density_target</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span> <span class="o">=</span> <span class="n">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_target</span><span class="p">,</span><span class="n">countertargets</span><span class="p">)</span>
+                        <span class="n">countertargets</span><span class="o">=</span><span class="n">countertargets</span><span class="o">+</span><span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
                     <span class="c1">#Create 11 density maps (zeros)</span>
-                    <span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span> <span class="o">=</span> <span class="n">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">)</span>
+                        <span class="n">density_maps</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                        <span class="c1">#density_target.append([])</span>
+                        <span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span> <span class="o">=</span> <span class="n">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counterr</span><span class="p">)</span>
+                        <span class="c1">#(density_target,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_target,countertargets)</span>
+                        <span class="n">counterr</span><span class="o">=</span><span class="n">counterr</span><span class="o">+</span><span class="mi">1</span>
+                       <span class="c1"># countertargets=countertargets+1</span>
+                    
+           <span class="c1"># for x in density_maps:</span>
+                <span class="c1">#protein</span>
 
-            
-            <span class="n">density_maps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">density_maps</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">density_maps</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">protein_maps</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">protein_maps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">protein_maps</span><span class="p">,</span> <span class="n">density_maps</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-           <span class="c1"># protein_maps.append(density_maps)</span>
+                <span class="n">density_maps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">density_maps</span><span class="p">)</span>
+                <span class="n">density_target</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">density_target</span><span class="p">)</span>
 
-        <span class="c1">#protein_maps=np.array(density_maps)</span>
+                <span class="n">protein_targets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">protein_targets</span><span class="p">,</span> <span class="n">density_target</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">protein_maps</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">protein_maps</span><span class="p">,</span> <span class="n">density_maps</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">protein_targets</span><span class="o">=</span><span class="n">protein_targets</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">protein_maps</span><span class="o">=</span><span class="n">protein_maps</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
 <span class="c1">#For saving and loading the array as an compressed npz file</span>
     <span class="k">if</span> <span class="s1">&#39;-s&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Do not use save(-s) and read(-r) at the same time&#39;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
     <span class="k">elif</span> <span class="s1">&#39;-s&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Saving file...&#39;</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;density_maps&#39;</span><span class="p">,</span> <span class="n">protein_maps</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-File saved as &quot;density_maps.npz&quot;&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Saving files...&#39;</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;protein_maps&#39;</span><span class="p">,</span> <span class="n">protein_maps</span><span class="p">)</span>
+        <span class="c1">#np.savez_compressed(&#39;protein_test&#39;, protein_test)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;protein_targets&#39;</span><span class="p">,</span> <span class="n">protein_targets</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Files saved as &quot;protein_train.npz&quot;,&quot;protein_test.npz&quot;,&quot;protein_target.npz&quot;&#39;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Loading file...&#39;</span><span class="p">)</span>
-        <span class="n">protein_maps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;density_maps.npz&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Loading files...&#39;</span><span class="p">)</span>
+        <span class="n">protein_maps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;protein_maps.npz&#39;</span><span class="p">)</span>
+        <span class="c1">#protein_test = np.load(&#39;protein_test.npz&#39;)</span>
+        <span class="n">protein_targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;protein_targets.npz&#39;</span><span class="p">)</span>
+        
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_maps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">protein_maps</span><span class="o">=</span><span class="n">protein_maps</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-File loaded&#39;</span><span class="p">)</span>
-
+       <span class="c1"># for key,array in protein_test.items():</span>
+           <span class="c1"># protein_test=protein_test[key]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_targets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">protein_targets</span><span class="o">=</span><span class="n">protein_targets</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    
+    
+    <span class="n">protein_targets</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">protein_targets</span>
+    
+    <span class="k">print</span><span class="p">(</span><span class="n">protein_targets</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">protein_maps</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
     <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
@@ -12227,7 +12266,7 @@ div#notebook {
     <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
     <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
 		
-    <span class="n">deep_learning</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">)</span>
+    <span class="n">deep_learning</span><span class="p">(</span><span class="n">protein_maps</span><span class="p">,</span><span class="n">protein_targets</span><span class="p">)</span>
         
             
 
@@ -12249,55 +12288,82 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;type &#39;unicode&#39;&gt;
-D1CGI
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1DQJ/D1DQJ-a0a-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1DQJ/D1DQJ-a0b-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(1, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1AHW/D1AHW-a0b-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1AHW/D1AHW-a0a-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(3, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1CLV/D1CLV-a0b-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1CLV/D1CLV-a0a-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(5, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1BVN/D1BVN-a0a-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1BVN/D1BVN-a0b-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(7, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1E6J/D1E6J-a0a-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1E6J/D1E6J-a0b-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(9, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1EAW/D1EAW-a0a-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1EAW/D1EAW-a0b-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(11, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1D6R/D1D6R-a0b-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1D6R/D1D6R-a0a-merged.pdb
-2/2, 100.0%
-(2, 11, 120, 120, 120)
-(13, 11, 120, 120, 120)
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1AVX/D1AVX-a0a-merged.pdb
-1/2, 50.0%
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1AVX/D1AVX-a0b-merged.pdb
-2/2, 100.0%
+<pre>Save or load-r
+-Loading files...
+[ 0.5768803   0.19176816  0.90155747  0.19220927  0.99130456  0.58302908
+  0.42018486  0.54933533  0.06802952  0.91029034  0.30144132  0.18808182
+  0.5186127   0.96076151  0.65711877  0.81588673  0.3903431   0.71665578
+  0.87003353  0.5555125 ]
+(20,)
+(20, 11, 120, 120, 120)
+&lt;type &#39;numpy.ndarray&#39;&gt;
+&lt;type &#39;numpy.ndarray&#39;&gt;
+&lt;type &#39;numpy.ndarray&#39;&gt;
+&lt;type &#39;numpy.ndarray&#39;&gt;
+&lt;type &#39;numpy.ndarray&#39;&gt;
+&lt;type &#39;numpy.float64&#39;&gt;
+Start training
 </pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-340-3c1579c7dcc4&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">    162</span> 
+<span class="ansi-green-intense-fg ansi-bold">    163</span> <span class="ansi-green-fg">if</span> __name__ <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;__main__&#39;</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 164</span><span class="ansi-red-fg">   </span>main<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-340-3c1579c7dcc4&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">    157</span>     <span class="ansi-green-fg">print</span><span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>protein_maps<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    158</span> 
+<span class="ansi-green-fg">--&gt; 159</span><span class="ansi-red-fg">     </span>deep_learning<span class="ansi-blue-fg">(</span>protein_maps<span class="ansi-blue-fg">,</span>protein_targets<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    160</span> 
+<span class="ansi-green-intense-fg ansi-bold">    161</span> 
+
+<span class="ansi-green-fg">&lt;ipython-input-339-774edbd1af9e&gt;</span> in <span class="ansi-cyan-fg">deep_learning</span><span class="ansi-blue-fg">(protein_maps, protein_targets)</span>
+<span class="ansi-green-intense-fg ansi-bold">     18</span> 
+<span class="ansi-green-intense-fg ansi-bold">     19</span> 
+<span class="ansi-green-fg">---&gt; 20</span><span class="ansi-red-fg">     </span>seq<span class="ansi-blue-fg">.</span>add<span class="ansi-blue-fg">(</span>Conv3D<span class="ansi-blue-fg">(</span>filters<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">11</span><span class="ansi-blue-fg">,</span> kernel_size<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> strides<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> activation<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;relu&#39;</span><span class="ansi-blue-fg">,</span>padding<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;same&#39;</span><span class="ansi-blue-fg">,</span> data_format<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;channels_first&#39;</span><span class="ansi-blue-fg">,</span> input_shape<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     21</span> 
+<span class="ansi-green-intense-fg ansi-bold">     22</span>     seq<span class="ansi-blue-fg">.</span>add<span class="ansi-blue-fg">(</span>MaxPooling3D<span class="ansi-blue-fg">(</span>pool_size<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>strides<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>data_format<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;channels_first&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/legacy/interfaces.pyc</span> in <span class="ansi-cyan-fg">wrapper</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     85</span>                 warnings.warn(&#39;Update your `&#39; + object_name +
+<span class="ansi-green-intense-fg ansi-bold">     86</span>                               &#39;` call to the Keras 2 API: &#39; + signature, stacklevel=2)
+<span class="ansi-green-fg">---&gt; 87</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> func<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     88</span>         wrapper<span class="ansi-blue-fg">.</span>_original_function <span class="ansi-blue-fg">=</span> func
+<span class="ansi-green-intense-fg ansi-bold">     89</span>         <span class="ansi-green-fg">return</span> wrapper
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/layers/convolutional.pyc</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, filters, kernel_size, strides, padding, data_format, dilation_rate, activation, use_bias, kernel_initializer, bias_initializer, kernel_regularizer, bias_regularizer, activity_regularizer, kernel_constraint, bias_constraint, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    581</span>             kernel_constraint<span class="ansi-blue-fg">=</span>kernel_constraint<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    582</span>             bias_constraint<span class="ansi-blue-fg">=</span>bias_constraint<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 583</span><span class="ansi-red-fg">             **kwargs)
+</span><span class="ansi-green-intense-fg ansi-bold">    584</span>         self<span class="ansi-blue-fg">.</span>input_spec <span class="ansi-blue-fg">=</span> InputSpec<span class="ansi-blue-fg">(</span>ndim<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">5</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    585</span> 
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/layers/convolutional.pyc</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, rank, filters, kernel_size, strides, padding, data_format, dilation_rate, activation, use_bias, kernel_initializer, bias_initializer, kernel_regularizer, bias_regularizer, activity_regularizer, kernel_constraint, bias_constraint, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     98</span>                  bias_constraint<span class="ansi-blue-fg">=</span>None<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">     99</span>                  **kwargs):
+<span class="ansi-green-fg">--&gt; 100</span><span class="ansi-red-fg">         </span>super<span class="ansi-blue-fg">(</span>_Conv<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    101</span>         self<span class="ansi-blue-fg">.</span>rank <span class="ansi-blue-fg">=</span> rank
+<span class="ansi-green-intense-fg ansi-bold">    102</span>         self<span class="ansi-blue-fg">.</span>filters <span class="ansi-blue-fg">=</span> filters
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/topology.pyc</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    296</span>                 <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    297</span>                     batch_size <span class="ansi-blue-fg">=</span> None
+<span class="ansi-green-fg">--&gt; 298</span><span class="ansi-red-fg">                 </span>batch_input_shape <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>batch_size<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">+</span> tuple<span class="ansi-blue-fg">(</span>kwargs<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;input_shape&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    299</span>             self<span class="ansi-blue-fg">.</span>batch_input_shape <span class="ansi-blue-fg">=</span> batch_input_shape
+<span class="ansi-green-intense-fg ansi-bold">    300</span> 
+
+<span class="ansi-red-fg">TypeError</span>: &#39;int&#39; object is not iterable</pre>
 </div>
 </div>
 

@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[91]:
+# In[335]:
 
 
 import os
@@ -53,7 +53,7 @@ def find_structure_params(structure):
     return (structure_data)
 
 
-# In[92]:
+# In[336]:
 
 
 def make_atom_layers(structure_data):
@@ -121,7 +121,7 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[93]:
+# In[337]:
 
 
 def find_midpoint(structure_data):
@@ -147,7 +147,7 @@ def normalize_in_origo(midpoint,structure_data):
     return (structure_data)
 
 
-# In[94]:
+# In[338]:
 
 
 def make_density_maps(layers,density_maps,counter):
@@ -187,10 +187,10 @@ def make_density_maps(layers,density_maps,counter):
         return (density_maps,x_values,y_values,z_values,density_values)               
 
 
-# In[ ]:
+# In[339]:
 
 
-def deep_learning(density_maps):
+def deep_learning(protein_maps,protein_targets):
     from keras.models import Sequential
     from keras.layers.convolutional import Conv3D
     from keras.layers import Conv3D, MaxPooling3D,Activation,Reshape
@@ -209,18 +209,18 @@ def deep_learning(density_maps):
                             #input_shape=(11,120, 120, 120)))
 
 
-    #seq.add(Conv3D(filters=11, kernel_size=(3,3,3), strides=(1,1,1), activation='relu',padding='valid', data_format='channels_first', input_shape=(11,120, 120, 120)))
+    seq.add(Conv3D(filters=11, kernel_size=(3), strides=(1), activation='relu',padding='same', data_format='channels_first', input_shape=(20)))
 
-    #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
+    seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
 
     
-    #seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+   # seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+   # seq.add(BatchNormalization())
     
-    #seq.add(Activation('relu'))
+   # seq.add(Activation('relu'))
 
-    #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))
+   # seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))
 
     
     #seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
@@ -285,12 +285,12 @@ def deep_learning(density_maps):
 
 
     adam = Adam(lr=0.0003, decay=0.01)
-    seq.compile(loss='binary_crossentropy',
+    seq.compile(loss='mean_squared_error',
 	      optimizer=adam,
               metrics=['accuracy', mean_pred])
-    class_y = np.random.random((10, 11, 118,118,118))
+
 	
-    seq.fit(density_maps,class_y,
+    seq.fit(protein_maps,protein_targets,
           epochs=20,
           batch_size=9)
     
@@ -298,7 +298,7 @@ def deep_learning(density_maps):
     
 
 
-# In[ ]:
+# In[340]:
 
 
 def main():
@@ -309,57 +309,70 @@ def main():
 
     
     files='/home/joakim/Downloads/models/' #str(args[0])
-
-
-
-    df=pd.read_excel('/home/joakim/Downloads/cross_val_sets.xls')
-    targets={}
-    for i,row in df.iterrows():
-         targets.setdefault(i, []).append(row['Targets'].split())
-
-    datasets={}
-    for dir in os.listdir('/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark/'):
-        for key,target in targets.items():
-            if dir in str(target):
-                datasets.setdefault(key, []).append(dir)
-
-    print type(targets[1][0][1])
-    print targets[1][0][1]
-
+    
+    while 'true':
+        input1=raw_input("Save or load")
+        if input1.lower()=='-r':
+            args='-r'
+            break
+        elif input1.lower()=='-s':
+            args='-s'
+            break
+        else:
+            break
     
 
-            
-    df=pd.read_excel('/home/joakim/Downloads/cross_val_sets.xls')
-    targets={}
-    for i,row in df.iterrows():
-         targets.setdefault(i, []).append(row['Targets'].split())
 
-    dir_home='/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/'
-    datasets={}
+    if not '-r' in args:
+        df=pd.read_excel('/home/joakim/Downloads/cross_val_sets.xls')
+        targets={}
+        for i,row in df.iterrows():
+             targets.setdefault(i, []).append(row['Targets'].split())
 
-    for dir in os.listdir(dir_home):
-        for key,target in targets.items():
-            if dir in str(target):
-                datasets.setdefault(key, []).append(dir)
+        datasets={}
+        for dir in os.listdir('/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark/'):
+            for key,target in targets.items():
+                if dir in str(target):
+                    datasets.setdefault(key, []).append(dir)
 
-    protein_maps=np.empty([1, 11, 120, 120, 120])
-    for key,protein_list in datasets.items():
-        
-        for prot_counter,protein in enumerate(protein_list):
-            
 
-            pdb_list=[]
-            for file in os.listdir(dir_home + protein):
-                if file.endswith(".pdb"):
-                    pdb_list.append(dir_home + protein+'/'+file)
-               
-            density_maps=[] 
-            if not '-r' in args:
+        df=pd.read_excel('/home/joakim/Downloads/cross_val_sets.xls')
+        targets={}
+        for i,row in df.iterrows():
+             targets.setdefault(i, []).append(row['Targets'].split())
+
+        dir_home='/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/'
+        datasets={}
+
+        for dir in os.listdir(dir_home):
+            for key,target in targets.items():
+                if dir in str(target):
+                    datasets.setdefault(key, []).append(dir)
+
+        protein_maps=np.empty([1, 11, 120, 120, 120])
+        protein_targets=np.empty([1, 11, 120, 120, 120])
+        for key,protein_list in datasets.items():
+
+            for prot_counter,protein in enumerate(protein_list):
+
+
+                pdb_list=[]
+                for file in os.listdir(dir_home + protein):
+                    if file.endswith(".pdb"):
+                        pdb_list.append(dir_home + protein+'/'+file)
+
+                density_target=[]  
+                density_maps=[]
+                counterr=0
+                countertargets=0
+           # if not '-r' in args:
                 for counter, filename_pdb in enumerate(pdb_list):
                     print(filename_pdb)
                     percent= np.around((np.float(counter+1) / len(pdb_list)*100), decimals=3)
                     print(str((counter+1)) +'/'+ str(len(pdb_list)) + ', ' + str(percent)+'%')
-                    density_maps.append([])
+                    
+                    
+
 
                     #filename_pdb = '/home/joakim/Downloads/5eh6.pdb'#'/home/joakim/Downloads/2HIY_A.pdb' #'/home/joakim/Downloads/D1A2K-a0a-merged.pdb'
                     try: 
@@ -383,36 +396,62 @@ def main():
                     structure_data = normalize_in_origo(midpoint,structure_data)
 
                     layers = make_atom_layers(structure_data)
-
-
-
+                    
+                    if 'a0a' in filename_pdb:
+                        density_target.append([])
+                        (density_target,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_target,countertargets)
+                        countertargets=countertargets+1
+                    else:
                     #Create 11 density maps (zeros)
-                    (density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_maps,counter)
+                        density_maps.append([])
+                        #density_target.append([])
+                        (density_maps,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_maps,counterr)
+                        #(density_target,x_values,y_values,z_values,density_values) = make_density_maps(layers,density_target,countertargets)
+                        counterr=counterr+1
+                       # countertargets=countertargets+1
+                    
+           # for x in density_maps:
+                #protein
 
-            
-            density_maps=np.array(density_maps)
-            print(density_maps.shape)
-            print(protein_maps.shape)
-            protein_maps=np.concatenate((protein_maps, density_maps), axis=0)
-           # protein_maps.append(density_maps)
+                density_maps=np.array(density_maps)
+                density_target=np.array(density_target)
 
-        #protein_maps=np.array(density_maps)
+                protein_targets=np.concatenate((protein_targets, density_target), axis=0)
+                protein_maps=np.concatenate((protein_maps, density_maps), axis=0)
+
+        protein_targets=protein_targets[1:]
+        protein_maps=protein_maps[1:]
+
 #For saving and loading the array as an compressed npz file
     if '-s' in args and '-r' in args:
         print('Do not use save(-s) and read(-r) at the same time')
         sys.exit()
     elif '-s' in args:
-        print('-Saving file...')
-        np.savez_compressed('density_maps', protein_maps)
-        print('-File saved as "density_maps.npz"')
+        print('-Saving files...')
+        np.savez_compressed('protein_maps', protein_maps)
+        #np.savez_compressed('protein_test', protein_test)
+        np.savez_compressed('protein_targets', protein_targets)
+        print('-Files saved as "protein_train.npz","protein_test.npz","protein_target.npz"')
 
     elif '-r' in args:
-        print('-Loading file...')
-        protein_maps = np.load('density_maps.npz')
+        print('-Loading files...')
+        protein_maps = np.load('protein_maps.npz')
+        #protein_test = np.load('protein_test.npz')
+        protein_targets = np.load('protein_targets.npz')
+        
         for key,array in protein_maps.items():
             protein_maps=protein_maps[key]
-        print('-File loaded')
-
+       # for key,array in protein_test.items():
+           # protein_test=protein_test[key]
+        for key,array in protein_targets.items():
+            protein_targets=protein_targets[key]
+    
+    
+    protein_targets=np.random.rand(20)
+    print protein_targets
+    
+    print(protein_targets.shape)
+    print(protein_maps.shape)
     print(type(protein_maps))
     print(type(protein_maps[0]))
     print(type(protein_maps[0][0]))
@@ -420,7 +459,7 @@ def main():
     print(type(protein_maps[0][0][0][0]))
     print(type(protein_maps[0][0][0][0][0]))
 		
-    deep_learning(protein_maps)
+    deep_learning(protein_maps,protein_targets)
         
             
 
