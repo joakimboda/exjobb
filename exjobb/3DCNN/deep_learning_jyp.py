@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[576]:
+# In[8]:
 
 
 import os
@@ -53,7 +53,7 @@ def find_structure_params(structure):
     return (structure_data)
 
 
-# In[577]:
+# In[9]:
 
 
 def make_atom_layers(structure_data):
@@ -121,7 +121,7 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[578]:
+# In[10]:
 
 
 def find_midpoint(structure_data):
@@ -136,7 +136,7 @@ def find_midpoint(structure_data):
     return(midpoint)    
 
 
-# In[579]:
+# In[11]:
 
 
 def normalize_in_origo(midpoint,structure_data):
@@ -149,7 +149,7 @@ def normalize_in_origo(midpoint,structure_data):
     return (structure_data)
 
 
-# In[580]:
+# In[12]:
 
 
 def make_density_maps(layers,density_maps,counter):
@@ -189,13 +189,13 @@ def make_density_maps(layers,density_maps,counter):
         return (density_maps,x_values,y_values,z_values,density_values)               
 
 
-# In[581]:
+# In[13]:
 
 
 def deep_learning(protein_train,protein_test,protein_target):
     from keras.models import Sequential
     from keras.layers.convolutional import Conv3D
-    from keras.layers import Conv3D, MaxPooling3D,Activation,Reshape
+    from keras.layers import Conv3D, MaxPooling3D,Activation,Reshape,Dense
     from keras.layers.normalization import BatchNormalization
     from keras.optimizers import Adam
     
@@ -211,87 +211,94 @@ def deep_learning(protein_train,protein_test,protein_target):
                             #input_shape=(11,120, 120, 120)))
 
 
-    seq.add(Conv3D(filters=11, kernel_size=(3,3,3), strides=(1,1,1), activation='relu',padding='valid', data_format='channels_first', input_shape=(11,120, 120, 120)))
+    seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1), activation='relu',padding='valid', data_format='channels_first', input_shape=(11,120, 120, 120)))
 
-    #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
-
-    
-    #seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
-
-    #seq.add(BatchNormalization())
-    
-    #seq.add(Activation('relu'))
-
-    #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))
+    seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
 
     
-    #seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+    seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+    seq.add(BatchNormalization())
+    
+    seq.add(Activation('relu'))
 
-    #seq.add(Activation('relu'))
+    seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
 
-    #seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+    
+    seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+    seq.add(BatchNormalization())
 
-    #seq.add(Activation('relu'))
+    seq.add(Activation('relu'))
+
+    seq.add(Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
+
+    seq.add(BatchNormalization())
+
+    seq.add(Activation('relu'))
    
-    #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))
+    seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
 
 
-    #seq.add(Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+    seq.add(Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+    seq.add(BatchNormalization())
 
-    #seq.add(Activation('relu'))
+    seq.add(Activation('relu'))
 
-    #seq.add(Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+    seq.add(Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+    seq.add(BatchNormalization())
 
-    #seq.add(Activation('relu'))
+    seq.add(Activation('relu'))
 
-    #seq.add(Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+    seq.add(Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+    seq.add(BatchNormalization())
 
-    #seq.add(Activation('relu'))
+    seq.add(Activation('relu'))
 
-    #seq.add(Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1),padding='same', data_format='channels_first'))
+    seq.add(Conv3D(filters=512, kernel_size=(3,3,3), strides=(1,1,1),padding='valid', data_format='channels_first'))
 
-    #seq.add(BatchNormalization())
+    seq.add(BatchNormalization())
 
-    #seq.add(Activation('relu'))
+    seq.add(Activation('relu'))
 
-    #seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))
-
-    
-    #seq.add(Reshape((-1,)))
-
-    #seq.add(Activation('linear'))
-
-    #seq.add(Activation('relu'))
-
-    #seq.add(Activation('linear'))
-
-    #seq.add(Activation('relu'))
-
-    #seq.add(Activation('linear'))
-
+    seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format='channels_first'))
 
     
+    seq.add(Reshape((-1,)))
+
+    #seq.add(Activation('linear'))
+    seq.add(Dense(256,activation='linear'))
+
+    seq.add(Activation('relu'))
+
+    #seq.add(Activation('linear'))
+    seq.add(Dense(128,activation='linear'))
+
+    seq.add(Activation('relu'))
+
+    #seq.add(Activation('linear'))
+    seq.add(Dense(1,activation='linear'))
+    
+    
+
+    seq.summary()
+    print('ready')
     def mean_pred(y_true, y_pred):
         return K.mean(y_pred)
     
-
+    #protein_target=np.random.rand(16)
+    #protein_target=np.random.rand(16,269748)
+    #protein_train=np.random.rand(16,11,120,120,120)
 
     adam = Adam(lr=0.0003, decay=0.01)
-    seq.compile(loss='binary_crossentropy',
+    seq.compile(loss='mean_squared_error',
             optimizer=adam,
               metrics=['accuracy', mean_pred])
 
-
+    
     seq.fit(protein_train,protein_target,
           epochs=20,
           batch_size=9)
@@ -300,7 +307,7 @@ def deep_learning(protein_train,protein_test,protein_target):
     
 
 
-# In[582]:
+# In[14]:
 
 
 def main():
@@ -308,7 +315,6 @@ def main():
     
     #Dir path
     args = sys.argv[1:]
-
     
     files='/home/joakim/Downloads/models/' #str(args[0])
     while 'true':
@@ -419,14 +425,17 @@ def main():
 
     elif '-r' in args:
         print('-Loading files...')
-        protein_train = np.load('protein_train.npz')
-        protein_test = np.load('protein_test.npz')
-        protein_target = np.load('protein_target.npz')
+       # protein_train = np.load('protein_train.npz')
+       # protein_test = np.load('protein_test.npz')
+       # protein_target = np.load('protein_target.npz')
+        
+        protein_train = np.load('/home/joakim/Downloads/x_train_6.npz')
+        protein_target = np.load('/home/joakim/Downloads/y_train_6.npz')
         
         for key,array in protein_train.items():
             protein_train=protein_train[key]
-        for key,array in protein_test.items():
-            protein_test=protein_test[key]
+        #for key,array in protein_test.items():
+            #protein_test=protein_test[key]
         for key,array in protein_target.items():
             protein_target=protein_target[key]
             

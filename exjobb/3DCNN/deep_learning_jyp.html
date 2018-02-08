@@ -11773,7 +11773,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[576]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -11832,7 +11832,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[577]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11907,7 +11907,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[578]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11929,7 +11929,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[579]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11949,7 +11949,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[580]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">):</span>
@@ -11996,13 +11996,13 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[581]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">deep_learning</span><span class="p">(</span><span class="n">protein_train</span><span class="p">,</span><span class="n">protein_test</span><span class="p">,</span><span class="n">protein_target</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
     <span class="kn">from</span> <span class="nn">keras.layers.convolutional</span> <span class="kn">import</span> <span class="n">Conv3D</span>
-    <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv3D</span><span class="p">,</span> <span class="n">MaxPooling3D</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">Reshape</span>
+    <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv3D</span><span class="p">,</span> <span class="n">MaxPooling3D</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">Reshape</span><span class="p">,</span><span class="n">Dense</span>
     <span class="kn">from</span> <span class="nn">keras.layers.normalization</span> <span class="kn">import</span> <span class="n">BatchNormalization</span>
     <span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
     
@@ -12018,87 +12018,94 @@ div#notebook {
                             <span class="c1">#input_shape=(11,120, 120, 120)))</span>
 
 
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">)))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">)))</span>
 
-    <span class="c1">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format=&#39;channels_first&#39;))</span>
-
-    
-    <span class="c1">#seq.add(Conv3D(filters=16, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
-
-    <span class="c1">#seq.add(BatchNormalization())</span>
-    
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
-
-    <span class="c1">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
     
-    <span class="c1">#seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+    
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(Conv3D(filters=32, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+    
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
 
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
    
-    <span class="c1">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
 
-    <span class="c1">#seq.add(Conv3D(filters=64, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
 
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
 
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(Conv3D(filters=128, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
 
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(Conv3D(filters=256, kernel_size=(3,3,3), strides=(1,1,1),padding=&#39;same&#39;, data_format=&#39;channels_first&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(BatchNormalization())</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
 
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
 
-    <span class="c1">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2)))</span>
-
-    
-    <span class="c1">#seq.add(Reshape((-1,)))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;relu&#39;))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
-
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
 
     
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,)))</span>
+
+    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span><span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+
+    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
+    
+    
+
+    <span class="n">seq</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">mean_pred</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
     
-
+    <span class="c1">#protein_target=np.random.rand(16)</span>
+    <span class="c1">#protein_target=np.random.rand(16,269748)</span>
+    <span class="c1">#protein_train=np.random.rand(16,11,120,120,120)</span>
 
     <span class="n">adam</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
-    <span class="n">seq</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+    <span class="n">seq</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mean_squared_error&#39;</span><span class="p">,</span>
             <span class="n">optimizer</span><span class="o">=</span><span class="n">adam</span><span class="p">,</span>
               <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">mean_pred</span><span class="p">])</span>
 
-
+    
     <span class="n">seq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">protein_train</span><span class="p">,</span><span class="n">protein_target</span><span class="p">,</span>
           <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
           <span class="n">batch_size</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
@@ -12114,7 +12121,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[582]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -12122,7 +12129,6 @@ div#notebook {
     
     <span class="c1">#Dir path</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-
     
     <span class="n">files</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/models/&#39;</span> <span class="c1">#str(args[0])</span>
     <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
@@ -12233,14 +12239,17 @@ div#notebook {
 
     <span class="k">elif</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Loading files...&#39;</span><span class="p">)</span>
-        <span class="n">protein_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;protein_train.npz&#39;</span><span class="p">)</span>
-        <span class="n">protein_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;protein_test.npz&#39;</span><span class="p">)</span>
-        <span class="n">protein_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;protein_target.npz&#39;</span><span class="p">)</span>
+       <span class="c1"># protein_train = np.load(&#39;protein_train.npz&#39;)</span>
+       <span class="c1"># protein_test = np.load(&#39;protein_test.npz&#39;)</span>
+       <span class="c1"># protein_target = np.load(&#39;protein_target.npz&#39;)</span>
+        
+        <span class="n">protein_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/x_train_6.npz&#39;</span><span class="p">)</span>
+        <span class="n">protein_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/y_train_6.npz&#39;</span><span class="p">)</span>
         
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_train</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">protein_train</span><span class="o">=</span><span class="n">protein_train</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_test</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">protein_test</span><span class="o">=</span><span class="n">protein_test</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="c1">#for key,array in protein_test.items():</span>
+            <span class="c1">#protein_test=protein_test[key]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_target</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">protein_target</span><span class="o">=</span><span class="n">protein_target</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             
@@ -12279,10 +12288,112 @@ div#notebook {
 <pre>Save or load-r
 -Loading files...
 -Files loaded
-15
-15
+6
+6
 5
-Start training
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Using TensorFlow backend.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Start training
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv3d_1 (Conv3D)            (None, 16, 118, 118, 118) 4768      
+_________________________________________________________________
+max_pooling3d_1 (MaxPooling3 (None, 16, 58, 58, 58)    0         
+_________________________________________________________________
+conv3d_2 (Conv3D)            (None, 32, 56, 56, 56)    13856     
+_________________________________________________________________
+batch_normalization_1 (Batch (None, 32, 56, 56, 56)    224       
+_________________________________________________________________
+activation_1 (Activation)    (None, 32, 56, 56, 56)    0         
+_________________________________________________________________
+max_pooling3d_2 (MaxPooling3 (None, 32, 27, 27, 27)    0         
+_________________________________________________________________
+conv3d_3 (Conv3D)            (None, 32, 25, 25, 25)    27680     
+_________________________________________________________________
+batch_normalization_2 (Batch (None, 32, 25, 25, 25)    100       
+_________________________________________________________________
+activation_2 (Activation)    (None, 32, 25, 25, 25)    0         
+_________________________________________________________________
+conv3d_4 (Conv3D)            (None, 64, 23, 23, 23)    55360     
+_________________________________________________________________
+batch_normalization_3 (Batch (None, 64, 23, 23, 23)    92        
+_________________________________________________________________
+activation_3 (Activation)    (None, 64, 23, 23, 23)    0         
+_________________________________________________________________
+max_pooling3d_3 (MaxPooling3 (None, 64, 11, 11, 11)    0         
+_________________________________________________________________
+conv3d_5 (Conv3D)            (None, 128, 9, 9, 9)      221312    
+_________________________________________________________________
+batch_normalization_4 (Batch (None, 128, 9, 9, 9)      36        
+_________________________________________________________________
+activation_4 (Activation)    (None, 128, 9, 9, 9)      0         
+_________________________________________________________________
+conv3d_6 (Conv3D)            (None, 128, 7, 7, 7)      442496    
+_________________________________________________________________
+batch_normalization_5 (Batch (None, 128, 7, 7, 7)      28        
+_________________________________________________________________
+activation_5 (Activation)    (None, 128, 7, 7, 7)      0         
+_________________________________________________________________
+conv3d_7 (Conv3D)            (None, 256, 5, 5, 5)      884992    
+_________________________________________________________________
+batch_normalization_6 (Batch (None, 256, 5, 5, 5)      20        
+_________________________________________________________________
+activation_6 (Activation)    (None, 256, 5, 5, 5)      0         
+_________________________________________________________________
+conv3d_8 (Conv3D)            (None, 512, 3, 3, 3)      3539456   
+_________________________________________________________________
+batch_normalization_7 (Batch (None, 512, 3, 3, 3)      12        
+_________________________________________________________________
+activation_7 (Activation)    (None, 512, 3, 3, 3)      0         
+_________________________________________________________________
+max_pooling3d_4 (MaxPooling3 (None, 512, 1, 1, 1)      0         
+_________________________________________________________________
+reshape_1 (Reshape)          (None, 512)               0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 256)               131328    
+_________________________________________________________________
+activation_8 (Activation)    (None, 256)               0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 128)               32896     
+_________________________________________________________________
+activation_9 (Activation)    (None, 128)               0         
+_________________________________________________________________
+dense_3 (Dense)              (None, 1)                 129       
+=================================================================
+Total params: 5,354,785
+Trainable params: 5,354,529
+Non-trainable params: 256
+_________________________________________________________________
+ready
+Epoch 1/20
+6/6 [==============================] - 125s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7052
+Epoch 2/20
+6/6 [==============================] - 124s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7052
+Epoch 3/20
+6/6 [==============================] - 124s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7053
+Epoch 4/20
+6/6 [==============================] - 125s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7052
+Epoch 5/20
 </pre>
 </div>
 </div>
@@ -12295,48 +12406,90 @@ Start training
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-582-f9bd0afe88b3&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">    141</span> 
-<span class="ansi-green-intense-fg ansi-bold">    142</span> <span class="ansi-green-fg">if</span> __name__ <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;__main__&#39;</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 143</span><span class="ansi-red-fg">   </span>main<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-14-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">    143</span> 
+<span class="ansi-green-intense-fg ansi-bold">    144</span> <span class="ansi-green-fg">if</span> __name__ <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;__main__&#39;</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 145</span><span class="ansi-red-fg">   </span>main<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">&lt;ipython-input-582-f9bd0afe88b3&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">    136</span> 
-<span class="ansi-green-intense-fg ansi-bold">    137</span> 
-<span class="ansi-green-fg">--&gt; 138</span><span class="ansi-red-fg">     </span>deep_learning<span class="ansi-blue-fg">(</span>protein_train<span class="ansi-blue-fg">,</span>protein_test<span class="ansi-blue-fg">,</span>protein_target<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">&lt;ipython-input-14-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">    138</span> 
 <span class="ansi-green-intense-fg ansi-bold">    139</span> 
-<span class="ansi-green-intense-fg ansi-bold">    140</span> 
+<span class="ansi-green-fg">--&gt; 140</span><span class="ansi-red-fg">     </span>deep_learning<span class="ansi-blue-fg">(</span>protein_train<span class="ansi-blue-fg">,</span>protein_test<span class="ansi-blue-fg">,</span>protein_target<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    141</span> 
+<span class="ansi-green-intense-fg ansi-bold">    142</span> 
 
-<span class="ansi-green-fg">&lt;ipython-input-581-4ecde49aaa17&gt;</span> in <span class="ansi-cyan-fg">deep_learning</span><span class="ansi-blue-fg">(protein_train, protein_test, protein_target)</span>
-<span class="ansi-green-intense-fg ansi-bold">     18</span> 
-<span class="ansi-green-intense-fg ansi-bold">     19</span> 
-<span class="ansi-green-fg">---&gt; 20</span><span class="ansi-red-fg">     </span>seq<span class="ansi-blue-fg">.</span>add<span class="ansi-blue-fg">(</span>Conv3D<span class="ansi-blue-fg">(</span>filters<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">11</span><span class="ansi-blue-fg">,</span> kernel_size<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> strides<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> activation<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;relu&#39;</span><span class="ansi-blue-fg">,</span>padding<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;valid&#39;</span><span class="ansi-blue-fg">,</span> data_format<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;channels_first&#39;</span><span class="ansi-blue-fg">,</span> input_shape<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">15</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">11</span><span class="ansi-blue-fg">,</span><span class="ansi-cyan-fg">120</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">120</span><span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">120</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     21</span> 
-<span class="ansi-green-intense-fg ansi-bold">     22</span>     <span class="ansi-red-fg">#seq.add(MaxPooling3D(pool_size=(3,3,3),strides=(2,2,2),data_format=&#39;channels_first&#39;))</span>
+<span class="ansi-green-fg">&lt;ipython-input-13-2ab296961a36&gt;</span> in <span class="ansi-cyan-fg">deep_learning</span><span class="ansi-blue-fg">(protein_train, protein_test, protein_target)</span>
+<span class="ansi-green-intense-fg ansi-bold">    108</span>     seq.fit(protein_train,protein_target,
+<span class="ansi-green-intense-fg ansi-bold">    109</span>           epochs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 110</span><span class="ansi-red-fg">           batch_size=9)
+</span><span class="ansi-green-intense-fg ansi-bold">    111</span> 
+<span class="ansi-green-intense-fg ansi-bold">    112</span>     <span class="ansi-green-fg">print</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Training done&#39;</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/models.pyc</span> in <span class="ansi-cyan-fg">add</span><span class="ansi-blue-fg">(self, layer)</span>
-<span class="ansi-green-intense-fg ansi-bold">    462</span>                 <span class="ansi-red-fg"># and create the node connecting the current layer</span>
-<span class="ansi-green-intense-fg ansi-bold">    463</span>                 <span class="ansi-red-fg"># to the input layer we just created.</span>
-<span class="ansi-green-fg">--&gt; 464</span><span class="ansi-red-fg">                 </span>layer<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    465</span> 
-<span class="ansi-green-intense-fg ansi-bold">    466</span>             <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>layer<span class="ansi-blue-fg">.</span>inbound_nodes<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>output_tensors<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">!=</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/models.pyc</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    958</span>                               initial_epoch<span class="ansi-blue-fg">=</span>initial_epoch<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    959</span>                               steps_per_epoch<span class="ansi-blue-fg">=</span>steps_per_epoch<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">--&gt; 960</span><span class="ansi-red-fg">                               validation_steps=validation_steps)
+</span><span class="ansi-green-intense-fg ansi-bold">    961</span> 
+<span class="ansi-green-intense-fg ansi-bold">    962</span>     def evaluate(self, x, y, batch_size=32, verbose=1,
 
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/topology.pyc</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, inputs, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    557</span>                 <span class="ansi-red-fg"># Raise exceptions in case the input is not compatible</span>
-<span class="ansi-green-intense-fg ansi-bold">    558</span>                 <span class="ansi-red-fg"># with the input_spec specified in the layer constructor.</span>
-<span class="ansi-green-fg">--&gt; 559</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>assert_input_compatibility<span class="ansi-blue-fg">(</span>inputs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    560</span> 
-<span class="ansi-green-intense-fg ansi-bold">    561</span>                 <span class="ansi-red-fg"># Collect input shapes to build layer.</span>
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/training.pyc</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1655</span>                               initial_epoch<span class="ansi-blue-fg">=</span>initial_epoch<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">   1656</span>                               steps_per_epoch<span class="ansi-blue-fg">=</span>steps_per_epoch<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">-&gt; 1657</span><span class="ansi-red-fg">                               validation_steps=validation_steps)
+</span><span class="ansi-green-intense-fg ansi-bold">   1658</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1659</span>     def evaluate(self, x=None, y=None,
 
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/topology.pyc</span> in <span class="ansi-cyan-fg">assert_input_compatibility</span><span class="ansi-blue-fg">(self, inputs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    456</span>                                      self<span class="ansi-blue-fg">.</span>name <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#39;: expected ndim=&#39;</span> <span class="ansi-blue-fg">+</span>
-<span class="ansi-green-intense-fg ansi-bold">    457</span>                                      str<span class="ansi-blue-fg">(</span>spec<span class="ansi-blue-fg">.</span>ndim<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#39;, found ndim=&#39;</span> <span class="ansi-blue-fg">+</span>
-<span class="ansi-green-fg">--&gt; 458</span><span class="ansi-red-fg">                                      str(K.ndim(x)))
-</span><span class="ansi-green-intense-fg ansi-bold">    459</span>             <span class="ansi-green-fg">if</span> spec<span class="ansi-blue-fg">.</span>max_ndim <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> None<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    460</span>                 ndim <span class="ansi-blue-fg">=</span> K<span class="ansi-blue-fg">.</span>ndim<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/training.pyc</span> in <span class="ansi-cyan-fg">_fit_loop</span><span class="ansi-blue-fg">(self, f, ins, out_labels, batch_size, epochs, verbose, callbacks, val_f, val_ins, shuffle, callback_metrics, initial_epoch, steps_per_epoch, validation_steps)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1211</span>                     batch_logs<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;size&#39;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>batch_ids<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1212</span>                     callbacks<span class="ansi-blue-fg">.</span>on_batch_begin<span class="ansi-blue-fg">(</span>batch_index<span class="ansi-blue-fg">,</span> batch_logs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">-&gt; 1213</span><span class="ansi-red-fg">                     </span>outs <span class="ansi-blue-fg">=</span> f<span class="ansi-blue-fg">(</span>ins_batch<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1214</span>                     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> isinstance<span class="ansi-blue-fg">(</span>outs<span class="ansi-blue-fg">,</span> list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1215</span>                         outs <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>outs<span class="ansi-blue-fg">]</span>
 
-<span class="ansi-red-fg">ValueError</span>: Input 0 is incompatible with layer conv3d_10: expected ndim=5, found ndim=7</pre>
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/backend/tensorflow_backend.pyc</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, inputs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2355</span>         session <span class="ansi-blue-fg">=</span> get_session<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2356</span>         updated = session.run(fetches=fetches, feed_dict=feed_dict,
+<span class="ansi-green-fg">-&gt; 2357</span><span class="ansi-red-fg">                               **self.session_kwargs)
+</span><span class="ansi-green-intense-fg ansi-bold">   2358</span>         <span class="ansi-green-fg">return</span> updated<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span>len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>outputs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   2359</span> 
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, fetches, feed_dict, options, run_metadata)</span>
+<span class="ansi-green-intense-fg ansi-bold">    893</span>     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    894</span>       result = self._run(None, fetches, feed_dict, options_ptr,
+<span class="ansi-green-fg">--&gt; 895</span><span class="ansi-red-fg">                          run_metadata_ptr)
+</span><span class="ansi-green-intense-fg ansi-bold">    896</span>       <span class="ansi-green-fg">if</span> run_metadata<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    897</span>         proto_data <span class="ansi-blue-fg">=</span> tf_session<span class="ansi-blue-fg">.</span>TF_GetBuffer<span class="ansi-blue-fg">(</span>run_metadata_ptr<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_run</span><span class="ansi-blue-fg">(self, handle, fetches, feed_dict, options, run_metadata)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1122</span>     <span class="ansi-green-fg">if</span> final_fetches <span class="ansi-green-fg">or</span> final_targets <span class="ansi-green-fg">or</span> <span class="ansi-blue-fg">(</span>handle <span class="ansi-green-fg">and</span> feed_dict_tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1123</span>       results = self._do_run(handle, final_targets, final_fetches,
+<span class="ansi-green-fg">-&gt; 1124</span><span class="ansi-red-fg">                              feed_dict_tensor, options, run_metadata)
+</span><span class="ansi-green-intense-fg ansi-bold">   1125</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1126</span>       results <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_do_run</span><span class="ansi-blue-fg">(self, handle, target_list, fetch_list, feed_dict, options, run_metadata)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1319</span>     <span class="ansi-green-fg">if</span> handle <span class="ansi-green-fg">is</span> None<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1320</span>       return self._do_call(_run_fn, self._session, feeds, fetches, targets,
+<span class="ansi-green-fg">-&gt; 1321</span><span class="ansi-red-fg">                            options, run_metadata)
+</span><span class="ansi-green-intense-fg ansi-bold">   1322</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1323</span>       <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_do_call<span class="ansi-blue-fg">(</span>_prun_fn<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>_session<span class="ansi-blue-fg">,</span> handle<span class="ansi-blue-fg">,</span> feeds<span class="ansi-blue-fg">,</span> fetches<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_do_call</span><span class="ansi-blue-fg">(self, fn, *args)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1325</span>   <span class="ansi-green-fg">def</span> _do_call<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> fn<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1326</span>     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1327</span><span class="ansi-red-fg">       </span><span class="ansi-green-fg">return</span> fn<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1328</span>     <span class="ansi-green-fg">except</span> errors<span class="ansi-blue-fg">.</span>OpError <span class="ansi-green-fg">as</span> e<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1329</span>       message <span class="ansi-blue-fg">=</span> compat<span class="ansi-blue-fg">.</span>as_text<span class="ansi-blue-fg">(</span>e<span class="ansi-blue-fg">.</span>message<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_run_fn</span><span class="ansi-blue-fg">(session, feed_dict, fetch_list, target_list, options, run_metadata)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1304</span>           return tf_session.TF_Run(session, options,
+<span class="ansi-green-intense-fg ansi-bold">   1305</span>                                    feed_dict<span class="ansi-blue-fg">,</span> fetch_list<span class="ansi-blue-fg">,</span> target_list<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg">-&gt; 1306</span><span class="ansi-red-fg">                                    status, run_metadata)
+</span><span class="ansi-green-intense-fg ansi-bold">   1307</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1308</span>     <span class="ansi-green-fg">def</span> _prun_fn<span class="ansi-blue-fg">(</span>session<span class="ansi-blue-fg">,</span> handle<span class="ansi-blue-fg">,</span> feed_dict<span class="ansi-blue-fg">,</span> fetch_list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
 </div>
 </div>
 

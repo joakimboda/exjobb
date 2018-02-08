@@ -19,7 +19,7 @@ import TopBio.PersistentHomology.PHComplex as PHComplex
 import TopBio.Feature.LigandFeature as LigandFeature
 import TopBio.Feature.ComplexFeature as ComplexFeature
 
-working_dir = # Full path to the folder '1a8i'
+working_dir = '/home/joakim/exjobb/exjobb/Literature/journal.pcbi.1005929.s002/1a8i'# Full path to the folder '1a8i'
 ligand_name = '1a8i_ligand'
 protein_name = '1a8i_protein'
 
