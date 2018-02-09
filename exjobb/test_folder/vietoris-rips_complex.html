@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>deep_learning_jyp</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>vietoris-rips_complex</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11773,56 +11773,23 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">Bio</span>
-<span class="kn">from</span> <span class="nn">Bio.PDB</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">dok_matrix</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">add</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
-
-<span class="c1">#This is for removing Bio.python warnings</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">Bio</span> <span class="kn">import</span> <span class="n">BiopythonWarning</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">BiopythonWarning</span><span class="p">)</span>
-
-<span class="c1">#import pandas as pd #pandas är en python modul for att hantera s.k DataFrames.</span>
+<span class="k">class</span> <span class="nc">SimplicialComplex</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simplices</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_simplices</span><span class="p">(</span><span class="n">simplices</span><span class="o">=</span><span class="n">simplices</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
  
-        
-<span class="k">def</span> <span class="nf">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">):</span>
-    
-    <span class="c1">#structure_data.append([Chain_id,Seg_id, residue_name, atom_name, atom_coord_vector])</span>
-    <span class="n">structure_data</span><span class="o">=</span><span class="p">{}</span>
-    <span class="n">res_key</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-    
-    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-            
-            <span class="c1">#for atom in structure.get_atoms():  If I want all atoms in a structure, depends if I want the residue</span>
-            <span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">residue</span><span class="o">.</span><span class="n">get_full_id</span><span class="p">()[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39; &#39;</span><span class="p">:</span>  <span class="c1">#If I want to remove HOH etc (hetero-atoms) use this!</span>
-                    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">residue</span><span class="p">:</span>
-                        <span class="n">key</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">get_id</span><span class="p">()</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">serial_number</span><span class="p">)</span>
-                        <span class="n">structure_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="p">([</span><span class="n">chain</span><span class="o">.</span><span class="n">get_id</span><span class="p">(),</span><span class="n">residue</span><span class="o">.</span><span class="n">get_resname</span><span class="p">(),</span><span class="n">atom</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span><span class="n">atom</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()])</span>
-                        
-                        <span class="c1">#Giving the C-terminal O its own name for when making the atom layers</span>
-                        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;OXT&#39;</span><span class="p">:</span>
-                            <span class="n">structure_data</span><span class="p">[</span><span class="n">res_key</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">structure_data</span><span class="p">[</span><span class="n">res_key</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;Cterm&#39;</span>
-                        <span class="n">res_key</span> <span class="o">=</span> <span class="n">key</span>
-   <span class="c1"># for i in structure_data:</span>
-       <span class="c1"># if i[0]==&#39;L&#39;:</span>
-     <span class="c1">#       print i</span>
-
-
-    <span class="k">return</span> <span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">import_simplices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simplices</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simplices</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">simplex</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">simplex</span><span class="p">)),</span> <span class="n">simplices</span><span class="p">)</span>
+        <span class="c1">#self.face_set = self.faces()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">face_set</span> <span class="o">=</span> <span class="n">faces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11832,72 +11799,17 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
-    
-    <span class="n">layer1_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CYS:SG&#39;</span><span class="p">,</span><span class="s1">&#39;MET:SD&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:SE&#39;</span><span class="p">]</span>
-    <span class="n">layer2_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ASN:ND2&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:NE2&#39;</span><span class="p">]</span> <span class="c1">#Backbone N</span>
-    <span class="n">layer3_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HIS:ND1&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:NE1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:NE1&#39;</span><span class="p">]</span>
-    <span class="n">layer4_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ARG:NE&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:NH1&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:NH2&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:NH3&#39;</span><span class="p">]</span>
-    <span class="n">layer5_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LYS:NZ&#39;</span><span class="p">]</span>
-    <span class="n">layer6_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ASN:OD1&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:OE1&#39;</span><span class="p">]</span> <span class="c1">#Backbone O?</span>
-    <span class="n">layer7_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SER:OG&#39;</span><span class="p">,</span><span class="s1">&#39;THR:OG1&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:OH&#39;</span><span class="p">]</span>
-    <span class="n">layer8_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ASP:OD1&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:OD2&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:OD3&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:OE1&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:OE2&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:OE3&#39;</span><span class="p">]</span>
-    <span class="n">layer9_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ARG:CZ&#39;</span><span class="p">,</span><span class="s1">&#39;ASN:CG&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:CG&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:CD&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:CD&#39;</span><span class="p">]</span> <span class="c1">#Backbone C?</span>
-    <span class="n">layer10_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HIS:CG&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CG&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CE2&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CE3&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CZ&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CG&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CE2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CE3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CZ1&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CZ2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CZ3&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CH2&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CG&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CE1&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CE2&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CE3&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CZ&#39;</span><span class="p">]</span>
-    <span class="n">layer11_check</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ALA:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:CG&#39;</span><span class="p">,</span><span class="s1">&#39;ARG:CD&#39;</span><span class="p">,</span><span class="s1">&#39;ASN:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ASP:CB&#39;</span><span class="p">,</span><span class="s1">&#39;CYS:CB&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:CB&#39;</span><span class="p">,</span><span class="s1">&#39;GLN:CG&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:CB&#39;</span><span class="p">,</span><span class="s1">&#39;GLU:CG&#39;</span><span class="p">,</span><span class="s1">&#39;HIS:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CB&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CG1&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CG2&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CG3&#39;</span><span class="p">,</span><span class="s1">&#39;ILE:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CB&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CG&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CD1&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CD2&#39;</span><span class="p">,</span><span class="s1">&#39;LEU:CD3&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CB&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CG&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CD&#39;</span><span class="p">,</span><span class="s1">&#39;LYS:CE&#39;</span><span class="p">,</span><span class="s1">&#39;MET:CB&#39;</span><span class="p">,</span><span class="s1">&#39;MET:CG&#39;</span><span class="p">,</span><span class="s1">&#39;MET:CE&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:CB&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:CG&#39;</span><span class="p">,</span><span class="s1">&#39;MSE:CE&#39;</span><span class="p">,</span><span class="s1">&#39;PHE:CB&#39;</span><span class="p">,</span><span class="s1">&#39;PRO:CB&#39;</span><span class="p">,</span><span class="s1">&#39;PRO:CG&#39;</span><span class="p">,</span><span class="s1">&#39;PRO:CD&#39;</span><span class="p">,</span><span class="s1">&#39;SER:CB&#39;</span><span class="p">,</span><span class="s1">&#39;THR:CB&#39;</span><span class="p">,</span><span class="s1">&#39;THR:CG2&#39;</span><span class="p">,</span><span class="s1">&#39;TRP:CB&#39;</span><span class="p">,</span><span class="s1">&#39;TYR:CB&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CB&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CG1&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CG2&#39;</span><span class="p">,</span><span class="s1">&#39;VAL:CG3&#39;</span><span class="p">]</span> <span class="c1">#Backbone CA?</span>
-    
-    <span class="n">layers</span><span class="o">=</span><span class="p">{}</span>
-    
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">structure_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;O&#39;</span><span class="p">:</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CA&#39;</span><span class="p">:</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;OXT&#39;</span><span class="p">:</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;OCterm&#39;</span><span class="p">:</span> <span class="c1">#C-terminal O</span>
-            <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">atom_type</span> <span class="o">=</span> <span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer1_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer2_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer3_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer4_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer5_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer6_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer7_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer8_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer9_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer10_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">atom_type</span> <span class="ow">in</span> <span class="n">layer11_check</span><span class="p">:</span>
-                <span class="n">layers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="c1"># print str(key) + str(atom[1:3]) + &#39; Has not been assigned to any layer&#39; #layers.setdefault(&#39;12&#39;, []).append(atom)</span>
-    
-    <span class="c1">#This is to check if anything is not sorted into a layer            </span>
-    <span class="c1">#for key,atom in layers.items():</span>
-        <span class="c1">#if key==&#39;12&#39;:</span>
-           <span class="c1"># for x in atom:</span>
-             <span class="c1">#   print x</span>
-
-    <span class="k">return</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">faces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">faceset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">simplex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">simplices</span><span class="p">:</span>
+        <span class="n">numnodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">simplex</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numnodes</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">simplex</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+                <span class="n">faceset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">faceset</span>
 </pre></div>
 
 </div>
@@ -11907,19 +11819,32 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
-    
-    <span class="n">allvectors</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>     
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">structure_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">allvectors</span><span class="o">=</span><span class="n">allvectors</span><span class="o">+</span><span class="n">atom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-        <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-    <span class="n">midpoint</span><span class="o">=</span><span class="n">Vector</span><span class="p">([</span><span class="n">allvectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">i</span><span class="p">,</span><span class="n">allvectors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">i</span><span class="p">,</span><span class="n">allvectors</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">i</span><span class="p">])</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">midpoint</span><span class="p">)</span>    
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">distance</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+ 
+<span class="k">class</span> <span class="nc">VietorisRipsComplex</span><span class="p">(</span><span class="n">SimplicialComplex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">distfcn</span><span class="o">=</span><span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pts</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pts</span><span class="p">))</span> <span class="k">if</span> <span class="n">labels</span><span class="o">==</span><span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pts</span><span class="p">)</span> <span class="k">else</span> <span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distfcn</span> <span class="o">=</span> <span class="n">distfcn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">construct_network</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distfcn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_simplices</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">find_cliques</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="p">))))</span>
+ 
+    <span class="k">def</span> <span class="nf">construct_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">distfcn</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+        <span class="n">zips</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">zips</span><span class="p">,</span> <span class="n">zips</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">!=</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">distfcn</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>
+                    <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">g</span>
 </pre></div>
 
 </div>
@@ -11929,17 +11854,11 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">):</span>
-
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">atom</span> <span class="ow">in</span> <span class="n">structure_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">newvector</span> <span class="o">=</span> <span class="n">atom</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">midpoint</span>
-        <span class="n">atom_new</span><span class="o">=</span><span class="p">[</span><span class="n">atom</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">atom</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">atom</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">newvector</span><span class="p">]</span>
-        <span class="n">structure_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">atom_new</span>
-
-    <span class="k">return</span> <span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">n_faces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">face</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">face</span><span class="p">)</span><span class="o">==</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">face_set</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11949,326 +11868,17 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">):</span>
-    
-        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span>
-            <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">)))</span>
-            <span class="c1">#density_maps[counter]=np.append(np.zeros((120,120,120)))</span>
-        <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">])</span>    
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">atom</span> <span class="ow">in</span> <span class="n">layers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">atom</span><span class="p">:</span>
-                <span class="n">x</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">+</span><span class="mi">60</span>
-                <span class="n">y</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">+</span><span class="mi">60</span>
-                <span class="n">z</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">+</span><span class="mi">60</span>
-                
-                <span class="k">for</span> <span class="n">xx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">yy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
-                        <span class="k">for</span> <span class="n">zz</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
-                            <span class="n">r</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">zz</span><span class="p">)))</span>
-                            <span class="n">density</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
-                            <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)][</span><span class="n">x</span><span class="o">+</span><span class="n">xx</span><span class="p">][</span><span class="n">y</span><span class="o">+</span><span class="n">yy</span><span class="p">][</span><span class="n">z</span><span class="o">+</span><span class="n">zz</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)][</span><span class="n">x</span><span class="o">+</span><span class="n">xx</span><span class="p">][</span><span class="n">y</span><span class="o">+</span><span class="n">yy</span><span class="p">][</span><span class="n">z</span><span class="o">+</span><span class="n">zz</span><span class="p">]</span><span class="o">+</span><span class="n">density</span><span class="p">)</span>
-
-        <span class="c1">#This is only for plotting the data in python, otherwise a numpy array is made over all layers</span>
-        <span class="n">x_values</span><span class="o">=</span><span class="p">[]</span>
-        <span class="n">y_values</span><span class="o">=</span><span class="p">[]</span>
-        <span class="n">z_values</span><span class="o">=</span><span class="p">[]</span>
-        <span class="n">density_values</span> <span class="o">=</span> <span class="p">[]</span>
-        
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">120</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.0</span><span class="p">:</span>
-                        <span class="n">x_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-                        <span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-                        <span class="n">z_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-                        <span class="n">density_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">density_maps</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="n">z</span><span class="p">])</span>
-        
-        <span class="k">return</span> <span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span>               
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">deep_learning</span><span class="p">(</span><span class="n">protein_train</span><span class="p">,</span><span class="n">protein_test</span><span class="p">,</span><span class="n">protein_target</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
-    <span class="kn">from</span> <span class="nn">keras.layers.convolutional</span> <span class="kn">import</span> <span class="n">Conv3D</span>
-    <span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv3D</span><span class="p">,</span> <span class="n">MaxPooling3D</span><span class="p">,</span><span class="n">Activation</span><span class="p">,</span><span class="n">Reshape</span><span class="p">,</span><span class="n">Dense</span>
-    <span class="kn">from</span> <span class="nn">keras.layers.normalization</span> <span class="kn">import</span> <span class="n">BatchNormalization</span>
-    <span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
-    
-    <span class="kn">import</span> <span class="nn">keras.backend</span> <span class="kn">as</span> <span class="nn">K</span> <span class="c1">#For compile</span>
-    
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Start training&#39;</span><span class="p">)</span>
-    <span class="n">seq</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
-
-    <span class="c1">#seq.add(Conv3D(11, 3, 3, 3, activation=&#39;relu&#39;, </span>
-                            <span class="c1">#border_mode=&#39;valid&#39;, name=&#39;conv1&#39;,</span>
-                            <span class="c1">#subsample=(1, 1, 1),</span>
-                            <span class="c1">#dim_ordering=&#39;th&#39;, </span>
-                            <span class="c1">#input_shape=(11,120, 120, 120)))</span>
-
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">)))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-    
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-   
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv3D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">())</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling3D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;channels_first&#39;</span><span class="p">))</span>
-
-    
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,)))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span><span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Activation</span><span class="p">(</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
-
-    <span class="c1">#seq.add(Activation(&#39;linear&#39;))</span>
-    <span class="n">seq</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
-    
-    
-
-    <span class="n">seq</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;ready&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">mean_pred</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
-    
-    <span class="c1">#protein_target=np.random.rand(16)</span>
-    <span class="c1">#protein_target=np.random.rand(16,269748)</span>
-    <span class="c1">#protein_train=np.random.rand(16,11,120,120,120)</span>
-
-    <span class="n">adam</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.0003</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
-    <span class="n">seq</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mean_squared_error&#39;</span><span class="p">,</span>
-            <span class="n">optimizer</span><span class="o">=</span><span class="n">adam</span><span class="p">,</span>
-              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">mean_pred</span><span class="p">])</span>
-
-    
-    <span class="n">seq</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">protein_train</span><span class="p">,</span><span class="n">protein_target</span><span class="p">,</span>
-          <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-          <span class="n">batch_size</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-    
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Training done&#39;</span><span class="p">)</span>
-    
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    
-    
-    <span class="c1">#Dir path</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    
-    <span class="n">files</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/models/&#39;</span> <span class="c1">#str(args[0])</span>
-    <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
-        <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Save or load&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;-r&#39;</span><span class="p">:</span>
-            <span class="n">args</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span>
-            <span class="k">break</span>
-        <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;-s&#39;</span><span class="p">:</span>
-            <span class="n">args</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span>
-            <span class="k">break</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">break</span>
-
-    <span class="n">df</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/cross_val_sets.xls&#39;</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">=</span><span class="p">{}</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-         <span class="n">targets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Targets&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-
-    <span class="n">dir_home</span><span class="o">=</span><span class="s1">&#39;/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/&#39;</span>
-    <span class="n">datasets</span><span class="o">=</span><span class="p">{}</span>
-
-    <span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_home</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
-                <span class="n">datasets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
-
-    <span class="n">protein_train</span><span class="o">=</span><span class="p">[]</span>
-    <span class="n">protein_test</span><span class="o">=</span><span class="p">[]</span>
-    <span class="n">protein_target</span><span class="o">=</span><span class="p">[]</span>
-    <span class="n">prot_counter_train</span><span class="o">=</span><span class="mi">1</span>
-    <span class="n">target_counter</span><span class="o">=</span><span class="mi">0</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">protein_list</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        
-        <span class="k">for</span> <span class="n">prot_counter</span><span class="p">,</span><span class="n">protein</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">protein_list</span><span class="p">):</span>
-            
-
-            <span class="n">pdb_list</span><span class="o">=</span><span class="p">[]</span>
-            <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_home</span> <span class="o">+</span> <span class="n">protein</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">):</span>
-                    <span class="n">pdb_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dir_home</span> <span class="o">+</span> <span class="n">protein</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="nb">file</span><span class="p">)</span>
-
-
-            <span class="n">density_maps</span><span class="o">=</span><span class="p">[]</span>
-            <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">filename_pdb</span> <span class="ow">in</span> <span class="n">pdb_list</span><span class="p">:</span>
-                    <span class="k">print</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">)</span>
-                    <span class="n">percent</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">),</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-                    <span class="c1">#print(str((counter+1)) +&#39;/&#39;+ str(len(pdb_list)) + &#39;, &#39; + str(percent)+&#39;%&#39;)</span>
-                    
-
-                    <span class="c1">#filename_pdb = &#39;/home/joakim/Downloads/5eh6.pdb&#39;#&#39;/home/joakim/Downloads/2HIY_A.pdb&#39; #&#39;/home/joakim/Downloads/D1A2K-a0a-merged.pdb&#39;</span>
-                    <span class="k">try</span><span class="p">:</span> 
-                        <span class="n">PDBobj</span> <span class="o">=</span> <span class="n">PDBParser</span><span class="p">()</span>
-                        <span class="n">structure</span> <span class="o">=</span> <span class="n">PDBobj</span><span class="o">.</span><span class="n">get_structure</span><span class="p">(</span><span class="n">filename_pdb</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>
-
-                    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> 
-                        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;IO Error&#39;</span><span class="p">,</span> <span class="n">filename_pdb</span><span class="p">)</span>       
-                        <span class="k">while</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
-                            <span class="n">input1</span><span class="o">=</span><span class="nb">raw_input</span><span class="p">(</span><span class="s2">&quot;Error parsing PDB file! Continue(y/n)...&quot;</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;y&#39;</span><span class="p">:</span>
-                                <span class="k">break</span>
-                            <span class="k">elif</span> <span class="n">input1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
-                                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-
-                    
-
-                    <span class="n">structure_data</span> <span class="o">=</span> <span class="n">find_structure_params</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
-
-                    <span class="n">midpoint</span> <span class="o">=</span> <span class="n">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">)</span> <span class="c1">#Avrundning gör att det blir lite konstigt,!! Kolla upp</span>
-
-                    <span class="n">structure_data</span> <span class="o">=</span> <span class="n">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">)</span>
-
-                    <span class="n">layers</span> <span class="o">=</span> <span class="n">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">)</span>
-
-                    <span class="c1">#Create 11 density maps (zeros)</span>
-                    <span class="k">if</span> <span class="s1">&#39;a0a&#39;</span> <span class="ow">in</span> <span class="n">filename_pdb</span> <span class="ow">and</span> <span class="n">prot_counter</span><span class="o">!=</span><span class="n">prot_counter_train</span><span class="p">:</span>
-                        <span class="n">protein_target</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
-                        <span class="p">(</span><span class="n">protein_target</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span> <span class="o">=</span> <span class="n">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">protein_target</span><span class="p">,</span><span class="n">target_counter</span><span class="p">)</span>
-                        <span class="n">target_counter</span><span class="o">=</span><span class="n">target_counter</span><span class="o">+</span><span class="mi">1</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">density_maps</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
-                        <span class="p">(</span><span class="n">density_maps</span><span class="p">,</span><span class="n">x_values</span><span class="p">,</span><span class="n">y_values</span><span class="p">,</span><span class="n">z_values</span><span class="p">,</span><span class="n">density_values</span><span class="p">)</span> <span class="o">=</span> <span class="n">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">)</span>
-                        <span class="n">counter</span><span class="o">=</span><span class="n">counter</span><span class="o">+</span><span class="mi">1</span>
-                        
-            <span class="k">if</span> <span class="n">prot_counter</span><span class="o">==</span><span class="n">prot_counter_train</span><span class="p">:</span>
-                <span class="n">protein_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">density_maps</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">protein_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">density_maps</span><span class="p">))</span>
-    
-    <span class="n">protein_target</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">protein_target</span><span class="p">)</span>
-    <span class="n">protein_train</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">protein_train</span><span class="p">)</span>
-    <span class="n">protein_test</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">protein_test</span><span class="p">)</span>
-
-
-    
-<span class="c1">#For saving and loading the array as an compressed npz file</span>
-    <span class="k">if</span> <span class="s1">&#39;-s&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Do not use save(-s) and read(-r) at the same time&#39;</span><span class="p">)</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="s1">&#39;-s&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Saving files...&#39;</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;protein_train&#39;</span><span class="p">,</span> <span class="n">protein_train</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;protein_test&#39;</span><span class="p">,</span> <span class="n">protein_test</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;protein_target&#39;</span><span class="p">,</span> <span class="n">protein_target</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Files saved as &quot;protein_train.npz&quot;,&quot;protein_test.npz&quot;,&quot;protein_target.npz&quot;&#39;</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Loading files...&#39;</span><span class="p">)</span>
-       <span class="c1"># protein_train = np.load(&#39;protein_train.npz&#39;)</span>
-       <span class="c1"># protein_test = np.load(&#39;protein_test.npz&#39;)</span>
-       <span class="c1"># protein_target = np.load(&#39;protein_target.npz&#39;)</span>
-        
-        <span class="n">protein_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/x_train_6.npz&#39;</span><span class="p">)</span>
-        <span class="n">protein_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/joakim/Downloads/y_train_6.npz&#39;</span><span class="p">)</span>
-        
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_train</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">protein_train</span><span class="o">=</span><span class="n">protein_train</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="c1">#for key,array in protein_test.items():</span>
-            <span class="c1">#protein_test=protein_test[key]</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">array</span> <span class="ow">in</span> <span class="n">protein_target</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">protein_target</span><span class="o">=</span><span class="n">protein_target</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-            
-            
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Files loaded&#39;</span><span class="p">)</span>
-        
-    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">protein_train</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">protein_target</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">protein_test</span><span class="p">))</span>
-    
-        
-
-
-    <span class="n">deep_learning</span><span class="p">(</span><span class="n">protein_train</span><span class="p">,</span><span class="n">protein_test</span><span class="p">,</span><span class="n">protein_target</span><span class="p">)</span>
-        
-            
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-  <span class="n">main</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+<span class="n">sampl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="c1">#sc = SimplicialComplex([(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;)])</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SimplicialComplex</span><span class="p">(</span><span class="n">sampl</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+<span class="n">faces</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+<span class="c1">#sg=VietorisRipsComplex(sc)</span>
+<span class="n">sg2</span><span class="o">=</span><span class="n">AlphaComplex</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12285,15 +11895,9 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Save or load-s
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a67d-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a53d-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a86a-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a74c-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a71d-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a83b-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a42a-merged.pdb
-/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a19c-merged.pdb
+<pre>2
+1
+&lt;__main__.SimplicialComplex instance at 0x7f69ccc9be18&gt;
 </pre>
 </div>
 </div>
@@ -12306,44 +11910,96 @@ div#notebook {
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-7-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">    143</span> 
-<span class="ansi-green-intense-fg ansi-bold">    144</span> <span class="ansi-green-fg">if</span> __name__ <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;__main__&#39;</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 145</span><span class="ansi-red-fg">   </span>main<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-38-297d30087939&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> faces<span class="ansi-blue-fg">(</span>sc<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-red-fg">#sg=VietorisRipsComplex(sc)</span>
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg"> </span>sg2<span class="ansi-blue-fg">=</span>AlphaComplex<span class="ansi-blue-fg">(</span>sc<span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#39;1&#39;</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">&lt;ipython-input-7-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     59</span>                     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     60</span>                         PDBobj <span class="ansi-blue-fg">=</span> PDBParser<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 61</span><span class="ansi-red-fg">                         </span>structure <span class="ansi-blue-fg">=</span> PDBobj<span class="ansi-blue-fg">.</span>get_structure<span class="ansi-blue-fg">(</span>filename_pdb<span class="ansi-blue-fg">,</span> filename_pdb<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     62</span> 
-<span class="ansi-green-intense-fg ansi-bold">     63</span>                     <span class="ansi-green-fg">except</span> IOError<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">&lt;ipython-input-13-cdd26d97ac78&gt;</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, points, epsilon, labels, distfcn)</span>
+<span class="ansi-green-intense-fg ansi-bold">     24</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> points<span class="ansi-blue-fg">,</span> epsilon<span class="ansi-blue-fg">,</span> labels<span class="ansi-blue-fg">=</span>None<span class="ansi-blue-fg">,</span> distfcn<span class="ansi-blue-fg">=</span>distance<span class="ansi-blue-fg">.</span>euclidean<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     25</span>         self<span class="ansi-blue-fg">.</span>pts <span class="ansi-blue-fg">=</span> points
+<span class="ansi-green-fg">---&gt; 26</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>labels <span class="ansi-blue-fg">=</span> range<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>pts<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> labels<span class="ansi-blue-fg">==</span>None <span class="ansi-green-fg">or</span> len<span class="ansi-blue-fg">(</span>labels<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">!=</span>len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>pts<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">else</span> labels
+<span class="ansi-green-intense-fg ansi-bold">     27</span>         self<span class="ansi-blue-fg">.</span>epsilon <span class="ansi-blue-fg">=</span> epsilon
+<span class="ansi-green-intense-fg ansi-bold">     28</span>         self<span class="ansi-blue-fg">.</span>distfcn <span class="ansi-blue-fg">=</span> distfcn
 
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/PDBParser.pyc</span> in <span class="ansi-cyan-fg">get_structure</span><span class="ansi-blue-fg">(self, id, file)</span>
-<span class="ansi-green-intense-fg ansi-bold">     80</span> 
-<span class="ansi-green-intense-fg ansi-bold">     81</span>             <span class="ansi-green-fg">with</span> as_handle<span class="ansi-blue-fg">(</span>file<span class="ansi-blue-fg">,</span> mode<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;rU&#39;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">as</span> handle<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 82</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>_parse<span class="ansi-blue-fg">(</span>handle<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     83</span> 
-<span class="ansi-green-intense-fg ansi-bold">     84</span>             self<span class="ansi-blue-fg">.</span>structure_builder<span class="ansi-blue-fg">.</span>set_header<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>header<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/PDBParser.pyc</span> in <span class="ansi-cyan-fg">_parse</span><span class="ansi-blue-fg">(self, header_coords_trailer)</span>
-<span class="ansi-green-intense-fg ansi-bold">    103</span>         self<span class="ansi-blue-fg">.</span>header<span class="ansi-blue-fg">,</span> coords_trailer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_get_header<span class="ansi-blue-fg">(</span>header_coords_trailer<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    104</span>         <span class="ansi-red-fg"># Parse the atomic data; return the PDB file trailer</span>
-<span class="ansi-green-fg">--&gt; 105</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>trailer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_parse_coordinates<span class="ansi-blue-fg">(</span>coords_trailer<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    106</span> 
-<span class="ansi-green-intense-fg ansi-bold">    107</span>     <span class="ansi-green-fg">def</span> _get_header<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> header_coords_trailer<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/PDBParser.pyc</span> in <span class="ansi-cyan-fg">_parse_coordinates</span><span class="ansi-blue-fg">(self, coords_trailer)</span>
-<span class="ansi-green-intense-fg ansi-bold">    173</span>                 <span class="ansi-red-fg"># atomic coordinates</span>
-<span class="ansi-green-intense-fg ansi-bold">    174</span>                 <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">--&gt; 175</span><span class="ansi-red-fg">                     </span>x <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">38</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    176</span>                     y <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">38</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">46</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    177</span>                     z <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">46</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">54</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
+<span class="ansi-red-fg">AttributeError</span>: SimplicialComplex instance has no attribute &#39;__len__&#39;</pre>
 </div>
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">Delaunay</span><span class="p">,</span> <span class="n">distance</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">or_</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+ 
+<span class="k">def</span> <span class="nf">facesiter</span><span class="p">(</span><span class="n">simplex</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">simplex</span><span class="p">)):</span>
+        <span class="k">yield</span> <span class="n">simplex</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">simplex</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">):]</span>
+ 
+<span class="k">def</span> <span class="nf">flattening_simplex</span><span class="p">(</span><span class="n">simplices</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">simplex</span> <span class="ow">in</span> <span class="n">simplices</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">simplex</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">point</span>
+
+<span class="k">def</span> <span class="nf">get_allpoints</span><span class="p">(</span><span class="n">simplices</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">flattening_simplex</span><span class="p">(</span><span class="n">simplices</span><span class="p">))</span>
+ 
+<span class="k">def</span> <span class="nf">contain_detachededges</span><span class="p">(</span><span class="n">simplex</span><span class="p">,</span> <span class="n">distdict</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">simplex</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">distdict</span><span class="p">[</span><span class="n">simplex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">simplex</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">*</span><span class="n">epsilon</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">or_</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">contain_detachededges</span><span class="p">,</span> <span class="n">distdict</span><span class="o">=</span><span class="n">distdict</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">),</span> <span class="n">facesiter</span><span class="p">(</span><span class="n">simplex</span><span class="p">)))</span>
+ 
+<span class="k">class</span> <span class="nc">AlphaComplex</span><span class="p">(</span><span class="n">SimplicialComplex</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">distfcn</span><span class="o">=</span><span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pts</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pts</span><span class="p">))</span> <span class="k">if</span> <span class="n">labels</span><span class="o">==</span><span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pts</span><span class="p">)</span> <span class="k">else</span> <span class="n">labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distfcn</span> <span class="o">=</span> <span class="n">distfcn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_simplices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">construct_simplices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">distfcn</span><span class="p">))</span>
+ 
+    <span class="k">def</span> <span class="nf">calculate_distmatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">distfcn</span><span class="p">):</span>
+        <span class="n">distdict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)):</span>
+                <span class="n">distdict</span><span class="p">[(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">j</span><span class="p">])]</span> <span class="o">=</span> <span class="n">distfcn</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">distdict</span>
+ 
+    <span class="k">def</span> <span class="nf">construct_simplices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">distfcn</span><span class="p">):</span>
+        <span class="n">delaunay</span> <span class="o">=</span> <span class="n">Delaunay</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">delaunay_simplices</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">delaunay</span><span class="o">.</span><span class="n">simplices</span><span class="p">)</span>
+        <span class="n">distdict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distmatrix</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">distfcn</span><span class="p">)</span>
+ 
+        <span class="n">simplices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">simplex</span> <span class="ow">in</span> <span class="n">delaunay_simplices</span><span class="p">:</span>
+            <span class="n">faces</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">facesiter</span><span class="p">(</span><span class="n">simplex</span><span class="p">))</span>
+            <span class="n">detached</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">contain_detachededges</span><span class="p">,</span> <span class="n">distdict</span><span class="o">=</span><span class="n">distdict</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">),</span> <span class="n">faces</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">or_</span><span class="p">,</span> <span class="n">detached</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">simplex</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">face</span><span class="p">,</span> <span class="n">notkeep</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">faces</span><span class="p">,</span> <span class="n">detached</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">notkeep</span><span class="p">:</span>
+                            <span class="n">simplices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">simplices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simplex</span><span class="p">)</span>
+        <span class="n">simplices</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">simplex</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">simplex</span><span class="p">)),</span> <span class="n">simplices</span><span class="p">)</span>
+        <span class="n">simplices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">simplices</span><span class="p">))</span>
+ 
+        <span class="n">allpts</span> <span class="o">=</span> <span class="n">get_allpoints</span><span class="p">(</span><span class="n">simplices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">-</span><span class="n">allpts</span><span class="p">):</span>
+            <span class="n">simplices</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">point</span><span class="p">,)]</span>
+ 
+        <span class="k">return</span> <span class="n">simplices</span>
+</pre></div>
+
+</div>
 </div>
 </div>
 

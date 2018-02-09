@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[8]:
+# In[1]:
 
 
 import os
@@ -53,7 +53,7 @@ def find_structure_params(structure):
     return (structure_data)
 
 
-# In[9]:
+# In[2]:
 
 
 def make_atom_layers(structure_data):
@@ -121,7 +121,7 @@ def make_atom_layers(structure_data):
     return(layers)
 
 
-# In[10]:
+# In[3]:
 
 
 def find_midpoint(structure_data):
@@ -136,7 +136,7 @@ def find_midpoint(structure_data):
     return(midpoint)    
 
 
-# In[11]:
+# In[4]:
 
 
 def normalize_in_origo(midpoint,structure_data):
@@ -149,7 +149,7 @@ def normalize_in_origo(midpoint,structure_data):
     return (structure_data)
 
 
-# In[12]:
+# In[5]:
 
 
 def make_density_maps(layers,density_maps,counter):
@@ -189,7 +189,7 @@ def make_density_maps(layers,density_maps,counter):
         return (density_maps,x_values,y_values,z_values,density_values)               
 
 
-# In[13]:
+# In[6]:
 
 
 def deep_learning(protein_train,protein_test,protein_target):
@@ -307,7 +307,7 @@ def deep_learning(protein_train,protein_test,protein_target):
     
 
 
-# In[14]:
+# In[7]:
 
 
 def main():
