@@ -11773,7 +11773,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -11832,7 +11832,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_atom_layers</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11907,7 +11907,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">find_midpoint</span><span class="p">(</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11929,7 +11929,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">normalize_in_origo</span><span class="p">(</span><span class="n">midpoint</span><span class="p">,</span><span class="n">structure_data</span><span class="p">):</span>
@@ -11949,7 +11949,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">make_density_maps</span><span class="p">(</span><span class="n">layers</span><span class="p">,</span><span class="n">density_maps</span><span class="p">,</span><span class="n">counter</span><span class="p">):</span>
@@ -11996,7 +11996,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">deep_learning</span><span class="p">(</span><span class="n">protein_train</span><span class="p">,</span><span class="n">protein_test</span><span class="p">,</span><span class="n">protein_target</span><span class="p">):</span>
@@ -12121,7 +12121,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -12285,115 +12285,15 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Save or load-r
--Loading files...
--Files loaded
-6
-6
-5
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Using TensorFlow backend.
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Start training
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv3d_1 (Conv3D)            (None, 16, 118, 118, 118) 4768      
-_________________________________________________________________
-max_pooling3d_1 (MaxPooling3 (None, 16, 58, 58, 58)    0         
-_________________________________________________________________
-conv3d_2 (Conv3D)            (None, 32, 56, 56, 56)    13856     
-_________________________________________________________________
-batch_normalization_1 (Batch (None, 32, 56, 56, 56)    224       
-_________________________________________________________________
-activation_1 (Activation)    (None, 32, 56, 56, 56)    0         
-_________________________________________________________________
-max_pooling3d_2 (MaxPooling3 (None, 32, 27, 27, 27)    0         
-_________________________________________________________________
-conv3d_3 (Conv3D)            (None, 32, 25, 25, 25)    27680     
-_________________________________________________________________
-batch_normalization_2 (Batch (None, 32, 25, 25, 25)    100       
-_________________________________________________________________
-activation_2 (Activation)    (None, 32, 25, 25, 25)    0         
-_________________________________________________________________
-conv3d_4 (Conv3D)            (None, 64, 23, 23, 23)    55360     
-_________________________________________________________________
-batch_normalization_3 (Batch (None, 64, 23, 23, 23)    92        
-_________________________________________________________________
-activation_3 (Activation)    (None, 64, 23, 23, 23)    0         
-_________________________________________________________________
-max_pooling3d_3 (MaxPooling3 (None, 64, 11, 11, 11)    0         
-_________________________________________________________________
-conv3d_5 (Conv3D)            (None, 128, 9, 9, 9)      221312    
-_________________________________________________________________
-batch_normalization_4 (Batch (None, 128, 9, 9, 9)      36        
-_________________________________________________________________
-activation_4 (Activation)    (None, 128, 9, 9, 9)      0         
-_________________________________________________________________
-conv3d_6 (Conv3D)            (None, 128, 7, 7, 7)      442496    
-_________________________________________________________________
-batch_normalization_5 (Batch (None, 128, 7, 7, 7)      28        
-_________________________________________________________________
-activation_5 (Activation)    (None, 128, 7, 7, 7)      0         
-_________________________________________________________________
-conv3d_7 (Conv3D)            (None, 256, 5, 5, 5)      884992    
-_________________________________________________________________
-batch_normalization_6 (Batch (None, 256, 5, 5, 5)      20        
-_________________________________________________________________
-activation_6 (Activation)    (None, 256, 5, 5, 5)      0         
-_________________________________________________________________
-conv3d_8 (Conv3D)            (None, 512, 3, 3, 3)      3539456   
-_________________________________________________________________
-batch_normalization_7 (Batch (None, 512, 3, 3, 3)      12        
-_________________________________________________________________
-activation_7 (Activation)    (None, 512, 3, 3, 3)      0         
-_________________________________________________________________
-max_pooling3d_4 (MaxPooling3 (None, 512, 1, 1, 1)      0         
-_________________________________________________________________
-reshape_1 (Reshape)          (None, 512)               0         
-_________________________________________________________________
-dense_1 (Dense)              (None, 256)               131328    
-_________________________________________________________________
-activation_8 (Activation)    (None, 256)               0         
-_________________________________________________________________
-dense_2 (Dense)              (None, 128)               32896     
-_________________________________________________________________
-activation_9 (Activation)    (None, 128)               0         
-_________________________________________________________________
-dense_3 (Dense)              (None, 1)                 129       
-=================================================================
-Total params: 5,354,785
-Trainable params: 5,354,529
-Non-trainable params: 256
-_________________________________________________________________
-ready
-Epoch 1/20
-6/6 [==============================] - 125s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7052
-Epoch 2/20
-6/6 [==============================] - 124s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7052
-Epoch 3/20
-6/6 [==============================] - 124s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7053
-Epoch 4/20
-6/6 [==============================] - 125s 21s/step - loss: 7.0417 - acc: 0.0000e+00 - mean_pred: -1.7052
-Epoch 5/20
+<pre>Save or load-s
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a67d-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a53d-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a86a-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a74c-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a71d-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a83b-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a42a-merged.pdb
+/home/joakim/Downloads/CnM-dataset/MOAL_Benchmark_test/D1JPS/D1JPS-a19c-merged.pdb
 </pre>
 </div>
 </div>
@@ -12407,87 +12307,38 @@ Epoch 5/20
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-14-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">&lt;ipython-input-7-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
 <span class="ansi-green-intense-fg ansi-bold">    143</span> 
 <span class="ansi-green-intense-fg ansi-bold">    144</span> <span class="ansi-green-fg">if</span> __name__ <span class="ansi-blue-fg">==</span> <span class="ansi-blue-fg">&#39;__main__&#39;</span><span class="ansi-blue-fg">:</span>
 <span class="ansi-green-fg">--&gt; 145</span><span class="ansi-red-fg">   </span>main<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">&lt;ipython-input-14-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">    138</span> 
-<span class="ansi-green-intense-fg ansi-bold">    139</span> 
-<span class="ansi-green-fg">--&gt; 140</span><span class="ansi-red-fg">     </span>deep_learning<span class="ansi-blue-fg">(</span>protein_train<span class="ansi-blue-fg">,</span>protein_test<span class="ansi-blue-fg">,</span>protein_target<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    141</span> 
-<span class="ansi-green-intense-fg ansi-bold">    142</span> 
+<span class="ansi-green-fg">&lt;ipython-input-7-68133572eb92&gt;</span> in <span class="ansi-cyan-fg">main</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     59</span>                     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     60</span>                         PDBobj <span class="ansi-blue-fg">=</span> PDBParser<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 61</span><span class="ansi-red-fg">                         </span>structure <span class="ansi-blue-fg">=</span> PDBobj<span class="ansi-blue-fg">.</span>get_structure<span class="ansi-blue-fg">(</span>filename_pdb<span class="ansi-blue-fg">,</span> filename_pdb<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     62</span> 
+<span class="ansi-green-intense-fg ansi-bold">     63</span>                     <span class="ansi-green-fg">except</span> IOError<span class="ansi-blue-fg">:</span>
 
-<span class="ansi-green-fg">&lt;ipython-input-13-2ab296961a36&gt;</span> in <span class="ansi-cyan-fg">deep_learning</span><span class="ansi-blue-fg">(protein_train, protein_test, protein_target)</span>
-<span class="ansi-green-intense-fg ansi-bold">    108</span>     seq.fit(protein_train,protein_target,
-<span class="ansi-green-intense-fg ansi-bold">    109</span>           epochs<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">20</span><span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">--&gt; 110</span><span class="ansi-red-fg">           batch_size=9)
-</span><span class="ansi-green-intense-fg ansi-bold">    111</span> 
-<span class="ansi-green-intense-fg ansi-bold">    112</span>     <span class="ansi-green-fg">print</span><span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Training done&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/PDBParser.pyc</span> in <span class="ansi-cyan-fg">get_structure</span><span class="ansi-blue-fg">(self, id, file)</span>
+<span class="ansi-green-intense-fg ansi-bold">     80</span> 
+<span class="ansi-green-intense-fg ansi-bold">     81</span>             <span class="ansi-green-fg">with</span> as_handle<span class="ansi-blue-fg">(</span>file<span class="ansi-blue-fg">,</span> mode<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;rU&#39;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">as</span> handle<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 82</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>_parse<span class="ansi-blue-fg">(</span>handle<span class="ansi-blue-fg">.</span>readlines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     83</span> 
+<span class="ansi-green-intense-fg ansi-bold">     84</span>             self<span class="ansi-blue-fg">.</span>structure_builder<span class="ansi-blue-fg">.</span>set_header<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>header<span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/models.pyc</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    958</span>                               initial_epoch<span class="ansi-blue-fg">=</span>initial_epoch<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    959</span>                               steps_per_epoch<span class="ansi-blue-fg">=</span>steps_per_epoch<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">--&gt; 960</span><span class="ansi-red-fg">                               validation_steps=validation_steps)
-</span><span class="ansi-green-intense-fg ansi-bold">    961</span> 
-<span class="ansi-green-intense-fg ansi-bold">    962</span>     def evaluate(self, x, y, batch_size=32, verbose=1,
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/PDBParser.pyc</span> in <span class="ansi-cyan-fg">_parse</span><span class="ansi-blue-fg">(self, header_coords_trailer)</span>
+<span class="ansi-green-intense-fg ansi-bold">    103</span>         self<span class="ansi-blue-fg">.</span>header<span class="ansi-blue-fg">,</span> coords_trailer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_get_header<span class="ansi-blue-fg">(</span>header_coords_trailer<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    104</span>         <span class="ansi-red-fg"># Parse the atomic data; return the PDB file trailer</span>
+<span class="ansi-green-fg">--&gt; 105</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>trailer <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_parse_coordinates<span class="ansi-blue-fg">(</span>coords_trailer<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span> 
+<span class="ansi-green-intense-fg ansi-bold">    107</span>     <span class="ansi-green-fg">def</span> _get_header<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> header_coords_trailer<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
 
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/training.pyc</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1655</span>                               initial_epoch<span class="ansi-blue-fg">=</span>initial_epoch<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">   1656</span>                               steps_per_epoch<span class="ansi-blue-fg">=</span>steps_per_epoch<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">-&gt; 1657</span><span class="ansi-red-fg">                               validation_steps=validation_steps)
-</span><span class="ansi-green-intense-fg ansi-bold">   1658</span> 
-<span class="ansi-green-intense-fg ansi-bold">   1659</span>     def evaluate(self, x=None, y=None,
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/engine/training.pyc</span> in <span class="ansi-cyan-fg">_fit_loop</span><span class="ansi-blue-fg">(self, f, ins, out_labels, batch_size, epochs, verbose, callbacks, val_f, val_ins, shuffle, callback_metrics, initial_epoch, steps_per_epoch, validation_steps)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1211</span>                     batch_logs<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;size&#39;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>batch_ids<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1212</span>                     callbacks<span class="ansi-blue-fg">.</span>on_batch_begin<span class="ansi-blue-fg">(</span>batch_index<span class="ansi-blue-fg">,</span> batch_logs<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">-&gt; 1213</span><span class="ansi-red-fg">                     </span>outs <span class="ansi-blue-fg">=</span> f<span class="ansi-blue-fg">(</span>ins_batch<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1214</span>                     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> isinstance<span class="ansi-blue-fg">(</span>outs<span class="ansi-blue-fg">,</span> list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1215</span>                         outs <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>outs<span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/keras/backend/tensorflow_backend.pyc</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, inputs)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2355</span>         session <span class="ansi-blue-fg">=</span> get_session<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2356</span>         updated = session.run(fetches=fetches, feed_dict=feed_dict,
-<span class="ansi-green-fg">-&gt; 2357</span><span class="ansi-red-fg">                               **self.session_kwargs)
-</span><span class="ansi-green-intense-fg ansi-bold">   2358</span>         <span class="ansi-green-fg">return</span> updated<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span>len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>outputs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">   2359</span> 
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">run</span><span class="ansi-blue-fg">(self, fetches, feed_dict, options, run_metadata)</span>
-<span class="ansi-green-intense-fg ansi-bold">    893</span>     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    894</span>       result = self._run(None, fetches, feed_dict, options_ptr,
-<span class="ansi-green-fg">--&gt; 895</span><span class="ansi-red-fg">                          run_metadata_ptr)
-</span><span class="ansi-green-intense-fg ansi-bold">    896</span>       <span class="ansi-green-fg">if</span> run_metadata<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    897</span>         proto_data <span class="ansi-blue-fg">=</span> tf_session<span class="ansi-blue-fg">.</span>TF_GetBuffer<span class="ansi-blue-fg">(</span>run_metadata_ptr<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_run</span><span class="ansi-blue-fg">(self, handle, fetches, feed_dict, options, run_metadata)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1122</span>     <span class="ansi-green-fg">if</span> final_fetches <span class="ansi-green-fg">or</span> final_targets <span class="ansi-green-fg">or</span> <span class="ansi-blue-fg">(</span>handle <span class="ansi-green-fg">and</span> feed_dict_tensor<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1123</span>       results = self._do_run(handle, final_targets, final_fetches,
-<span class="ansi-green-fg">-&gt; 1124</span><span class="ansi-red-fg">                              feed_dict_tensor, options, run_metadata)
-</span><span class="ansi-green-intense-fg ansi-bold">   1125</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1126</span>       results <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">]</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_do_run</span><span class="ansi-blue-fg">(self, handle, target_list, fetch_list, feed_dict, options, run_metadata)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1319</span>     <span class="ansi-green-fg">if</span> handle <span class="ansi-green-fg">is</span> None<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1320</span>       return self._do_call(_run_fn, self._session, feeds, fetches, targets,
-<span class="ansi-green-fg">-&gt; 1321</span><span class="ansi-red-fg">                            options, run_metadata)
-</span><span class="ansi-green-intense-fg ansi-bold">   1322</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1323</span>       <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_do_call<span class="ansi-blue-fg">(</span>_prun_fn<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>_session<span class="ansi-blue-fg">,</span> handle<span class="ansi-blue-fg">,</span> feeds<span class="ansi-blue-fg">,</span> fetches<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_do_call</span><span class="ansi-blue-fg">(self, fn, *args)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1325</span>   <span class="ansi-green-fg">def</span> _do_call<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> fn<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1326</span>     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">-&gt; 1327</span><span class="ansi-red-fg">       </span><span class="ansi-green-fg">return</span> fn<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1328</span>     <span class="ansi-green-fg">except</span> errors<span class="ansi-blue-fg">.</span>OpError <span class="ansi-green-fg">as</span> e<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   1329</span>       message <span class="ansi-blue-fg">=</span> compat<span class="ansi-blue-fg">.</span>as_text<span class="ansi-blue-fg">(</span>e<span class="ansi-blue-fg">.</span>message<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/tensorflow/python/client/session.pyc</span> in <span class="ansi-cyan-fg">_run_fn</span><span class="ansi-blue-fg">(session, feed_dict, fetch_list, target_list, options, run_metadata)</span>
-<span class="ansi-green-intense-fg ansi-bold">   1304</span>           return tf_session.TF_Run(session, options,
-<span class="ansi-green-intense-fg ansi-bold">   1305</span>                                    feed_dict<span class="ansi-blue-fg">,</span> fetch_list<span class="ansi-blue-fg">,</span> target_list<span class="ansi-blue-fg">,</span>
-<span class="ansi-green-fg">-&gt; 1306</span><span class="ansi-red-fg">                                    status, run_metadata)
-</span><span class="ansi-green-intense-fg ansi-bold">   1307</span> 
-<span class="ansi-green-intense-fg ansi-bold">   1308</span>     <span class="ansi-green-fg">def</span> _prun_fn<span class="ansi-blue-fg">(</span>session<span class="ansi-blue-fg">,</span> handle<span class="ansi-blue-fg">,</span> feed_dict<span class="ansi-blue-fg">,</span> fetch_list<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">/home/joakim/anaconda2/lib/python2.7/site-packages/Bio/PDB/PDBParser.pyc</span> in <span class="ansi-cyan-fg">_parse_coordinates</span><span class="ansi-blue-fg">(self, coords_trailer)</span>
+<span class="ansi-green-intense-fg ansi-bold">    173</span>                 <span class="ansi-red-fg"># atomic coordinates</span>
+<span class="ansi-green-intense-fg ansi-bold">    174</span>                 <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 175</span><span class="ansi-red-fg">                     </span>x <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">30</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">38</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    176</span>                     y <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">38</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">46</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    177</span>                     z <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">46</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">54</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
 </div>
