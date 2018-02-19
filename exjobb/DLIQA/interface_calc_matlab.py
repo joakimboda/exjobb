@@ -122,10 +122,12 @@ def calc_dist_matrix(chain_one, chain_two,outfile,alphaprot) :
 
 def main():
     
+    cwd = os.getcwd()
     #Dir path
     #args = sys.argv[1:]
-    pdb_dir='D:\Downloads\CnM-dataset\models'#'/home/joakim/Downloads/models' #str(args[0]) 
-    cwd = os.getcwd()
+    
+    pdb_dir= cwd+'/models' #'D:\Downloads\CnM-dataset\models'#'/home/joakim/Downloads/models' #str(args[0]) 
+    
     
     while 'true':
         input1=raw_input("Save or load ")
@@ -148,8 +150,8 @@ def main():
             if file.endswith(".pdb"):
                 pdb_list.append([pdb_dir,file])
       
-        #valuefile='/home/joakim/Downloads/CnM.featuresNPqDNZ'#'D:\Downloads\CnM.featuresNPqDNZ'
-        #value_df=pandas.read_csv(valuefile,delim_whitespace=1)
+        valuefile= cwd+'CnM.featuresNPqDNZ'#'/home/joakim/Downloads/CnM.featuresNPqDNZ'#'D:\Downloads\CnM.featuresNPqDNZ'
+        value_df=pandas.read_csv(valuefile,delim_whitespace=1)
 
         #Just a check to se if the data_set dir exist, in this case it removes it and all the files in it and make a new one
         if os.path.exists(cwd + "/pts_dir"):
@@ -187,7 +189,7 @@ def main():
                         sys.exit()
 
            
-            #score.append(value_df.loc[((value_df['#'] == pdb_list[counter][1][:-11]),'CPscore')].values[0])
+            score.append(value_df.loc[((value_df['#'] == pdb_list[counter][1][:-11]),'CPscore')].values[0])
 
 
 
