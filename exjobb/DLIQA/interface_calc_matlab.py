@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[106]:
+# In[1]:
 
 
 import Bio
@@ -26,26 +26,35 @@ from Bio import BiopythonWarning
 warnings.simplefilter('ignore', BiopythonWarning)
 
 
-# In[107]:
+# Calaculates an alpha complex from coordinates for a choosen atomtype and puts them into an dict. Dict key = name of the protein
+
+# In[2]:
 
 
-def calculate_alpha_complex(alphaprot,cwd):
+def calculate_alpha_complex(BarCollection, name, alphaprot, cwd):
     
     for key,coords in alphaprot.items():
+        Bars = []
         tmpoutfile =open(cwd+'/pts_dir/tmp.csv', 'w')
         tmpoutfile.write('x1,x2,x3\n')
+        
         for coord in coords:
             tmpoutfile.write(coord+'\n')
         tmpoutfile.close()
         os.system('Rscript PH_Alpha.R '+ cwd+'/pts_dir/tmp.csv '+ cwd+'/pts_dir'+'/tmp.out')
+        
+        tmpinfile = open(cwd+'/pts_dir/tmp.out')
+        lines = tmpinfile.read().splitlines()
+        
+        for line in lines[1:]:
+            a,b,c,d = line.split()
+            if d!='Inf':
+                if float(d)-float(c) >= 0.01: #If the bar is to small we don't need to use it (more data for nothing)
+                    Bars.append([int(b), float(c), float(d)])
+        BarCollection[name] = Bars    
 
-    
-    
-    
-    
 
-
-# In[ ]:
+# In[3]:
 
 
 def calc_residue_dist(residue1, residue2, outfile, atom1_used, atom2_used, alphaprot) :
@@ -72,16 +81,16 @@ def calc_residue_dist(residue1, residue2, outfile, atom1_used, atom2_used, alpha
                     z=str(atom1.get_coord()[2])
                     if 'C' in atom1.get_name():# and
                         outfile.write('0'+' '+'1'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('C', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('C', []).append(x+','+y+','+z)
                     elif 'O' in atom1.get_name():
                         outfile.write('0'+' '+'2'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('O', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('O', []).append(x+','+y+','+z)
                     elif 'N' in atom1.get_name():
                         outfile.write('0'+' '+'3'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('N', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('N', []).append(x+','+y+','+z)
                     elif 'S' in atom1.get_name():
                         outfile.write('0'+' '+'4'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('S', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('S', []).append(x+','+y+','+z)
                 if a2_serial not in atom2_used:
                     atom2_used.append(a2_serial)
                     x=str(atom2.get_coord()[0])
@@ -89,16 +98,16 @@ def calc_residue_dist(residue1, residue2, outfile, atom1_used, atom2_used, alpha
                     z=str(atom2.get_coord()[2])
                     if 'C' in atom1.get_name():
                         outfile.write('1'+' '+'1'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('C', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('C', []).append(x+','+y+','+z)
                     elif 'O' in atom1.get_name():
                         outfile.write('1'+' '+'2'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('O', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('O', []).append(x+','+y+','+z)
                     elif 'N' in atom1.get_name():
                         outfile.write('1'+' '+'3'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('N', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('N', []).append(x+','+y+','+z)
                     elif 'S' in atom1.get_name():
                         outfile.write('1'+' '+'4'+' '+x+' '+y+' '+z+'\n')
-                        alphaprot.setdefault('S', []).append(x+' '+y+' '+z)
+                        alphaprot.setdefault('S', []).append(x+','+y+','+z)
                 
     return(alphaprot)
 
@@ -117,7 +126,7 @@ def calc_dist_matrix(chain_one, chain_two,outfile,alphaprot) :
     return(alphaprot)
 
 
-# In[ ]:
+# In[4]:
 
 
 def main():
@@ -150,7 +159,7 @@ def main():
             if file.endswith(".pdb"):
                 pdb_list.append([pdb_dir,file])
       
-        valuefile= cwd+'CnM.featuresNPqDNZ'#'/home/joakim/Downloads/CnM.featuresNPqDNZ'#'D:\Downloads\CnM.featuresNPqDNZ'
+        valuefile= cwd+'/CnM.featuresNPqDNZ'#'/home/joakim/Downloads/CnM.featuresNPqDNZ'#'D:\Downloads\CnM.featuresNPqDNZ'
         value_df=pandas.read_csv(valuefile,delim_whitespace=1)
 
         #Just a check to se if the data_set dir exist, in this case it removes it and all the files in it and make a new one
@@ -165,14 +174,17 @@ def main():
         
         score=[]
         dist_matrix=[]
+        BarCollection = {}
         for counter, filepath_pdb in enumerate(pdb_list):
+            name=pdb_list[counter][1][:-11]
             
             working_file=open(cwd + '/pts_dir/working_file.txt', 'a')
-            working_file.write(pdb_list[counter][1][:-11]+'\n') #Writes what pdb have been worked on in working_file.txt
+            working_file.write(name+'\n') #Writes what pdb have been worked on in working_file.txt
             working_file.close()
             
-            print(counter)
-            print(pdb_list[counter][1])
+            print(counter+1)            
+            print(name)
+            
             filename_pdb=os.path.join(pdb_list[counter][0],pdb_list[counter][1])
 
             try: 
@@ -189,32 +201,31 @@ def main():
                         sys.exit()
 
            
-            score.append(value_df.loc[((value_df['#'] == pdb_list[counter][1][:-11]),'CPscore')].values[0])
+            score.append(value_df.loc[((value_df['#'] == name),'CPscore')].values[0])
 
 
 
             chain_used=[]
-            outfile=open(cwd + "/pts_dir/"+pdb_list[counter][1][:-11] + '.pts', 'w')
+            outfile=open(cwd + "/pts_dir/"+name + '.pts', 'w')
             for chain1 in model:
                 for chain2 in model:
                     alphaprot={} #Used to make temp file for alpha complex calculations, its a dict of coord for every atomtype used
                     if chain1!=chain2 and chain2 not in chain_used:
                         chain_used.append(chain1)
                         alphaprot=calc_dist_matrix(chain1, chain2, outfile,alphaprot) #Makes coord files for matlab and returns a dict for alpha complex
-                        calculate_alpha_complex(alphaprot,cwd) #Calculates alpha complex
+                        calculate_alpha_complex(BarCollection, name, alphaprot, cwd) #Calculates alpha complex
                         
             outfile.close()
     
-
-
+    
 
     if '-s' in args and '-r' in args:
         print('Do not use save(-s) and read(-r) at the same time')
         sys.exit()
     elif '-s' in args:
         print('-Saving files...')
-        np.savez_compressed('score', score)
-        #np.savez_compressed('dist_matrix', dist_matrix)
+        #np.savez_compressed('score', score)
+        np.savez_compressed('Alpha_Complex', BarCollection)
         print('-Files saved as "dist_matrix.npz","score.npz"')
 
     elif '-r' in args:
@@ -229,11 +240,13 @@ def main():
             
         print('-Files loaded')
     
+    os.remove(cwd+'/pts_dir/tmp.out')
+    os.remove(cwd+'/pts_dir/tmp.csv')
     
-    
-    print(score[1])
-    print(score.shape)
- 
+   # print(score[1])
+   # print(score.shape)
+    line = 'matlab -nodisplay -nodesktop -nosplash -r '+cwd+'/bar.m'
+    os.system(line)
     
 if __name__ == '__main__':
     main()

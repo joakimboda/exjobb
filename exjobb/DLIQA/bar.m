@@ -1,4 +1,5 @@
 clear
+load javaplex
 dir=fileparts(mfilename('fullpath'));
 javaaddpath([dir,'/javaplex/lib/javaplex.jar']);
 import edu.stanford.math.plex4.*;

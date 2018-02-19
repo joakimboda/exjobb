@@ -11773,7 +11773,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[106]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">Bio</span>
@@ -11803,25 +11803,41 @@ div#notebook {
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Calaculates an alpha complex from coordinates for a choosen atomtype and puts them into an dict. Dict key = name of the protein</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[107]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">calculate_alpha_complex</span><span class="p">(</span><span class="n">alphaprot</span><span class="p">,</span><span class="n">cwd</span><span class="p">):</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">calculate_alpha_complex</span><span class="p">(</span><span class="n">BarCollection</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">alphaprot</span><span class="p">,</span> <span class="n">cwd</span><span class="p">):</span>
     
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">coords</span> <span class="ow">in</span> <span class="n">alphaprot</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">Bars</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">tmpoutfile</span> <span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/pts_dir/tmp.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
         <span class="n">tmpoutfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;x1,x2,x3</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        
         <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">:</span>
             <span class="n">tmpoutfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">coord</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">tmpoutfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;Rscript PH_Alpha.R &#39;</span><span class="o">+</span> <span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/pts_dir/tmp.csv &#39;</span><span class="o">+</span> <span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/pts_dir&#39;</span><span class="o">+</span><span class="s1">&#39;/tmp.out&#39;</span><span class="p">)</span>
-
-    
-    
-    
-    
+        
+        <span class="n">tmpinfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/pts_dir/tmp.out&#39;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">tmpinfile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">d</span><span class="o">!=</span><span class="s1">&#39;Inf&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.01</span><span class="p">:</span> <span class="c1">#If the bar is to small we don&#39;t need to use it (more data for nothing)</span>
+                    <span class="n">Bars</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">)])</span>
+        <span class="n">BarCollection</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bars</span>    
 </pre></div>
 
 </div>
@@ -11831,7 +11847,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">calc_residue_dist</span><span class="p">(</span><span class="n">residue1</span><span class="p">,</span> <span class="n">residue2</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">atom1_used</span><span class="p">,</span> <span class="n">atom2_used</span><span class="p">,</span> <span class="n">alphaprot</span><span class="p">)</span> <span class="p">:</span>
@@ -11858,16 +11874,16 @@ div#notebook {
                     <span class="n">z</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">atom1</span><span class="o">.</span><span class="n">get_coord</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
                     <span class="k">if</span> <span class="s1">&#39;C&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span><span class="c1"># and</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;1&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="s1">&#39;O&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;2&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="s1">&#39;N&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;3&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="s1">&#39;S&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;4&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">a2_serial</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">atom2_used</span><span class="p">:</span>
                     <span class="n">atom2_used</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a2_serial</span><span class="p">)</span>
                     <span class="n">x</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">atom2</span><span class="o">.</span><span class="n">get_coord</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
@@ -11875,16 +11891,16 @@ div#notebook {
                     <span class="n">z</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">atom2</span><span class="o">.</span><span class="n">get_coord</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
                     <span class="k">if</span> <span class="s1">&#39;C&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;1&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="s1">&#39;O&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;2&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="s1">&#39;N&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;3&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="s1">&#39;S&#39;</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">get_name</span><span class="p">():</span>
                         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="s1">&#39;4&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">alphaprot</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">y</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="n">z</span><span class="p">)</span>
                 
     <span class="k">return</span><span class="p">(</span><span class="n">alphaprot</span><span class="p">)</span>
 
@@ -11910,7 +11926,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -11943,7 +11959,7 @@ div#notebook {
             <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">):</span>
                 <span class="n">pdb_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pdb_dir</span><span class="p">,</span><span class="nb">file</span><span class="p">])</span>
       
-        <span class="n">valuefile</span><span class="o">=</span> <span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;CnM.featuresNPqDNZ&#39;</span><span class="c1">#&#39;/home/joakim/Downloads/CnM.featuresNPqDNZ&#39;#&#39;D:\Downloads\CnM.featuresNPqDNZ&#39;</span>
+        <span class="n">valuefile</span><span class="o">=</span> <span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/CnM.featuresNPqDNZ&#39;</span><span class="c1">#&#39;/home/joakim/Downloads/CnM.featuresNPqDNZ&#39;#&#39;D:\Downloads\CnM.featuresNPqDNZ&#39;</span>
         <span class="n">value_df</span><span class="o">=</span><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">valuefile</span><span class="p">,</span><span class="n">delim_whitespace</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1">#Just a check to se if the data_set dir exist, in this case it removes it and all the files in it and make a new one</span>
@@ -11958,14 +11974,17 @@ div#notebook {
         
         <span class="n">score</span><span class="o">=</span><span class="p">[]</span>
         <span class="n">dist_matrix</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">BarCollection</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">filepath_pdb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">):</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span>
             
             <span class="n">working_file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s1">&#39;/pts_dir/working_file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
-            <span class="n">working_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1">#Writes what pdb have been worked on in working_file.txt</span>
+            <span class="n">working_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="c1">#Writes what pdb have been worked on in working_file.txt</span>
             <span class="n">working_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             
-            <span class="k">print</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>            
+            <span class="k">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            
             <span class="n">filename_pdb</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
             <span class="k">try</span><span class="p">:</span> 
@@ -11982,32 +12001,31 @@ div#notebook {
                         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
            
-            <span class="n">score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[((</span><span class="n">value_df</span><span class="p">[</span><span class="s1">&#39;#&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">11</span><span class="p">]),</span><span class="s1">&#39;CPscore&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[((</span><span class="n">value_df</span><span class="p">[</span><span class="s1">&#39;#&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">),</span><span class="s1">&#39;CPscore&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
 
 
             <span class="n">chain_used</span><span class="o">=</span><span class="p">[]</span>
-            <span class="n">outfile</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/pts_dir/&quot;</span><span class="o">+</span><span class="n">pdb_list</span><span class="p">[</span><span class="n">counter</span><span class="p">][</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.pts&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">outfile</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">cwd</span> <span class="o">+</span> <span class="s2">&quot;/pts_dir/&quot;</span><span class="o">+</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.pts&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">chain1</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">chain2</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
                     <span class="n">alphaprot</span><span class="o">=</span><span class="p">{}</span> <span class="c1">#Used to make temp file for alpha complex calculations, its a dict of coord for every atomtype used</span>
                     <span class="k">if</span> <span class="n">chain1</span><span class="o">!=</span><span class="n">chain2</span> <span class="ow">and</span> <span class="n">chain2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">chain_used</span><span class="p">:</span>
                         <span class="n">chain_used</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chain1</span><span class="p">)</span>
                         <span class="n">alphaprot</span><span class="o">=</span><span class="n">calc_dist_matrix</span><span class="p">(</span><span class="n">chain1</span><span class="p">,</span> <span class="n">chain2</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span><span class="n">alphaprot</span><span class="p">)</span> <span class="c1">#Makes coord files for matlab and returns a dict for alpha complex</span>
-                        <span class="n">calculate_alpha_complex</span><span class="p">(</span><span class="n">alphaprot</span><span class="p">,</span><span class="n">cwd</span><span class="p">)</span> <span class="c1">#Calculates alpha complex</span>
+                        <span class="n">calculate_alpha_complex</span><span class="p">(</span><span class="n">BarCollection</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">alphaprot</span><span class="p">,</span> <span class="n">cwd</span><span class="p">)</span> <span class="c1">#Calculates alpha complex</span>
                         
             <span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     
-
-
+    
 
     <span class="k">if</span> <span class="s1">&#39;-s&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Do not use save(-s) and read(-r) at the same time&#39;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
     <span class="k">elif</span> <span class="s1">&#39;-s&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Saving files...&#39;</span><span class="p">)</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
-        <span class="c1">#np.savez_compressed(&#39;dist_matrix&#39;, dist_matrix)</span>
+        <span class="c1">#np.savez_compressed(&#39;score&#39;, score)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span><span class="s1">&#39;Alpha_Complex&#39;</span><span class="p">,</span> <span class="n">BarCollection</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Files saved as &quot;dist_matrix.npz&quot;,&quot;score.npz&quot;&#39;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="s1">&#39;-r&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
@@ -12022,11 +12040,13 @@ div#notebook {
             
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;-Files loaded&#39;</span><span class="p">)</span>
     
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/pts_dir/tmp.out&#39;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/pts_dir/tmp.csv&#39;</span><span class="p">)</span>
     
-    
-    <span class="k">print</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">score</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
- 
+   <span class="c1"># print(score[1])</span>
+   <span class="c1"># print(score.shape)</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;matlab -nodisplay -nodesktop -nosplash -r &#39;</span><span class="o">+</span><span class="n">cwd</span><span class="o">+</span><span class="s1">&#39;/bar.m&#39;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
     
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
@@ -12048,11 +12068,19 @@ div#notebook {
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Save or load -s
 0
-D1AKJ-a0c-merged.pdb
+D1AKJ-a14b
 1
-D1AKJ-a0d-merged.pdb
+D1AKJ-a1b
 2
-D1AKJ-a1a-merged.pdb
+D1AKJ-a2b
+3
+D1AKJ-a3d
+4
+D1B6C-a0d
+5
+D1FQJ-a2c
+-Saving files...
+-Files saved as &#34;dist_matrix.npz&#34;,&#34;score.npz&#34;
 </pre>
 </div>
 </div>
